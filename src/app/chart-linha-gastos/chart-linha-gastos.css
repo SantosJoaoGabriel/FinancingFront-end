@@ -1,0 +1,11 @@
+.chart-container {
+  background-color: #1e1e1e;
+  padding: 16px;
+  border-radius: 8px;
+  color: white;
+}
+
+.chart-container h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}

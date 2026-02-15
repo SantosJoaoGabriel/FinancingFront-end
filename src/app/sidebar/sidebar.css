@@ -1,0 +1,51 @@
+.container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 240px;
+  background-color: #1e1e1e;
+  color: white;
+}
+
+.sidenav-header {
+  height: 64px;
+}
+
+mat-nav-list a {
+  color: inherit;
+}
+
+mat-nav-list a mat-icon {
+  margin-right: 8px;
+}
+
+.content {
+  background-color: #121212;
+  color: white;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.menu-button {
+  margin-right: 8px;
+}
+
+.app-title {
+  font-weight: 500;
+}
+
+.page-content {
+  padding: 16px;
+}
+
+/* Responsivo: esconde o sidenav em telas menores */
+@media (max-width: 768px) {
+  .sidenav {
+    width: 220px;
+  }
+}
