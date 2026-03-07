@@ -22,13 +22,15 @@ export class ChartLinhaGastosComponent {
         data: [],
         fill: true,
         tension: 0.4,
-        borderColor: '#4caf50',
-        backgroundColor: 'rgba(76, 175, 80, 0.2)',
+        borderColor: '#3b82f6',
+        backgroundColor: 'rgba(59, 130, 246, 0.15)',
         pointRadius: 4,
-        pointBackgroundColor: '#ffffff',
-        pointBorderColor: '#4caf50'
+        pointBackgroundColor: '#3b82f6',
+        pointBorderColor: '#ffffff',
+        pointBorderWidth: 2
       }
     ]
+
   };
 
   public lineChartOptions: ChartConfiguration['options'] = {
@@ -40,14 +42,15 @@ export class ChartLinhaGastosComponent {
     },
     scales: {
       x: {
-        ticks: { color: 'white' },
-        grid: { color: '#333333' }
+        ticks: { color: '#8892a4' },
+        grid: { color: '#1a2d4a' }
       },
       y: {
-        ticks: { color: 'white' },
-        grid: { color: '#333333' }
+        ticks: { color: '#8892a4' },
+        grid: { color: '#1a2d4a' }
       }
     }
+
   };
 
   constructor(private transactionsService: TransactionsService) {

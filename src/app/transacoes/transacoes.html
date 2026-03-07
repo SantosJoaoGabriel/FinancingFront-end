@@ -1,53 +1,232 @@
-<h2>Transações</h2>
+<div class="page-container">
 
-<form class="form-nova" (ngSubmit)="adicionarTransacao()">
-  <mat-form-field appearance="fill">
-    <mat-label>Descrição</mat-label>
-    <input matInput [(ngModel)]="novaTransacao.descricao" name="descricao">
-  </mat-form-field>
+  <!-- Header -->
+  <div class="page-header">
+    <h2 class="page-title">All Expenses</h2>
+  </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Categoria</mat-label>
-    <input matInput [(ngModel)]="novaTransacao.categoria" name="categoria">
-  </mat-form-field>
+  <!-- Filtros -->
+  <div class="filters-row">
+    <div class="search-box">
+      <span class="material-icons search-icon">search</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search expenses..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applyFilters()">
+    </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Data</mat-label>
-    <input matInput type="date" [(ngModel)]="novaTransacao.data" name="data">
-  </mat-form-field>
+    <div class="filter-chips">
+      <select class="filter-chip" [(ngModel)]="filtroCategoria" (ngModelChange)="applyFilters()">
+        <option value="">Category</option>
+        <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+      </select>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Valor</mat-label>
-    <input matInput type="number" [(ngModel)]="novaTransacao.valor" name="valor">
-  </mat-form-field>
+      <select class="filter-chip" [(ngModel)]="filtroPayment" (ngModelChange)="applyFilters()">
+        <option value="">Payment Method</option>
+        <option *ngFor="let m of paymentMethods" [value]="m">{{ m }}</option>
+      </select>
+    </div>
+  </div>
 
-  <button mat-raised-button color="primary" type="submit">
-    Adicionar
+  <!-- Tabela -->
+  <div class="table-card">
+    <!-- Header -->
+    <div class="table-header">
+      <div class="col-date">DATE</div>
+      <div class="col-details">EXPENSE DETAILS</div>
+      <div class="col-category">CATEGORY</div>
+      <div class="col-payment">PAYMENT METHOD</div>
+      <div class="col-amount">AMOUNT</div>
+      <div class="col-actions"></div>
+    </div>
+
+    <!-- Linhas -->
+    <div class="table-row" *ngFor="let t of paginatedData">
+      <div class="col-date">{{ t.data | date:'MMM dd, yyyy' }}</div>
+
+      <div class="col-details">
+        <div class="vendor-icon" [style.background-color]="getCategoryColor(t.categoria)">
+          <span class="material-icons">{{ getCategoryIcon(t.categoria) }}</span>
+        </div>
+        <span class="vendor-name">{{ t.descricao }}</span>
+      </div>
+
+      <div class="col-category">
+        <span class="category-badge">{{ t.categoria }}</span>
+      </div>
+
+      <div class="col-payment">
+        <span class="material-icons payment-icon">credit_card</span>
+        {{ t.categoria }}
+      </div>
+
+      <div class="col-amount amount-negative">
+        -${{ t.valor | number:'1.2-2' }}
+      </div>
+
+      <div class="col-actions">
+        <span class="material-icons more-icon">more_vert</span>
+      </div>
+    </div>
+
+    <!-- Paginação -->
+    <div class="pagination">
+      <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+        Previous
+      </button>
+
+      <ng-container *ngFor="let p of pageNumbers">
+        <button
+          class="page-btn page-number"
+          [class.active]="p === currentPage"
+          (click)="goToPage(p)">
+          {{ p }}
+        </button>
+      </ng-container>
+
+      <button class="page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+        Next
+      </button>
+
+      <span class="page-info">
+        Showing {{ (currentPage - 1) * pageSize + 1 }}
+        to {{ Math.min(currentPage * pageSize, filteredData.length) }}
+        of {{ filteredData.length }} expenses
+      </span>
+    </div>
+  </div>
+
+  <!-- Botão flutuante -->
+  <button class="fab" (click)="abrirFormulario()">
+    <span class="material-icons">add</span>
   </button>
-</form>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 transacoes-table">
+  <!-- Overlay do formulário -->
+  <div class="overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()"></div>
 
-  <ng-container matColumnDef="descricao">
-    <th mat-header-cell *matHeaderCellDef> Descrição </th>
-    <td mat-cell *matCellDef="let item"> {{ item.descricao }} </td>
-  </ng-container>
+  <!-- Formulário (modal) -->
+  <div class="form-modal" *ngIf="mostrarFormulario">
+    <div class="form-card">
 
-  <ng-container matColumnDef="categoria">
-    <th mat-header-cell *matHeaderCellDef> Categoria </th>
-    <td mat-cell *matCellDef="let item"> {{ item.categoria }} </td>
-  </ng-container>
+      <div class="amount-section">
+        <div class="amount-label">TRANSACTION AMOUNT</div>
+        <div class="amount-input-row">
+          <span class="currency-symbol">$</span>
+          <input
+            type="number"
+            class="amount-input"
+            [(ngModel)]="novaTransacao.valor"
+            name="valor"
+            placeholder="0.00"
+            step="0.01"
+            min="0">
+        </div>
+      </div>
 
-  <ng-container matColumnDef="data">
-    <th mat-header-cell *matHeaderCellDef> Data </th>
-    <td mat-cell *matCellDef="let item"> {{ item.data | date:'dd/MM/yyyy' }} </td>
-  </ng-container>
+      <div class="divider"></div>
 
-  <ng-container matColumnDef="valor">
-    <th mat-header-cell *matHeaderCellDef> Valor </th>
-    <td mat-cell *matCellDef="let item"> {{ item.valor | currency:'BRL' }} </td>
-  </ng-container>
+      <div class="field-group">
+        <label class="field-label">Transaction Title</label>
+        <input
+          type="text"
+          class="field-input"
+          [(ngModel)]="novaTransacao.descricao"
+          name="descricao"
+          placeholder="e.g. Weekly Groceries">
+      </div>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Category</label>
+          <div class="select-wrapper">
+            <span class="material-icons select-icon">category</span>
+            <select class="field-select" [(ngModel)]="novaTransacao.categoria" name="categoria">
+              <option value="" disabled selected>Select category</option>
+              <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+            </select>
+            <span class="material-icons chevron-icon">expand_more</span>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Date</label>
+          <div class="select-wrapper">
+            <span class="material-icons select-icon">calendar_today</span>
+            <input
+              type="date"
+              class="field-date"
+              [(ngModel)]="novaTransacao.data"
+              name="data">
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Payment Method</label>
+        <div class="select-wrapper">
+          <span class="material-icons select-icon">credit_card</span>
+          <select class="field-select" [(ngModel)]="novaTransacao.paymentMethod" name="paymentMethod">
+            <option *ngFor="let method of paymentMethods" [value]="method">{{ method }}</option>
+          </select>
+          <span class="material-icons chevron-icon">expand_more</span>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Notes</label>
+        <textarea
+          class="field-textarea"
+          [(ngModel)]="novaTransacao.notes"
+          name="notes"
+          placeholder="Add additional details here...">
+        </textarea>
+      </div>
+
+          <!-- Receipt Upload -->
+      <div class="field-group">
+        <label class="field-label">Receipt Upload</label>
+        <div class="upload-area" (click)="fileInput.click()" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+          <input
+            #fileInput
+            type="file"
+            accept=".pdf,.png,.jpg,.jpeg"
+            style="display:none"
+            (change)="onFileSelected($event)"
+            multiple>
+
+          <ng-container *ngIf="arquivosSelecionados.length === 0">
+            <span class="material-icons upload-icon">cloud_upload</span>
+            <div class="upload-text">Click to upload or drag and drop</div>
+            <div class="upload-subtext">PDF, PNG, JPG (max. 10MB)</div>
+          </ng-container>
+
+          <ng-container *ngIf="arquivosSelecionados.length > 0">
+            <div class="files-list">
+              <div class="file-item" *ngFor="let file of arquivosSelecionados; let i = index">
+                <span class="material-icons file-icon">{{ getFileIcon(file.name) }}</span>
+                <div class="file-info">
+                  <span class="file-name">{{ file.name }}</span>
+                  <span class="file-size">{{ formatFileSize(file.size) }}</span>
+                </div>
+                <span class="material-icons remove-icon" (click)="removerArquivo(i, $event)">close</span>
+              </div>
+            </div>
+            <div class="upload-more">
+              <span class="material-icons">add</span>
+              Add more files
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-cancel" (click)="fecharFormulario()">Cancel</button>
+        <button class="btn-save" (click)="adicionarTransacao()">Save Transaction</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

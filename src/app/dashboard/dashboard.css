@@ -158,20 +158,20 @@
 
 .donut-layout {
   display: flex;
+  flex-direction: column;
   gap: 20px;
   margin-top: 18px;
-  align-items: center;
 }
 
 .donut-chart-wrapper {
-  flex: 1.1;
+  width: 100%;
 }
 
 .donut-legend {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
 }
 
 .legend-row {

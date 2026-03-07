@@ -4,24 +4,45 @@
 
 .sidenav {
   width: 240px;
-  background-color: #1e1e1e;
+  background-color: #0d1117;
   color: white;
+  border-right: 1px solid #1a2332;
 }
 
 .sidenav-header {
   height: 64px;
+  background-color: #0d1117 !important;
+  border-bottom: 1px solid #1a2332;
 }
 
 mat-nav-list a {
-  color: inherit;
+  color: #8892a4;
+  border-radius: 8px;
+  margin: 2px 8px;
+  transition: all 0.2s;
 }
 
 mat-nav-list a mat-icon {
   margin-right: 8px;
+  color: #8892a4;
+}
+
+mat-nav-list a.active {
+  background-color: #1a2d4a !important;
+  color: white !important;
+}
+
+mat-nav-list a.active mat-icon {
+  color: #3b82f6 !important;
+}
+
+mat-nav-list a:hover {
+  background-color: #111827 !important;
+  color: white;
 }
 
 .content {
-  background-color: #121212;
+  background-color: #0a0f1e;
   color: white;
 }
 
@@ -29,6 +50,8 @@ mat-nav-list a mat-icon {
   position: sticky;
   top: 0;
   z-index: 2;
+  background-color: #0d1117 !important;
+  border-bottom: 1px solid #1a2332;
 }
 
 .menu-button {
@@ -40,10 +63,9 @@ mat-nav-list a mat-icon {
 }
 
 .page-content {
-  padding: 16px;
+  padding: 24px;
 }
 
-/* Responsivo: esconde o sidenav em telas menores */
 @media (max-width: 768px) {
   .sidenav {
     width: 220px;

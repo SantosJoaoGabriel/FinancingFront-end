@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration, ChartType } from 'chart.js';
+import { ChartConfiguration } from 'chart.js';
 import { TransactionsService, Transacao } from '../core/transactions.service';
 
 @Component({
@@ -12,26 +12,27 @@ import { TransactionsService, Transacao } from '../core/transactions.service';
   styleUrl: './chart-gastos.css'
 })
 export class ChartGastosComponent {
-  public doughnutChartType: ChartType = 'doughnut';
+  public doughnutChartType = 'doughnut' as const;
 
-  public doughnutChartData: ChartConfiguration['data'] = {
+  public doughnutChartData: ChartConfiguration<'doughnut'>['data'] = {
     labels: [],
     datasets: [
       {
         data: [],
-        backgroundColor: ['#4caf50', '#2196f3', '#ff9800', '#f44336', '#9c27b0'],
-        borderColor: '#121212',
-        borderWidth: 2
+        backgroundColor: ['#3b82f6', '#22c55e', '#f97316', '#6b7280'],
+        borderColor: '#0d1626',
+        borderWidth: 3,
+        hoverOffset: 4
       }
     ]
   };
 
-  public doughnutChartOptions: ChartConfiguration['options'] = {
+  public doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
     responsive: true,
+    cutout: '72%',
     plugins: {
       legend: {
-        position: 'bottom',
-        labels: { color: 'white' }
+        display: false
       }
     }
   };
