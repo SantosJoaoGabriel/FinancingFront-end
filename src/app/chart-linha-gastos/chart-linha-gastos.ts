@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration, ChartType } from 'chart.js';
+import { ChartConfiguration } from 'chart.js';
 import { TransactionsService, Transacao } from '../core/transactions.service';
 
 @Component({
@@ -11,10 +11,10 @@ import { TransactionsService, Transacao } from '../core/transactions.service';
   templateUrl: './chart-linha-gastos.html',
   styleUrl: './chart-linha-gastos.css'
 })
-export class ChartLinhaGastosComponent {
-  public lineChartType: ChartType = 'line';
+export class ChartLinhaGastosComponent implements OnInit {
+  public lineChartType = 'line' as const;
 
-  public lineChartData: ChartConfiguration['data'] = {
+  public lineChartData: ChartConfiguration<'line'>['data'] = {
     labels: [],
     datasets: [
       {
@@ -30,10 +30,9 @@ export class ChartLinhaGastosComponent {
         pointBorderWidth: 2
       }
     ]
-
   };
 
-  public lineChartOptions: ChartConfiguration['options'] = {
+  public lineChartOptions: ChartConfiguration<'line'>['options'] = {
     responsive: true,
     plugins: {
       legend: {
@@ -50,19 +49,18 @@ export class ChartLinhaGastosComponent {
         grid: { color: '#1a2d4a' }
       }
     }
-
   };
 
-  constructor(private transactionsService: TransactionsService) {
-  this.transactionsService.getTransacoes().subscribe({
-    next: (data) => this.montarDados(data),
-    error: (err) => console.error('Erro ao carregar gráfico:', err)
-  });
-}
+  constructor(private transactionsService: TransactionsService) {}
 
+  ngOnInit() {
+    this.transactionsService.getTransacoes().subscribe({
+      next: (data) => this.montarDados(data),
+      error: (err) => console.error('Erro ao carregar gráfico de linha:', err)
+    });
+  }
 
   private montarDados(transacoes: Transacao[]) {
-    // soma de gastos por dia (chave: 'dd/MM')
     const porDia = new Map<string, number>();
 
     for (const t of transacoes) {
@@ -75,10 +73,16 @@ export class ChartLinhaGastosComponent {
       porDia.set(chave, atual + t.valor);
     }
 
-    const labels = Array.from(porDia.keys());
-    const valores = Array.from(porDia.values());
-
-    this.lineChartData.labels = labels;
-    this.lineChartData.datasets[0].data = valores;
+    // precisa criar um novo objeto para o Angular detectar a mudança
+    this.lineChartData = {
+      ...this.lineChartData,
+      labels: Array.from(porDia.keys()),
+      datasets: [
+        {
+          ...this.lineChartData.datasets[0],
+          data: Array.from(porDia.values())
+        }
+      ]
+    };
   }
 }
