@@ -54,9 +54,12 @@ export class ChartLinhaGastosComponent {
   };
 
   constructor(private transactionsService: TransactionsService) {
-    const transacoes = this.transactionsService.getTransacoes();
-    this.montarDados(transacoes);
-  }
+  this.transactionsService.getTransacoes().subscribe({
+    next: (data) => this.montarDados(data),
+    error: (err) => console.error('Erro ao carregar gráfico:', err)
+  });
+}
+
 
   private montarDados(transacoes: Transacao[]) {
     // soma de gastos por dia (chave: 'dd/MM')

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,27 +23,29 @@ import { TransactionsService, Transacao } from '../core/transactions.service';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   saldoTotal = 0;
   gastosMes = 0;
   metasMes = 3000;
-
-  transacoes: Transacao[] = [];
   transacoesRecentes: Transacao[] = [];
 
-  constructor(private transactionsService: TransactionsService) {
-    this.transacoes = this.transactionsService.getTransacoes();
-    this.calcularResumo();
+  constructor(private transactionsService: TransactionsService) {}
 
-    // Pegar as 5 mais recentes
-    this.transacoesRecentes = this.transacoes
-      .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
-      .slice(0, 5);
+  ngOnInit() {
+    this.carregarDados();
   }
 
-  private calcularResumo() {
-    this.gastosMes = this.transacoes.reduce((total, t) => total + t.valor, 0);
-    this.saldoTotal = this.metasMes - this.gastosMes;
+  carregarDados() {
+    this.transactionsService.getTransacoes().subscribe({
+      next: (data) => {
+        this.gastosMes = data.reduce((total, t) => total + t.valor, 0);
+        this.saldoTotal = this.metasMes - this.gastosMes;
+        this.transacoesRecentes = data
+          .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
+          .slice(0, 5);
+      },
+      error: (err) => console.error('Erro ao carregar dashboard:', err)
+    });
   }
 
   getIconName(categoria: string): string {
@@ -51,7 +53,9 @@ export class DashboardComponent {
       'Alimentação': 'restaurant',
       'Transporte': 'directions_car',
       'Assinaturas': 'subscriptions',
-      'Lazer': 'movie'
+      'Lazer': 'movie',
+      'Moradia': 'home',
+      'Saúde': 'favorite'
     };
     return icons[categoria] || 'shopping_bag';
   }
@@ -61,7 +65,9 @@ export class DashboardComponent {
       'Alimentação': '#22c55e',
       'Transporte': '#f97316',
       'Assinaturas': '#3b82f6',
-      'Lazer': '#a855f7'
+      'Lazer': '#a855f7',
+      'Moradia': '#f59e0b',
+      'Saúde': '#ef4444'
     };
     return colors[categoria] || '#6b7280';
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -20,9 +20,8 @@ interface NovaTransacao {
   templateUrl: './transacoes.html',
   styleUrl: './transacoes.css'
 })
-export class TransacoesComponent {
+export class TransacoesComponent implements OnInit {
   Math = Math;
-
   mostrarFormulario = false;
 
   dataSource: Transacao[] = [];
@@ -44,10 +43,22 @@ export class TransacoesComponent {
   ];
 
   novaTransacao: NovaTransacao = this.emptyForm();
+  arquivosSelecionados: File[] = [];
 
-  constructor(private transactionsService: TransactionsService) {
-    this.dataSource = this.transactionsService.getTransacoes();
-    this.applyFilters();
+  constructor(private transactionsService: TransactionsService) {}
+
+  ngOnInit() {
+    this.carregarTransacoes();
+  }
+
+  carregarTransacoes() {
+    this.transactionsService.getTransacoes().subscribe({
+      next: (data) => {
+        this.dataSource = data;
+        this.applyFilters();
+      },
+      error: (err) => console.error('Erro ao carregar transações:', err)
+    });
   }
 
   get totalPages(): number {
@@ -85,7 +96,7 @@ export class TransacoesComponent {
   fecharFormulario() {
     this.mostrarFormulario = false;
     this.novaTransacao = this.emptyForm();
-    this.arquivosSelecionados = []; // limpar arquivos
+    this.arquivosSelecionados = [];
   }
 
   adicionarTransacao() {
@@ -95,12 +106,16 @@ export class TransacoesComponent {
       descricao: this.novaTransacao.descricao,
       categoria: this.novaTransacao.categoria,
       data: this.novaTransacao.data,
-      valor: this.novaTransacao.valor
+      valor: this.novaTransacao.valor,
+      paymentMethod: this.novaTransacao.paymentMethod,
+      notes: this.novaTransacao.notes
+    }).subscribe({
+      next: () => {
+        this.carregarTransacoes();
+        this.fecharFormulario();
+      },
+      error: (err) => console.error('Erro ao adicionar transação:', err)
     });
-
-    this.dataSource = this.transactionsService.getTransacoes();
-    this.applyFilters();
-    this.fecharFormulario();
   }
 
   getCategoryIcon(cat: string): string {
@@ -127,6 +142,49 @@ export class TransacoesComponent {
     return colors[cat] || '#6b7280';
   }
 
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      this.adicionarArquivos(Array.from(input.files));
+    }
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.dataTransfer?.files) {
+      this.adicionarArquivos(Array.from(event.dataTransfer.files));
+    }
+  }
+
+  adicionarArquivos(novos: File[]) {
+    const validos = novos.filter(f => f.size <= 10 * 1024 * 1024);
+    this.arquivosSelecionados = [...this.arquivosSelecionados, ...validos];
+  }
+
+  removerArquivo(index: number, event: MouseEvent) {
+    event.stopPropagation();
+    this.arquivosSelecionados.splice(index, 1);
+  }
+
+  getFileIcon(filename: string): string {
+    const ext = filename.split('.').pop()?.toLowerCase();
+    if (ext === 'pdf') return 'picture_as_pdf';
+    if (['png', 'jpg', 'jpeg'].includes(ext || '')) return 'image';
+    return 'insert_drive_file';
+  }
+
+  formatFileSize(bytes: number): string {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
   private emptyForm(): NovaTransacao {
     return {
       descricao: '',
@@ -137,50 +195,4 @@ export class TransacoesComponent {
       notes: ''
     };
   }
-  // Upload de arquivos
-arquivosSelecionados: File[] = [];
-
-onFileSelected(event: Event) {
-  const input = event.target as HTMLInputElement;
-  if (input.files) {
-    this.adicionarArquivos(Array.from(input.files));
-  }
-}
-
-onDragOver(event: DragEvent) {
-  event.preventDefault();
-  event.stopPropagation();
-}
-
-onDrop(event: DragEvent) {
-  event.preventDefault();
-  event.stopPropagation();
-  if (event.dataTransfer?.files) {
-    this.adicionarArquivos(Array.from(event.dataTransfer.files));
-  }
-}
-
-adicionarArquivos(novos: File[]) {
-  const validos = novos.filter(f => f.size <= 10 * 1024 * 1024); // max 10MB
-  this.arquivosSelecionados = [...this.arquivosSelecionados, ...validos];
-}
-
-removerArquivo(index: number, event: MouseEvent) {
-  event.stopPropagation();
-  this.arquivosSelecionados.splice(index, 1);
-}
-
-getFileIcon(filename: string): string {
-  const ext = filename.split('.').pop()?.toLowerCase();
-  if (ext === 'pdf') return 'picture_as_pdf';
-  if (['png', 'jpg', 'jpeg'].includes(ext || '')) return 'image';
-  return 'insert_drive_file';
-}
-
-formatFileSize(bytes: number): string {
-  if (bytes < 1024) return bytes + ' B';
-  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-}
-
 }
