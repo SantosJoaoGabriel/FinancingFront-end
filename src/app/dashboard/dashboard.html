@@ -1,150 +1,160 @@
-<div class="dashboard-grid">
-  <!-- Linha 1: três cards -->
-  <mat-card class="card metric-card">
-    <div class="card-header">
-      <div class="card-text">
-        <div class="card-label">Total Balance</div>
-        <div class="card-value">{{ saldoTotal | currency:'USD':'symbol':'1.2-2' }}</div>
-      </div>
-      <div class="card-icon card-icon-green">
-        <span class="material-icons">account_balance</span>
-      </div>
-    </div>
-    <div class="card-mini-chart">
-      <div class="bar bar-1"></div>
-      <div class="bar bar-2"></div>
-      <div class="bar bar-3"></div>
-      <div class="bar bar-4"></div>
-    </div>
-  </mat-card>
+<div class="dashboard-container">
 
-  <mat-card class="card metric-card">
-    <div class="card-header">
-      <div class="card-text">
-        <div class="card-label">Monthly Spending</div>
-        <div class="card-value">{{ gastosMes | currency:'USD':'symbol':'1.2-2' }}</div>
-      </div>
-      <div class="card-icon card-icon-blue">
-        <span class="material-icons">shopping_cart</span>
-      </div>
-    </div>
-    <div class="card-mini-chart">
-      <div class="bar bar-2"></div>
-      <div class="bar bar-3"></div>
-      <div class="bar bar-4"></div>
-      <div class="bar bar-1"></div>
-    </div>
-  </mat-card>
+    <!-- Cards -->
+  <div class="cards-row">
 
-  <mat-card class="card metric-card">
-    <div class="card-header">
-      <div class="card-text">
-        <div class="card-label">Savings Goal</div>
-        <div class="card-value">85%</div>
-        <div class="card-subtext">$1,200 remaining to reach goal</div>
+    <!-- Saldo Total -->
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <p class="card-label">Total Balance</p>
+          <p class="card-value">{{ saldoTotal | currency:'BRL' }}</p>
+        </div>
+        <div class="card-icon icon-green">
+          <span class="material-icons-round">account_balance</span>
+        </div>
       </div>
-      <div class="card-icon card-icon-orange">
-        <span class="material-icons">flag</span>
+      <div class="mini-bars">
+        <div class="mini-bar" style="height:60%; background:rgba(16,185,129,0.2)"></div>
+        <div class="mini-bar" style="height:40%; background:rgba(16,185,129,0.2)"></div>
+        <div class="mini-bar" style="height:80%; background:rgba(16,185,129,0.2)"></div>
+        <div class="mini-bar" style="height:95%; background:#10b981"></div>
+        <div class="mini-bar" style="height:70%; background:rgba(16,185,129,0.2)"></div>
+        <div class="mini-bar" style="height:50%; background:rgba(16,185,129,0.2)"></div>
       </div>
     </div>
-    <div class="card-progress">
-      <div class="progress-bar">
-        <div class="progress-fill"></div>
-      </div>
-    </div>
-  </mat-card>
 
-  <!-- Linha 2: gráfico de linha grande -->
-  <mat-card class="card trends-card">
-    <div class="card-header">
-      <div class="card-text">
-        <div class="card-label">Spending Trends</div>
-        <div class="card-subtext">Overview of the last 6 months</div>
+    <!-- Gastos do Mês -->
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <p class="card-label">Monthly Spending</p>
+          <p class="card-value">{{ gastosMes | currency:'BRL' }}</p>
+        </div>
+        <div class="card-icon icon-blue">
+          <span class="material-icons-round">shopping_cart</span>
+        </div>
       </div>
-      <button mat-button class="chip">Last 6 Months</button>
+      <div class="mini-bars">
+        <div class="mini-bar" style="height:30%; background:rgba(19,127,236,0.2)"></div>
+        <div class="mini-bar" style="height:85%; background:#137fec"></div>
+        <div class="mini-bar" style="height:60%; background:rgba(19,127,236,0.2)"></div>
+        <div class="mini-bar" style="height:40%; background:rgba(19,127,236,0.2)"></div>
+        <div class="mini-bar" style="height:90%; background:rgba(19,127,236,0.2)"></div>
+        <div class="mini-bar" style="height:55%; background:rgba(19,127,236,0.2)"></div>
+      </div>
     </div>
-    <div class="chart-wrapper">
+
+    <!-- Meta -->
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <p class="card-label">Savings Goal</p>
+          <p class="card-value">{{ metaPorcentagem }}%</p>
+        </div>
+        <div class="card-icon icon-orange">
+          <span class="material-icons-round">flag</span>
+        </div>
+      </div>
+      <div class="progress-section">
+        <div class="progress-track">
+          <div class="progress-fill" [style.width.%]="metaPorcentagem"></div>
+        </div>
+        <p class="progress-label">{{ metaRestante | currency:'BRL' }} remaining to reach goal</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Gráficos -->
+  <div class="charts-row">
+
+    <!-- Gráfico de Linha -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div>
+          <p class="chart-title">Spending Trends</p>
+          <p class="chart-subtitle">Overview of the last 6 months</p>
+        </div>
+        <select class="period-select">
+          <option>Last 6 Months</option>
+          <option>Last 12 Months</option>
+        </select>
+      </div>
       <app-chart-linha-gastos></app-chart-linha-gastos>
     </div>
-  </mat-card>
 
-  <!-- Linha 2: gráfico de donut + legenda -->
-  <mat-card class="card donut-card">
-    <div class="card-header">
-      <div class="card-text">
-        <div class="card-label">Spending by Category</div>
-        <div class="card-subtext">Detailed breakdown</div>
+    <!-- Gráfico de Rosca -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div>
+          <p class="chart-title">Spending by Category</p>
+          <p class="chart-subtitle">Detailed breakdown</p>
+        </div>
       </div>
-    </div>
-    <div class="donut-layout">
-      <div class="donut-chart-wrapper">
-        <app-chart-gastos></app-chart-gastos>
-      </div>
+      <app-chart-gastos></app-chart-gastos>
       <div class="donut-legend">
-        <div class="legend-row">
-          <span class="dot dot-blue"></span>
-          <span class="legend-label">Housing</span>
-          <span class="legend-value">$1,200</span>
-        </div>
-        <div class="legend-row">
-          <span class="dot dot-green"></span>
-          <span class="legend-label">Food</span>
-          <span class="legend-value">$850</span>
-        </div>
-        <div class="legend-row">
-          <span class="dot dot-orange"></span>
-          <span class="legend-label">Transport</span>
-          <span class="legend-value">$400</span>
-        </div>
-        <div class="legend-row">
-          <span class="dot dot-gray"></span>
-          <span class="legend-label">Entertainment</span>
-          <span class="legend-value">$750</span>
+        <div class="legend-item" *ngFor="let item of legendaGastos">
+          <div class="legend-left">
+            <div class="legend-dot" [style.background-color]="item.cor"></div>
+            <span>{{ item.categoria }}</span>
+          </div>
+          <span class="legend-value">{{ item.valor | currency:'BRL' }}</span>
         </div>
       </div>
     </div>
-  </mat-card>
+
+  </div>
+
+  <!-- Transações Recentes -->
+  <div class="transactions-card">
+    <div class="transactions-header">
+      <h4 class="transactions-title">Recent Transactions</h4>
+      <a class="view-all-btn" routerLink="/transacoes">View All</a>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Vendor</th>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th style="text-align:right">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of transacoesRecentes">
+            <td>
+              <div class="vendor-cell">
+                <div class="vendor-icon-box">
+                  <span class="material-icons-round" [style.color]="getCategoryColor(t.categoria)">
+                    {{ getCategoryIcon(t.categoria) }}
+                  </span>
+                </div>
+                <div>
+                  <p class="vendor-name">{{ t.descricao }}</p>
+                  <p class="vendor-sub">{{ t.categoria }}</p>
+                </div>
+              </div>
+            </td>
+            <td class="date-cell">{{ t.data | date:'MMM dd, yyyy' }}</td>
+            <td>
+              <span class="category-badge" [ngClass]="getCategoryBadgeClass(t.categoria)">
+                {{ t.categoria }}
+              </span>
+            </td>
+            <td>
+              <span class="amount-negative">-{{ t.valor | currency:'BRL' }}</span>
+            </td>
+            <td class="status-cell">
+              <span class="status-badge status-completed">Completed</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
-<!-- Seção de transações recentes -->
-<mat-card class="card transactions-card">
-  <div class="transactions-header">
-    <div>
-      <div class="card-label">Recent Transactions</div>
-    </div>
-    <a routerLink="/transacoes" class="view-all-link">View All</a>
-  </div>
-
-  <div class="transactions-table">
-    <!-- Header -->
-    <div class="table-header">
-      <div class="col-vendor">VENDOR</div>
-      <div class="col-date">DATE</div>
-      <div class="col-category">CATEGORY</div>
-      <div class="col-amount">AMOUNT</div>
-      <div class="col-status">STATUS</div>
-    </div>
-
-    <!-- Linhas de transação -->
-    <div class="table-row" *ngFor="let t of transacoesRecentes">
-      <div class="col-vendor">
-        <div class="vendor-info">
-          <div class="vendor-icon" [style.background-color]="getIconColor(t.categoria)">
-            <span class="material-icons">{{ getIconName(t.categoria) }}</span>
-          </div>
-          <div>
-            <div class="vendor-name">{{ t.descricao }}</div>
-            <div class="vendor-sub">{{ t.categoria }}</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-date">{{ t.data | date:'MMM dd, yyyy' }}</div>
-      <div class="col-category">
-        <span class="category-badge">{{ t.categoria }}</span>
-      </div>
-      <div class="col-amount amount-negative">-${{ t.valor | number:'1.2-2' }}</div>
-      <div class="col-status">
-        <span class="status-badge status-completed">COMPLETED</span>
-      </div>
-    </div>
-  </div>
-</mat-card>

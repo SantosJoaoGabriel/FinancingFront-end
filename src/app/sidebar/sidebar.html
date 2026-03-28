@@ -1,39 +1,67 @@
 <mat-sidenav-container class="container">
-  <mat-sidenav
-    #sidenav
-    [(opened)]="opened"
-    mode="side"
-    class="sidenav">
+  <mat-sidenav #sidenav [(opened)]="opened" mode="side" class="sidenav">
 
-    <mat-toolbar color="primary" class="sidenav-header">
-      <span>Gastos App</span>
-    </mat-toolbar>
+    <!-- Logo -->
+    <div class="logo-area">
+      <div class="logo-icon">
+        <span class="material-icons-round">account_balance_wallet</span>
+      </div>
+      <span class="logo-text">SpendFree</span>
+    </div>
 
-    <mat-nav-list>
-      <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
-        <mat-icon>dashboard</mat-icon>
+    <!-- Navegação -->
+    <nav class="nav-list">
+      <a class="nav-item" routerLink="/dashboard" routerLinkActive="active">
+        <span class="material-icons-round">dashboard</span>
         <span>Dashboard</span>
       </a>
-      <a mat-list-item routerLink="/transacoes" routerLinkActive="active">
-        <mat-icon>list</mat-icon>
-        <span>Transações</span>
+      <a class="nav-item" routerLink="/transacoes" routerLinkActive="active">
+        <span class="material-icons-round">receipt_long</span>
+        <span>Transactions</span>
       </a>
-    </mat-nav-list>
+      <a class="nav-item" routerLink="/relatorios" routerLinkActive="active">
+        <span class="material-icons-round">analytics</span>
+        <span>Reports</span>
+      </a>
+      <a class="nav-item" routerLink="/metas" routerLinkActive="active">
+        <span class="material-icons-round">savings</span>
+        <span>Budgeting</span>
+      </a>
+      <a class="nav-item" routerLink="/configuracoes" routerLinkActive="active">
+        <span class="material-icons-round">settings</span>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <!-- Upgrade box -->
+    <div class="upgrade-box">
+      <p class="upgrade-label">Pro Plan</p>
+      <p class="upgrade-text">Unlock advanced reports & custom categories</p>
+      <button class="upgrade-btn">Upgrade Now</button>
+    </div>
+
   </mat-sidenav>
 
   <mat-sidenav-content class="content">
-    <mat-toolbar color="primary" class="topbar">
-      <button
-        mat-icon-button
-        (click)="toggle()"
-        class="menu-button">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <span class="app-title">Gastos App</span>
-    </mat-toolbar>
 
+    <!-- Topbar -->
+    <div class="topbar">
+      <button class="menu-btn" (click)="opened = !opened">
+        <span class="material-icons-round">menu</span>
+      </button>
+      <div class="topbar-right">
+        <div class="user-info">
+          <p class="user-name">Alex Johnson</p>
+          <p class="user-plan">Free Tier Account</p>
+        </div>
+        <div class="user-avatar">A</div>
+      </div>
+    </div>
+
+    <!-- Conteúdo das páginas -->
     <div class="page-content">
       <ng-content></ng-content>
     </div>
+
   </mat-sidenav-content>
 </mat-sidenav-container>
