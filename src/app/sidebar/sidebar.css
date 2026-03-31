@@ -89,48 +89,7 @@
   color: #137fec;
 }
 
-/* Upgrade box */
-.upgrade-box {
-  margin: 12px;
-  padding: 16px;
-  background-color: #101922;
-  border-radius: 16px;
-  border: 1px solid #2d3a4b;
-}
 
-.upgrade-label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin: 0 0 6px 0;
-}
-
-.upgrade-text {
-  font-size: 0.8rem;
-  color: #94a3b8;
-  margin: 0 0 12px 0;
-  line-height: 1.4;
-}
-
-.upgrade-btn {
-  width: 100%;
-  padding: 8px;
-  background-color: #137fec;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: 'Manrope', sans-serif;
-  transition: opacity 0.2s;
-}
-
-.upgrade-btn:hover {
-  opacity: 0.9;
-}
 
 /* Content */
 .content {
