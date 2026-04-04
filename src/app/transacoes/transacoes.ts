@@ -118,6 +118,30 @@ export class TransacoesComponent implements OnInit {
     });
   }
 
+    getCategoryIconClass(cat: string): string {
+    const classes: { [key: string]: string } = {
+      'Alimentação': 'icon-alimentacao',
+      'Transporte': 'icon-transporte',
+      'Assinaturas': 'icon-assinaturas',
+      'Lazer': 'icon-lazer',
+      'Moradia': 'icon-moradia',
+      'Saúde': 'icon-saude'
+    };
+    return classes[cat] || 'icon-default';
+  }
+
+  getCategoryBadgeClass(cat: string): string {
+    const classes: { [key: string]: string } = {
+      'Alimentação': 'badge-alimentacao',
+      'Transporte': 'badge-transporte',
+      'Assinaturas': 'badge-assinaturas',
+      'Lazer': 'badge-lazer',
+      'Moradia': 'badge-moradia',
+      'Saúde': 'badge-saude'
+    };
+    return classes[cat] || 'badge-default';
+  }
+
   getCategoryIcon(cat: string): string {
     const icons: { [key: string]: string } = {
       'Alimentação': 'restaurant',
