@@ -32,69 +32,94 @@
 
   <!-- Tabela -->
   <div class="table-card">
-    <!-- Header -->
-    <div class="table-header">
-      <div class="col-date">DATE</div>
-      <div class="col-details">EXPENSE DETAILS</div>
-      <div class="col-category">CATEGORY</div>
-      <div class="col-payment">PAYMENT METHOD</div>
-      <div class="col-amount">AMOUNT</div>
-      <div class="col-actions"></div>
-    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Expense Details</th>
+            <th>Category</th>
+            <th>Payment Method</th>
+            <th style="text-align:right">Amount</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of paginatedData">
+            <td class="date-cell">{{ t.data | date:'MMM dd, yyyy' }}</td>
 
-    <!-- Linhas -->
-    <div class="table-row" *ngFor="let t of paginatedData">
-      <div class="col-date">{{ t.data | date:'MMM dd, yyyy' }}</div>
+            <td>
+              <div class="expense-details">
+                <div class="expense-icon" [ngClass]="getCategoryIconClass(t.categoria)">
+                  <span class="material-icons">{{ getCategoryIcon(t.categoria) }}</span>
+                </div>
+                <span class="expense-name">{{ t.descricao }}</span>
+              </div>
+            </td>
 
-      <div class="col-details">
-        <div class="vendor-icon" [style.background-color]="getCategoryColor(t.categoria)">
-          <span class="material-icons">{{ getCategoryIcon(t.categoria) }}</span>
-        </div>
-        <span class="vendor-name">{{ t.descricao }}</span>
-      </div>
+            <td>
+              <span class="category-badge" [ngClass]="getCategoryBadgeClass(t.categoria)">
+                {{ t.categoria }}
+              </span>
+            </td>
 
-      <div class="col-category">
-        <span class="category-badge">{{ t.categoria }}</span>
-      </div>
+            <td>
+              <div class="payment-cell">
+                <span class="material-icons">credit_card</span>
+                {{ t.paymentMethod || 'Credit Card' }}
+              </div>
+            </td>
 
-      <div class="col-payment">
-        <span class="material-icons payment-icon">credit_card</span>
-        {{ t.categoria }}
-      </div>
+            <td class="amount-cell">
+              -{{ t.valor | currency:'BRL' }}
+            </td>
 
-      <div class="col-amount amount-negative">
-        -${{ t.valor | number:'1.2-2' }}
-      </div>
-
-      <div class="col-actions">
-        <span class="material-icons more-icon">more_vert</span>
-      </div>
+            <td class="action-cell">
+              <button class="action-btn">
+                <span class="material-icons">more_vert</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- Paginação -->
-    <div class="pagination">
-      <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-        Previous
-      </button>
-
-      <ng-container *ngFor="let p of pageNumbers">
+    <div class="pagination-wrapper">
+      <div class="pagination-buttons">
         <button
-          class="page-btn page-number"
-          [class.active]="p === currentPage"
-          (click)="goToPage(p)">
-          {{ p }}
+          class="page-nav-btn"
+          (click)="goToPage(currentPage - 1)"
+          [disabled]="currentPage === 1">
+          Previous
         </button>
-      </ng-container>
 
-      <button class="page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-        Next
-      </button>
+        <ng-container *ngFor="let p of pageNumbers">
+          <button
+            class="page-number-btn"
+            [class.active]="p === currentPage"
+            (click)="goToPage(p)">
+            {{ p }}
+          </button>
+        </ng-container>
 
-      <span class="page-info">
-        Showing {{ (currentPage - 1) * pageSize + 1 }}
-        to {{ Math.min(currentPage * pageSize, filteredData.length) }}
-        of {{ filteredData.length }} expenses
-      </span>
+        <button
+          class="page-nav-btn"
+          (click)="goToPage(currentPage + 1)"
+          [disabled]="currentPage === totalPages">
+          Next
+        </button>
+      </div>
+
+      <p class="page-info">
+        Showing
+        <span>{{ (currentPage - 1) * pageSize + 1 }}</span>
+        to
+        <span>{{ Math.min(currentPage * pageSize, filteredData.length) }}</span>
+        of
+        <span>{{ filteredData.length }}</span>
+        expenses
+      </p>
     </div>
   </div>
 
@@ -103,15 +128,15 @@
     <span class="material-icons">add</span>
   </button>
 
-  <!-- Overlay do formulário -->
+  <!-- Overlay -->
   <div class="overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()"></div>
 
-  <!-- Formulário (modal) -->
+  <!-- Modal formulário -->
   <div class="form-modal" *ngIf="mostrarFormulario">
     <div class="form-card">
 
       <div class="amount-section">
-        <div class="amount-label">TRANSACTION AMOUNT</div>
+        <div class="amount-label">Transaction Amount</div>
         <div class="amount-input-row">
           <span class="currency-symbol">$</span>
           <input
@@ -128,7 +153,7 @@
       <div class="divider"></div>
 
       <div class="field-group">
-        <label class="field-label">Transaction Title</label>
+        <label class="field-label">Transação</label>
         <input
           type="text"
           class="field-input"
@@ -151,7 +176,7 @@
         </div>
 
         <div class="field-group">
-          <label class="field-label">Date</label>
+          <label class="field-label">Data</label>
           <div class="select-wrapper">
             <span class="material-icons select-icon">calendar_today</span>
             <input
@@ -184,7 +209,6 @@
         </textarea>
       </div>
 
-          <!-- Receipt Upload -->
       <div class="field-group">
         <label class="field-label">Receipt Upload</label>
         <div class="upload-area" (click)="fileInput.click()" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
