@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
@@ -11,7 +11,7 @@ import { TransactionsService, Transacao } from '../core/transactions.service';
   templateUrl: './chart-gastos.html',
   styleUrl: './chart-gastos.css'
 })
-export class ChartGastosComponent {
+export class ChartGastosComponent implements OnInit {
   public doughnutChartType = 'doughnut' as const;
 
   public doughnutChartData: ChartConfiguration<'doughnut'>['data'] = {
@@ -37,13 +37,14 @@ export class ChartGastosComponent {
     }
   };
 
-  constructor(private transactionsService: TransactionsService) {
-  this.transactionsService.getTransacoes().subscribe({
-    next: (data) => this.montarDados(data),
-    error: (err) => console.error('Erro ao carregar gráfico:', err)
-  });
-}
+  constructor(private transactionsService: TransactionsService) {}
 
+  ngOnInit() {
+    this.transactionsService.getTransacoes().subscribe({
+      next: (data) => this.montarDados(data),
+      error: (err) => console.error('Erro ao carregar gráfico de rosca:', err)
+    });
+  }
 
   private montarDados(transacoes: Transacao[]) {
     const porCategoria = new Map<string, number>();
@@ -53,7 +54,16 @@ export class ChartGastosComponent {
       porCategoria.set(t.categoria, atual + t.valor);
     }
 
-    this.doughnutChartData.labels = Array.from(porCategoria.keys());
-    this.doughnutChartData.datasets[0].data = Array.from(porCategoria.values());
+    // precisa criar um novo objeto para o Angular detectar a mudança
+    this.doughnutChartData = {
+      ...this.doughnutChartData,
+      labels: Array.from(porCategoria.keys()),
+      datasets: [
+        {
+          ...this.doughnutChartData.datasets[0],
+          data: Array.from(porCategoria.values())
+        }
+      ]
+    };
   }
 }
