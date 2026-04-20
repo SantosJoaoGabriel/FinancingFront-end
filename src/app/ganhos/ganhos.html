@@ -1,7 +1,7 @@
 <div class="page-container">
 
   <div class="page-header">
-    <h2 class="page-title">All Income</h2>
+    <h2 class="page-title">Todos os Ganhos</h2>
   </div>
 
   <div class="filters-row">
@@ -10,19 +10,19 @@
       <input
         type="text"
         class="search-input"
-        placeholder="Search income..."
+        placeholder="Pesquisar..."
         [(ngModel)]="searchTerm"
         (ngModelChange)="applyFilters()">
     </div>
 
     <div class="filter-chips">
       <select class="filter-chip" [(ngModel)]="filtroCategoria" (ngModelChange)="applyFilters()">
-        <option value="">Category</option>
+        <option value="">Categoria</option>
         <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
       </select>
 
       <select class="filter-chip" [(ngModel)]="filtroPayment" (ngModelChange)="applyFilters()">
-        <option value="">Payment Method</option>
+        <option value="">Metodos</option>
         <option *ngFor="let m of paymentMethods" [value]="m">{{ m }}</option>
       </select>
     </div>
@@ -33,11 +33,11 @@
       <table>
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Income Details</th>
-            <th>Category</th>
-            <th>Payment Method</th>
-            <th style="text-align:right">Amount</th>
+            <th>Data</th>
+            <th>Descrição</th>
+            <th>Categoria</th>
+            <th>Forma de Recebimento</th>
+            <th style="text-align:right">Valor</th>
             <th></th>
           </tr>
         </thead>
@@ -87,7 +87,7 @@
           class="page-nav-btn"
           (click)="goToPage(currentPage - 1)"
           [disabled]="currentPage === 1">
-          Previous
+          Anterior
         </button>
 
         <ng-container *ngFor="let p of pageNumbers">
@@ -103,7 +103,7 @@
           class="page-nav-btn"
           (click)="goToPage(currentPage + 1)"
           [disabled]="currentPage === totalPages">
-          Next
+          Proximo
         </button>
       </div>
 
@@ -129,7 +129,7 @@
     <div class="form-card">
 
       <div class="amount-section">
-        <div class="amount-label">Income Amount</div>
+        <div class="amount-label">Adicionar Ganho</div>
         <div class="amount-input-row">
           <span class="currency-symbol">R$</span>
           <input
@@ -146,22 +146,22 @@
       <div class="divider"></div>
 
       <div class="field-group">
-        <label class="field-label">Description</label>
+        <label class="field-label">Descrição</label>
         <input
           type="text"
           class="field-input"
           [(ngModel)]="novoGanho.descricao"
           name="descricao"
-          placeholder="e.g. Monthly Salary">
+          placeholder="Clique para escrever">
       </div>
 
       <div class="field-row">
         <div class="field-group">
-          <label class="field-label">Category</label>
+          <label class="field-label">Categoria</label>
           <div class="select-wrapper">
             <span class="material-icons select-icon">category</span>
             <select class="field-select" [(ngModel)]="novoGanho.categoria" name="categoria">
-              <option value="" disabled selected>Select category</option>
+              <option value="" disabled selected>Selecione</option>
               <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
             </select>
             <span class="material-icons chevron-icon">expand_more</span>
@@ -169,7 +169,7 @@
         </div>
 
         <div class="field-group">
-          <label class="field-label">Date</label>
+          <label class="field-label">Data</label>
           <div class="select-wrapper">
             <span class="material-icons select-icon">calendar_today</span>
             <input
@@ -182,7 +182,7 @@
       </div>
 
       <div class="field-group">
-        <label class="field-label">Payment Method</label>
+        <label class="field-label">Forma de Recebimento</label>
         <div class="select-wrapper">
           <span class="material-icons select-icon">payments</span>
           <select class="field-select" [(ngModel)]="novoGanho.paymentMethod" name="paymentMethod">
@@ -193,17 +193,17 @@
       </div>
 
       <div class="field-group">
-        <label class="field-label">Notes</label>
+        <label class="field-label">Observação</label>
         <textarea
           class="field-textarea"
           [(ngModel)]="novoGanho.notes"
           name="notes"
-          placeholder="Add additional details here...">
+          placeholder="Clique para escrever">
         </textarea>
       </div>
 
       <div class="field-group">
-        <label class="field-label">Receipt Upload</label>
+        <label class="field-label">Adicionar Comprovante</label>
         <div class="upload-area"
           (click)="fileInput.click()"
           (dragover)="onDragOver($event)"
@@ -218,7 +218,7 @@
 
           <ng-container *ngIf="arquivosSelecionados.length === 0">
             <span class="material-icons upload-icon">cloud_upload</span>
-            <div class="upload-text">Click to upload or drag and drop</div>
+            <div class="upload-text">Clique para adicionar</div>
             <div class="upload-subtext">PDF, PNG, JPG (max. 10MB)</div>
           </ng-container>
 
@@ -242,132 +242,8 @@
       </div>
 
       <div class="actions">
-        <button class="btn-cancel" (click)="fecharFormulario()">Cancel</button>
-        <button class="btn-save btn-save-green" (click)="adicionarGanho()">Save Income</button>
-      </div>
-
-    </div>
-  </div>
-
-    <div class="form-modal" *ngIf="mostrarFormulario">
-    <div class="form-card">
-
-      <div class="amount-section">
-        <div class="amount-label">Income Amount</div>
-        <div class="amount-input-row">
-          <span class="currency-symbol">R$</span>
-          <input
-            type="number"
-            class="amount-input"
-            [(ngModel)]="novoGanho.valor"
-            name="valor"
-            placeholder="0.00"
-            step="0.01"
-            min="0">
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="field-group">
-        <label class="field-label">Description</label>
-        <input
-          type="text"
-          class="field-input"
-          [(ngModel)]="novoGanho.descricao"
-          name="descricao"
-          placeholder="e.g. Monthly Salary">
-      </div>
-
-      <div class="field-row">
-        <div class="field-group">
-          <label class="field-label">Category</label>
-          <div class="select-wrapper">
-            <span class="material-icons select-icon">category</span>
-            <select class="field-select" [(ngModel)]="novoGanho.categoria" name="categoria">
-              <option value="" disabled selected>Select category</option>
-              <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
-            </select>
-            <span class="material-icons chevron-icon">expand_more</span>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label class="field-label">Date</label>
-          <div class="select-wrapper">
-            <span class="material-icons select-icon">calendar_today</span>
-            <input
-              type="date"
-              class="field-date"
-              [(ngModel)]="novoGanho.data"
-              name="data">
-          </div>
-        </div>
-      </div>
-
-      <div class="field-group">
-        <label class="field-label">Payment Method</label>
-        <div class="select-wrapper">
-          <span class="material-icons select-icon">payments</span>
-          <select class="field-select" [(ngModel)]="novoGanho.paymentMethod" name="paymentMethod">
-            <option *ngFor="let method of paymentMethods" [value]="method">{{ method }}</option>
-          </select>
-          <span class="material-icons chevron-icon">expand_more</span>
-        </div>
-      </div>
-
-      <div class="field-group">
-        <label class="field-label">Notes</label>
-        <textarea
-          class="field-textarea"
-          [(ngModel)]="novoGanho.notes"
-          name="notes"
-          placeholder="Add additional details here...">
-        </textarea>
-      </div>
-
-      <div class="field-group">
-        <label class="field-label">Receipt Upload</label>
-        <div class="upload-area"
-          (click)="fileInput.click()"
-          (dragover)="onDragOver($event)"
-          (drop)="onDrop($event)">
-          <input
-            #fileInput
-            type="file"
-            accept=".pdf,.png,.jpg,.jpeg"
-            style="display:none"
-            (change)="onFileSelected($event)"
-            multiple>
-
-          <ng-container *ngIf="arquivosSelecionados.length === 0">
-            <span class="material-icons upload-icon">cloud_upload</span>
-            <div class="upload-text">Click to upload or drag and drop</div>
-            <div class="upload-subtext">PDF, PNG, JPG (max. 10MB)</div>
-          </ng-container>
-
-          <ng-container *ngIf="arquivosSelecionados.length > 0">
-            <div class="files-list">
-              <div class="file-item" *ngFor="let file of arquivosSelecionados; let i = index">
-                <span class="material-icons file-icon">{{ getFileIcon(file.name) }}</span>
-                <div class="file-info">
-                  <span class="file-name">{{ file.name }}</span>
-                  <span class="file-size">{{ formatFileSize(file.size) }}</span>
-                </div>
-                <span class="material-icons remove-icon" (click)="removerArquivo(i, $event)">close</span>
-              </div>
-            </div>
-            <div class="upload-more">
-              <span class="material-icons">add</span>
-              Add more files
-            </div>
-          </ng-container>
-        </div>
-      </div>
-
-      <div class="actions">
-        <button class="btn-cancel" (click)="fecharFormulario()">Cancel</button>
-        <button class="btn-save btn-save-green" (click)="adicionarGanho()">Save Income</button>
+        <button class="btn-cancel" (click)="fecharFormulario()">Cancelar</button>
+        <button class="btn-save btn-save-green" (click)="adicionarGanho()">Salvar</button>
       </div>
 
     </div>
