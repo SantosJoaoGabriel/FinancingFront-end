@@ -2,7 +2,7 @@
 
   <!-- Header -->
   <div class="page-header">
-    <h2 class="page-title">All Expenses</h2>
+    <h2 class="page-title">Todos os Gastos</h2>
   </div>
 
   <!-- Filtros -->
@@ -12,19 +12,19 @@
       <input
         type="text"
         class="search-input"
-        placeholder="Search expenses..."
+        placeholder="Pesquisar..."
         [(ngModel)]="searchTerm"
         (ngModelChange)="applyFilters()">
     </div>
 
     <div class="filter-chips">
       <select class="filter-chip" [(ngModel)]="filtroCategoria" (ngModelChange)="applyFilters()">
-        <option value="">Category</option>
+        <option value="">Categoria</option>
         <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
       </select>
 
       <select class="filter-chip" [(ngModel)]="filtroPayment" (ngModelChange)="applyFilters()">
-        <option value="">Payment Method</option>
+        <option value="">Metodos</option>
         <option *ngFor="let m of paymentMethods" [value]="m">{{ m }}</option>
       </select>
     </div>
@@ -36,11 +36,11 @@
       <table>
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Expense Details</th>
-            <th>Category</th>
-            <th>Payment Method</th>
-            <th style="text-align:right">Amount</th>
+            <th>Data</th>
+            <th>Descrição</th>
+            <th>Categoria</th>
+            <th>Metodos de Pagamento</th>
+            <th style="text-align:right">Valor</th>
             <th></th>
           </tr>
         </thead>
@@ -91,7 +91,7 @@
           class="page-nav-btn"
           (click)="goToPage(currentPage - 1)"
           [disabled]="currentPage === 1">
-          Previous
+          Anterior
         </button>
 
         <ng-container *ngFor="let p of pageNumbers">
@@ -107,7 +107,7 @@
           class="page-nav-btn"
           (click)="goToPage(currentPage + 1)"
           [disabled]="currentPage === totalPages">
-          Next
+          Proximo
         </button>
       </div>
 
@@ -136,7 +136,7 @@
     <div class="form-card">
 
       <div class="amount-section">
-        <div class="amount-label">Transaction Amount</div>
+        <div class="amount-label">Adicionar Gasto</div>
         <div class="amount-input-row">
           <span class="currency-symbol">$</span>
           <input
@@ -145,7 +145,6 @@
             [(ngModel)]="novaTransacao.valor"
             name="valor"
             placeholder="0.00"
-            step="0.01"
             min="0">
         </div>
       </div>
@@ -164,11 +163,11 @@
 
       <div class="field-row">
         <div class="field-group">
-          <label class="field-label">Category</label>
+          <label class="field-label">Categoria</label>
           <div class="select-wrapper">
             <span class="material-icons select-icon">category</span>
             <select class="field-select" [(ngModel)]="novaTransacao.categoria" name="categoria">
-              <option value="" disabled selected>Select category</option>
+              <option value="" disabled selected>Selecione</option>
               <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
             </select>
             <span class="material-icons chevron-icon">expand_more</span>
@@ -189,7 +188,7 @@
       </div>
 
       <div class="field-group">
-        <label class="field-label">Payment Method</label>
+        <label class="field-label">Forma de Pagamento</label>
         <div class="select-wrapper">
           <span class="material-icons select-icon">credit_card</span>
           <select class="field-select" [(ngModel)]="novaTransacao.paymentMethod" name="paymentMethod">
@@ -200,7 +199,7 @@
       </div>
 
       <div class="field-group">
-        <label class="field-label">Notes</label>
+        <label class="field-label">Observação</label>
         <textarea
           class="field-textarea"
           [(ngModel)]="novaTransacao.notes"
@@ -210,7 +209,7 @@
       </div>
 
       <div class="field-group">
-        <label class="field-label">Receipt Upload</label>
+        <label class="field-label">Adicionar Comprovante</label>
         <div class="upload-area" (click)="fileInput.click()" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
           <input
             #fileInput
@@ -222,7 +221,7 @@
 
           <ng-container *ngIf="arquivosSelecionados.length === 0">
             <span class="material-icons upload-icon">cloud_upload</span>
-            <div class="upload-text">Click to upload or drag and drop</div>
+            <div class="upload-text">Clique para adicionar</div>
             <div class="upload-subtext">PDF, PNG, JPG (max. 10MB)</div>
           </ng-container>
 
