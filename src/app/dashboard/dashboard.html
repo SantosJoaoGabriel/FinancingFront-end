@@ -7,7 +7,7 @@
     <div class="card">
       <div class="card-top">
         <div>
-          <p class="card-label">Total Balance</p>
+          <p class="card-label">Ganhos Mensal</p>
           <p class="card-value">{{ saldoTotal | currency:'BRL' }}</p>
         </div>
         <div class="card-icon icon-green">
@@ -28,7 +28,7 @@
     <div class="card">
       <div class="card-top">
         <div>
-          <p class="card-label">Monthly Spending</p>
+          <p class="card-label">Gastos Mensal</p>
           <p class="card-value">{{ gastosMes | currency:'BRL' }}</p>
         </div>
         <div class="card-icon icon-blue">
@@ -49,7 +49,7 @@
     <div class="card">
       <div class="card-top">
         <div>
-          <p class="card-label">Savings Goal</p>
+          <p class="card-label">Disponível</p>
           <p class="card-value">{{ metaPorcentagem }}%</p>
         </div>
         <div class="card-icon icon-orange">
@@ -60,7 +60,7 @@
         <div class="progress-track">
           <div class="progress-fill" [style.width.%]="metaPorcentagem"></div>
         </div>
-        <p class="progress-label">{{ metaRestante | currency:'BRL' }} remaining to reach goal</p>
+        <p class="progress-label">{{ metaRestante | currency:'BRL' }} Não Gastos</p>
       </div>
     </div>
 
@@ -73,12 +73,12 @@
     <div class="chart-card">
       <div class="chart-card-header">
         <div>
-          <p class="chart-title">Spending Trends</p>
-          <p class="chart-subtitle">Overview of the last 6 months</p>
+          <p class="chart-title">Escala de Gastos</p>
+          <p class="chart-subtitle">Crescimentos dos gastos em escala grafica</p>
         </div>
         <select class="period-select">
-          <option>Last 6 Months</option>
-          <option>Last 12 Months</option>
+          <option>Ultimos 6 Meses</option>
+          <option>Ultimos 12 Meses</option>
         </select>
       </div>
       <app-chart-linha-gastos></app-chart-linha-gastos>
@@ -88,8 +88,8 @@
     <div class="chart-card">
       <div class="chart-card-header">
         <div>
-          <p class="chart-title">Spending by Category</p>
-          <p class="chart-subtitle">Detailed breakdown</p>
+          <p class="chart-title">Categorias de Gastos</p>
+          <p class="chart-subtitle">Gastos Detalhados</p>
         </div>
       </div>
       <app-chart-gastos></app-chart-gastos>
@@ -109,7 +109,7 @@
   <!-- Transações Recentes -->
   <div class="transactions-card">
     <div class="transactions-header">
-      <h4 class="transactions-title">Recent Transactions</h4>
+      <h4 class="transactions-title">Ultimas Transações</h4>
       <a class="view-all-btn" routerLink="/transacoes">View All</a>
     </div>
 
@@ -118,9 +118,9 @@
         <thead>
           <tr>
             <th>Vendor</th>
-            <th>Date</th>
-            <th>Category</th>
-            <th>Amount</th>
+            <th>Data</th>
+            <th>Categoria</th>
+            <th>Valor</th>
             <th style="text-align:right">Status</th>
           </tr>
         </thead>
