@@ -1,1 +1,32 @@
-<p>reports works!</p>
+<div class="reports-page">
+  <div class="page-header">
+    <h2>Relatórios</h2>
+    <p>Visualize e baixe os relatórios financeiros disponíveis em PDF.</p>
+  </div>
+
+  <div class="reports-grid">
+    <mat-card class="report-card" *ngFor="let report of reports">
+      <div class="report-card-top">
+        <div class="report-icon">
+          <mat-icon>description</mat-icon>
+        </div>
+
+        <div class="report-badge">
+          {{ report.format }}
+        </div>
+      </div>
+
+      <div class="report-content">
+        <h3>{{ report.title }}</h3>
+        <p>{{ report.description }}</p>
+      </div>
+
+      <div class="report-actions">
+        <button mat-flat-button color="primary" (click)="downloadReport(report)">
+          <mat-icon>download</mat-icon>
+          Baixar PDF
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>
