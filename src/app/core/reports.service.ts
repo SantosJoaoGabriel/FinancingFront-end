@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 
 export interface ReportItem {
   id: number;
+  date: string;
   title: string;
-  description: string;
-  fileName: string;
+  category: string;
   format: string;
+  fileName: string;
 }
 
 @Injectable({
@@ -16,24 +17,27 @@ export class ReportsService {
     return [
       {
         id: 1,
+        date: '2026-04-01',
         title: 'Relatório mensal',
-        description: 'Resumo das receitas e despesas do mês atual.',
-        fileName: 'relatorio-mensal.pdf',
-        format: 'PDF'
+        category: 'Financeiro',
+        format: 'PDF',
+        fileName: 'relatorio-mensal.pdf'
       },
       {
         id: 2,
+        date: '2026-04-01',
         title: 'Relatório por categoria',
-        description: 'Agrupamento dos gastos e ganhos por categoria.',
-        fileName: 'relatorio-categorias.pdf',
-        format: 'PDF'
+        category: 'Categorias',
+        format: 'PDF',
+        fileName: 'relatorio-categorias.pdf'
       },
       {
         id: 3,
+        date: '2026-04-01',
         title: 'Relatório anual',
-        description: 'Visão consolidada das movimentações financeiras do ano.',
-        fileName: 'relatorio-anual.pdf',
-        format: 'PDF'
+        category: 'Resumo anual',
+        format: 'PDF',
+        fileName: 'relatorio-anual.pdf'
       }
     ];
   }
