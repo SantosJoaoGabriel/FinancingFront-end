@@ -1,173 +1,114 @@
-<div class="rel-container">
-
-  <!-- Header -->
-  <div class="rel-header">
+<div class="reports-page">
+  <div class="reports-header">
     <div>
-      <nav class="rel-breadcrumb">
-        <span>SpendFree</span>
-        <span class="material-icons">chevron_right</span>
-        <span class="rel-breadcrumb-active">Central de Relatórios</span>
-      </nav>
-      <h2 class="rel-title">Relatórios Financeiros</h2>
-      <p class="rel-subtitle">Visualize, gere e exporte seus demonstrativos consolidados.</p>
+      <div class="breadcrumb">CENTRO FINANCEIRO <span>›</span> RELATÓRIOS</div>
+      <h2>Relatórios Financeiros</h2>
+      <p>Visualize, gere e exporte seus demonstrativos consolidados.</p>
     </div>
-    <button class="rel-btn-primary" (click)="gerarRelatorio('novo')">
-      <span class="material-icons">add_circle</span>
-      Gerar Novo Relatório
-    </button>
   </div>
 
-  <!-- Cards rápidos -->
-  <section class="rel-cards-grid">
-
-    <!-- Card Mensal -->
-    <div class="rel-card rel-card-hover">
-      <div class="rel-card-top">
-        <div class="rel-card-icon rel-icon-primary">
-          <span class="material-icons">calendar_month</span>
+  <div class="cards-grid">
+    <mat-card class="report-card" *ngFor="let report of reportCards; let i = index">
+      <div class="card-top">
+        <div class="card-icon" [ngClass]="'icon-' + i">
+          <mat-icon>
+            {{ i === 0 ? 'calendar_month' : i === 1 ? 'donut_large' : 'insights' }}
+          </mat-icon>
         </div>
-        <span class="rel-badge rel-badge-secondary">Mensal</span>
+
+        <div class="card-tag">
+          {{ report.type }}
+        </div>
       </div>
-      <h3 class="rel-card-title">Relatório Mensal</h3>
-      <p class="rel-card-desc">Conciliação completa de entradas e saídas do mês vigente.</p>
-      <button class="rel-card-btn" (click)="gerarRelatorio('mensal')">
-        <span class="material-icons">bolt</span>
-        Gerar agora
+
+      <div class="card-content">
+        <h3>{{ report.title }}</h3>
+        <p>{{ report.subtitle }}</p>
+      </div>
+
+      <button mat-flat-button class="generate-button" (click)="generatePdf(report)">
+        <mat-icon>bolt</mat-icon>
+        {{ report.buttonText }}
       </button>
-    </div>
+    </mat-card>
+  </div>
 
-    <!-- Card Analítico -->
-    <div class="rel-card rel-card-hover">
-      <div class="rel-card-top">
-        <div class="rel-card-icon rel-icon-tertiary">
-          <span class="material-icons">category</span>
-        </div>
-        <span class="rel-badge rel-badge-tertiary">Analítico</span>
-      </div>
-      <h3 class="rel-card-title">Gastos por Categoria</h3>
-      <p class="rel-card-desc">Distribuição percentual de despesas operacionais e fixas.</p>
-      <button class="rel-card-btn" (click)="gerarRelatorio('categoria')">
-        <span class="material-icons">bolt</span>
-        Gerar agora
-      </button>
-    </div>
+  <div class="history-section">
+    <div class="history-header">
+      <h3>Histórico de relatórios</h3>
 
-    <!-- Card Anual -->
-    <div class="rel-card rel-card-hover">
-      <div class="rel-card-top">
-        <div class="rel-card-icon rel-icon-secondary">
-          <span class="material-icons">query_stats</span>
-        </div>
-        <span class="rel-badge rel-badge-primary">Anual</span>
-      </div>
-      <h3 class="rel-card-title">Resumo Anual</h3>
-      <p class="rel-card-desc">Projeção de crescimento e balanço patrimonial consolidado.</p>
-      <button class="rel-card-btn" (click)="gerarRelatorio('anual')">
-        <span class="material-icons">bolt</span>
-        Gerar agora
-      </button>
-    </div>
+      <div class="history-filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Categoria</mat-label>
+          <mat-select [(ngModel)]="selectedCategory">
+            <mat-option value="Todos">Todos</mat-option>
+            <mat-option value="Financeiro">Financeiro</mat-option>
+            <mat-option value="Analítico">Analítico</mat-option>
+            <mat-option value="Anual">Anual</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-  </section>
-
-  <!-- Histórico -->
-  <section class="rel-table-section">
-
-    <!-- Filtros -->
-    <div class="rel-table-header">
-      <h4 class="rel-table-title">Histórico de Relatórios</h4>
-      <div class="rel-filters">
-        <div class="rel-filter-box">
-          <span class="material-icons rel-filter-icon">filter_alt</span>
-          <select class="rel-filter-select" [(ngModel)]="filtroCategoria">
-            <option>Todas Categorias</option>
-            <option>Mensal</option>
-            <option>Anual</option>
-          </select>
-        </div>
-        <div class="rel-filter-box">
-          <span class="material-icons rel-filter-icon">event</span>
-          <select class="rel-filter-select" [(ngModel)]="filtroPeriodo">
-            <option>Últimos 30 dias</option>
-            <option>Últimos 6 meses</option>
-            <option>Ano atual</option>
-          </select>
-        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>Período</mat-label>
+          <mat-select [(ngModel)]="selectedPeriod">
+            <mat-option value="Últimos 30 dias">Últimos 30 dias</mat-option>
+            <mat-option value="Últimos 90 dias">Últimos 90 dias</mat-option>
+            <mat-option value="Este ano">Este ano</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
 
-    <!-- Tabela -->
-    <div class="rel-table-wrapper">
-      <table class="rel-table">
-        <thead>
-          <tr>
-            <th>Data do Relatório</th>
-            <th>Título / Descrição</th>
-            <th>Período</th>
-            <th>Formato</th>
-            <th>Status</th>
-            <th class="text-right">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let r of relatoriosFiltrados; let i = index" class="rel-row">
-            <td class="rel-td-date">{{ r.data }}</td>
+    <div class="table-shell">
+      <table mat-table [dataSource]="reportHistory" class="reports-table">
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>DATA DO RELATÓRIO</th>
+          <td mat-cell *matCellDef="let item">{{ item.date | date:'dd/MM/yyyy' }}</td>
+        </ng-container>
 
-            <td class="rel-td-title">
-              <p class="rel-row-title">{{ r.titulo }}</p>
-              <p class="rel-row-desc">{{ r.descricao }}</p>
-            </td>
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>TÍTULO / DESCRIÇÃO</th>
+          <td mat-cell *matCellDef="let item">
+            <div class="title-cell">
+              <strong>{{ item.title }}</strong>
+              <span>{{ item.description }}</span>
+            </div>
+          </td>
+        </ng-container>
 
-            <td class="rel-td-periodo">{{ r.periodo }}</td>
+        <ng-container matColumnDef="period">
+          <th mat-header-cell *matHeaderCellDef>PERÍODO</th>
+          <td mat-cell *matCellDef="let item">{{ item.period }}</td>
+        </ng-container>
 
-            <td>
-              <div class="rel-formato">
-                <span class="material-icons" [class.rel-pdf-icon]="isPdf(r.formato)" [class.rel-xlsx-icon]="!isPdf(r.formato)">
-                  {{ isPdf(r.formato) ? 'picture_as_pdf' : 'table_chart' }}
-                </span>
-                <span class="rel-formato-label">{{ r.formato }}</span>
-              </div>
-            </td>
+        <ng-container matColumnDef="format">
+          <th mat-header-cell *matHeaderCellDef>FORMATO</th>
+          <td mat-cell *matCellDef="let item">
+            <span class="format-chip pdf-chip">{{ item.format }}</span>
+          </td>
+        </ng-container>
 
-            <td>
-              <span class="rel-status" [class.rel-status-done]="isConcluido(r.status)" [class.rel-status-processing]="!isConcluido(r.status)">
-                {{ r.status }}
-              </span>
-            </td>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>STATUS</th>
+          <td mat-cell *matCellDef="let item">
+            <span class="status-chip" [ngClass]="item.status === 'Concluído' ? 'success' : 'warning'">
+              {{ item.status }}
+            </span>
+          </td>
+        </ng-container>
 
-            <td>
-              <div class="rel-actions">
-                <button class="rel-action-btn rel-action-view" [class.rel-disabled]="!isConcluido(r.status)" (click)="isConcluido(r.status) && visualizar(r)">
-                  <span class="material-icons">visibility</span>
-                </button>
-                <button class="rel-action-btn rel-action-download" [class.rel-disabled]="!isConcluido(r.status)" (click)="isConcluido(r.status) && baixar(r)">
-                  <span class="material-icons">download</span>
-                </button>
-                <button class="rel-action-btn rel-action-delete" (click)="deletar(i)">
-                  <span class="material-icons">delete</span>
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>AÇÕES</th>
+          <td mat-cell *matCellDef="let item">
+            <button mat-icon-button class="table-action" (click)="downloadPdf(item)" aria-label="Baixar PDF">
+              <mat-icon>download</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     </div>
-
-    <!-- Paginação -->
-    <div class="rel-pagination">
-      <button class="rel-page-btn">
-        <span class="material-icons">chevron_left</span>
-      </button>
-      <button class="rel-page-num rel-page-active">1</button>
-      <button class="rel-page-num">2</button>
-      <button class="rel-page-num">3</button>
-      <span class="rel-page-dots">...</span>
-      <button class="rel-page-num">12</button>
-      <button class="rel-page-btn">
-        <span class="material-icons">chevron_right</span>
-      </button>
-    </div>
-
-  </section>
-
+  </div>
 </div>
