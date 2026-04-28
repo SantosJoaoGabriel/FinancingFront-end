@@ -1,8 +1,15 @@
+/* ===== DASHBOARD CONTAINER ===== */
 .dashboard-container {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  color: #f1f5f9;
+  color: #1e293b;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
 }
 
 /* ===== CARDS ===== */
@@ -15,15 +22,13 @@
 .card {
   flex: 1;
   min-width: 220px;
-  background-color: #1a2530;
+  background: #ffffff;
   border-radius: 20px;
-  border: 1px solid #2d3a4b;
-  color: #f1f5f9;
+  border: 1px solid #e2e8f0;
   padding: 20px 22px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
-/* card-top é o que o HTML usa */
 .card-top {
   display: flex;
   align-items: flex-start;
@@ -41,7 +46,7 @@
 .card-value {
   font-size: 1.8rem;
   font-weight: 800;
-  color: #f1f5f9;
+  color: #1e293b;
   letter-spacing: -0.5px;
   margin: 0;
 }
@@ -56,33 +61,32 @@
   flex-shrink: 0;
 }
 
-/* corrigido para material-icons-round */
-.card-icon .material-icons-round {
+.card-icon .material-icons-round,
+.card-icon mat-icon {
   font-size: 20px;
 }
 
 .card-icon mat-icon {
-  font-size: 20px;
   width: 20px;
   height: 20px;
 }
 
 .icon-green {
-  background-color: rgba(16, 185, 129, 0.15);
+  background: rgba(16, 185, 129, 0.15);
   color: #10b981;
 }
 
 .icon-blue {
-  background-color: rgba(19, 127, 236, 0.15);
+  background: rgba(19, 127, 236, 0.15);
   color: #137fec;
 }
 
 .icon-orange {
-  background-color: rgba(249, 115, 22, 0.15);
+  background: rgba(249, 115, 22, 0.15);
   color: #f97316;
 }
 
-/* Mini barras - alinhado com HTML (.mini-bars e .mini-bar) */
+/* Mini barras */
 .mini-bars {
   display: flex;
   gap: 5px;
@@ -105,14 +109,14 @@
   width: 100%;
   height: 10px;
   border-radius: 999px;
-  background-color: #0f1922;
+  background: #e2e8f0;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
   border-radius: 999px;
-  background-color: #f97316;
+  background: #f97316;
 }
 
 .progress-label {
@@ -129,11 +133,10 @@
   gap: 20px;
 }
 
-/* chart-card é o que o HTML usa para ambos os gráficos */
 .chart-card {
-  background-color: #1a2530;
+  background: #ffffff;
   border-radius: 20px;
-  border: 1px solid #2d3a4b;
+  border: 1px solid #e2e8f0;
   padding: 22px;
 }
 
@@ -157,7 +160,7 @@
 .chart-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: #1e293b;
   margin: 0 0 4px 0;
 }
 
@@ -168,10 +171,10 @@
 }
 
 .period-select {
-  background-color: #0f1922;
-  border: 1px solid #2d3a4b;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
-  color: #94a3b8;
+  color: #475569;
   padding: 6px 12px;
   font-size: 0.78rem;
   font-family: 'Manrope', sans-serif;
@@ -179,7 +182,7 @@
   outline: none;
 }
 
-/* Legenda do donut - alinhado com HTML (.legend-item, .legend-left, .legend-dot, .legend-value) */
+/* Legenda do donut */
 .donut-legend {
   display: flex;
   flex-direction: column;
@@ -198,7 +201,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #cbd5e1;
+  color: #475569;
   font-weight: 500;
 }
 
@@ -211,14 +214,14 @@
 
 .legend-value {
   font-weight: 700;
-  color: #f1f5f9;
+  color: #1e293b;
 }
 
 /* ===== TRANSAÇÕES RECENTES ===== */
 .transactions-card {
-  background-color: #1a2530;
+  background: #ffffff;
   border-radius: 20px;
-  border: 1px solid #2d3a4b;
+  border: 1px solid #e2e8f0;
   overflow: hidden;
 }
 
@@ -227,13 +230,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
-  border-bottom: 1px solid #2d3a4b;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .transactions-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: #1e293b;
   margin: 0;
 }
 
@@ -262,7 +265,7 @@ table {
 }
 
 thead tr {
-  background-color: rgba(15, 25, 34, 0.5);
+  background: #f8fafc;
 }
 
 thead th {
@@ -280,8 +283,8 @@ thead th:last-child {
 }
 
 tbody tr {
-  border-bottom: 1px solid #2d3a4b;
-  transition: background-color 0.15s;
+  border-bottom: 1px solid #e2e8f0;
+  transition: background 0.15s;
 }
 
 tbody tr:last-child {
@@ -289,16 +292,16 @@ tbody tr:last-child {
 }
 
 tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.03);
+  background: #f8fafc;
 }
 
 tbody td {
   padding: 14px 24px;
   font-size: 0.85rem;
-  color: #f1f5f9;
+  color: #1e293b;
 }
 
-/* vendor-cell e vendor-icon-box são o que o HTML usa */
+/* Célula de vendor */
 .vendor-cell {
   display: flex;
   align-items: center;
@@ -309,14 +312,13 @@ tbody td {
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background-color: #0f1922;
+  background: #f1f5f9;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-/* corrigido para material-icons-round */
 .vendor-icon-box .material-icons-round {
   font-size: 20px;
 }
@@ -324,7 +326,7 @@ tbody td {
 .vendor-name {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: #1e293b;
   margin: 0;
 }
 
@@ -341,38 +343,37 @@ tbody td {
 .category-badge {
   padding: 4px 10px;
   border-radius: 999px;
-  background-color: #0f1922;
-  color: #94a3b8;
+  background: #f1f5f9;
+  color: #475569;
   font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-/* classes de badge por categoria */
 .badge-food {
-  background-color: rgba(16, 185, 129, 0.15);
-  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
 }
 
 .badge-transport {
-  background-color: rgba(249, 115, 22, 0.15);
-  color: #f97316;
+  background: rgba(249, 115, 22, 0.1);
+  color: #ea580c;
 }
 
 .badge-default {
-  background-color: #0f1922;
-  color: #94a3b8;
+  background: #f1f5f9;
+  color: #475569;
 }
 
 .amount-negative {
   font-weight: 700;
-  color: #ef4444;
+  color: #dc2626;
 }
 
 .amount-positive {
   font-weight: 700;
-  color: #10b981;
+  color: #16a34a;
 }
 
 .status-cell {
@@ -389,17 +390,21 @@ tbody td {
 }
 
 .status-completed {
-  background-color: rgba(16, 185, 129, 0.15);
-  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
 }
 
 .status-pending {
-  background-color: #0f1922;
-  color: #94a3b8;
+  background: #f1f5f9;
+  color: #64748b;
 }
 
 /* ===== RESPONSIVO ===== */
 @media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
   .charts-row {
     flex-direction: column;
   }

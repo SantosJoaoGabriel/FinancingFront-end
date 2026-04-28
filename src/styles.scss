@@ -1,6 +1,28 @@
+html, body {
+  height: 100%;
+}
+
 body {
   margin: 0;
-  background-color: #101922;
-  color: #f1f5f9;
-  font-family: 'Manrope', sans-serif;
+  background: #f4f8ff;
+  color: #0f172a;
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+/* cores globais do projeto */
+:root {
+  --app-bg: #f4f8ff;
+  --surface: #ffffff;
+  --surface-soft: #f8fbff;
+  --surface-hover: #eef5ff;
+  --border-color: #dbe7f5;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-soft: #dbeafe;
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --shadow-soft: 0 10px 30px rgba(37, 99, 235, 0.08);
 }
