@@ -14,13 +14,13 @@ interface NovaTransacao {
 }
 
 @Component({
-  selector: 'app-transacoes',
+  selector: 'app-expenses',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './transacoes.html',
-  styleUrl: './transacoes.css'
+  templateUrl: './expenses.html',
+  styleUrl: './expenses.css'
 })
-export class TransacoesComponent implements OnInit {
+export class ExpensesComponent implements OnInit {
   Math = Math;
   mostrarFormulario = false;
 
