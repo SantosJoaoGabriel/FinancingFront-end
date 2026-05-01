@@ -28,7 +28,7 @@ interface NovoGanho {
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './gains.html',
-  styleUrl: './gains.css'
+  styleUrls: ['./gains.css']
 })
 export class GainsComponent implements OnInit {
   Math = Math;
@@ -38,8 +38,8 @@ export class GainsComponent implements OnInit {
   filteredData: Ganho[] = [];
 
   searchTerm = '';
-  filtroCategoria = '';
-  filtroPayment = '';
+  filtroDataInicio = '';
+  filtroDataFim = '';
 
   pageSize = 5;
   currentPage = 1;
@@ -64,7 +64,6 @@ export class GainsComponent implements OnInit {
   }
 
   carregarGanhos() {
-    // Por enquanto usando dados mock até criar o endpoint no backend
     this.dataSource = [
       { id: 1, descricao: 'Salário Mensal', categoria: 'Salário', data: '2026-04-05', valor: 5000, paymentMethod: 'Transferência' },
       { id: 2, descricao: 'Projeto Freelance', categoria: 'Freelance', data: '2026-04-10', valor: 1500, paymentMethod: 'PIX' },
@@ -95,10 +94,25 @@ export class GainsComponent implements OnInit {
   applyFilters() {
     this.filteredData = this.dataSource.filter(t => {
       const matchSearch = t.descricao.toLowerCase().includes(this.searchTerm.toLowerCase());
-      const matchCat = this.filtroCategoria ? t.categoria === this.filtroCategoria : true;
-      return matchSearch && matchCat;
+
+      const dataGanho = new Date(t.data);
+      const matchInicio = this.filtroDataInicio
+        ? dataGanho >= new Date(this.filtroDataInicio)
+        : true;
+      const matchFim = this.filtroDataFim
+        ? dataGanho <= new Date(this.filtroDataFim)
+        : true;
+
+      return matchSearch && matchInicio && matchFim;
     });
     this.currentPage = 1;
+  }
+
+  limparFiltros() {
+    this.searchTerm = '';
+    this.filtroDataInicio = '';
+    this.filtroDataFim = '';
+    this.applyFilters();
   }
 
   abrirFormulario() {

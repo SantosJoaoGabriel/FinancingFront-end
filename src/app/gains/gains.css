@@ -760,3 +760,94 @@ tbody td {
 .badge-aluguel       { background: rgba(245, 158, 11, 0.1);  color: #d97706; border-color: rgba(245, 158, 11, 0.25); }
 .badge-vendas        { background: rgba(236, 72, 153, 0.1);  color: #db2777; border-color: rgba(236, 72, 153, 0.25); }
 .badge-outros        { background: rgba(100, 116, 139, 0.1); color: #475569; border-color: rgba(100, 116, 139, 0.25); }
+
+/* ===== FILTRO DE PERÍODO ===== */
+.date-range-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.date-field {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  gap: 8px;
+  transition: border-color 0.2s;
+}
+
+.date-field:focus-within {
+  border-color: #137fec;
+}
+
+.date-icon {
+  font-size: 18px;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.date-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #1e293b;
+  font-size: 0.85rem;
+  font-family: 'Manrope', sans-serif;
+  color-scheme: light;
+  cursor: pointer;
+}
+
+.date-separator {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.btn-clear-filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-clear-filter:hover {
+  border-color: #dc2626;
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.05);
+}
+
+.btn-clear-filter .material-icons {
+  font-size: 18px;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: #94a3b8;
+}
+
+.empty-state .material-icons {
+  font-size: 40px;
+  color: #cbd5e1;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.empty-state p {
+  font-size: 0.9rem;
+  margin: 0;
+}

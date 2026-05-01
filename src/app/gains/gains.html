@@ -5,6 +5,7 @@
   </div>
 
   <div class="filters-row">
+    <!-- Campo de pesquisa -->
     <div class="search-box">
       <span class="material-icons search-icon">search</span>
       <input
@@ -15,16 +16,37 @@
         (ngModelChange)="applyFilters()">
     </div>
 
-    <div class="filter-chips">
-      <select class="filter-chip" [(ngModel)]="filtroCategoria" (ngModelChange)="applyFilters()">
-        <option value="">Categoria</option>
-        <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
-      </select>
+    <!-- Filtro por período -->
+    <div class="date-range-filter">
+      <div class="date-field">
+        <span class="material-icons date-icon">calendar_today</span>
+        <input
+          type="date"
+          class="date-input"
+          [(ngModel)]="filtroDataInicio"
+          (ngModelChange)="applyFilters()"
+          title="Data inicial">
+      </div>
 
-      <select class="filter-chip" [(ngModel)]="filtroPayment" (ngModelChange)="applyFilters()">
-        <option value="">Metodos</option>
-        <option *ngFor="let m of paymentMethods" [value]="m">{{ m }}</option>
-      </select>
+      <span class="date-separator">até</span>
+
+      <div class="date-field">
+        <span class="material-icons date-icon">calendar_today</span>
+        <input
+          type="date"
+          class="date-input"
+          [(ngModel)]="filtroDataFim"
+          (ngModelChange)="applyFilters()"
+          title="Data final">
+      </div>
+
+      <button
+        class="btn-clear-filter"
+        *ngIf="filtroDataInicio || filtroDataFim"
+        (click)="limparFiltros()"
+        title="Limpar filtros">
+        <span class="material-icons">close</span>
+      </button>
     </div>
   </div>
 
@@ -77,6 +99,14 @@
               </button>
             </td>
           </tr>
+
+          <!-- Estado vazio -->
+          <tr *ngIf="paginatedData.length === 0">
+            <td colspan="6" class="empty-state">
+              <span class="material-icons">search_off</span>
+              <p>Nenhum ganho encontrado para o período selecionado.</p>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -103,29 +133,29 @@
           class="page-nav-btn"
           (click)="goToPage(currentPage + 1)"
           [disabled]="currentPage === totalPages">
-          Proximo
+          Próximo
         </button>
       </div>
 
       <p class="page-info">
-        Showing
+        Mostrando
         <span>{{ (currentPage - 1) * pageSize + 1 }}</span>
-        to
+        a
         <span>{{ Math.min(currentPage * pageSize, filteredData.length) }}</span>
-        of
+        de
         <span>{{ filteredData.length }}</span>
-        income records
+        registros
       </p>
     </div>
   </div>
 
-  <button class="fab fab-green" (click)="abrirFormulario()">
+  <button class="fab" (click)="abrirFormulario()">
     <span class="material-icons">add</span>
   </button>
 
   <div class="overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()"></div>
 
-    <div class="form-modal" *ngIf="mostrarFormulario">
+  <div class="form-modal" *ngIf="mostrarFormulario">
     <div class="form-card">
 
       <div class="amount-section">
@@ -235,7 +265,7 @@
             </div>
             <div class="upload-more">
               <span class="material-icons">add</span>
-              Add more files
+              Adicionar mais arquivos
             </div>
           </ng-container>
         </div>
@@ -243,7 +273,7 @@
 
       <div class="actions">
         <button class="btn-cancel" (click)="fecharFormulario()">Cancelar</button>
-        <button class="btn-save btn-save-green" (click)="adicionarGanho()">Salvar</button>
+        <button class="btn-save" (click)="adicionarGanho()">Salvar</button>
       </div>
 
     </div>

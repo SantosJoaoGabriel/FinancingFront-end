@@ -18,7 +18,7 @@ interface NovaTransacao {
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './expenses.html',
-  styleUrl: './expenses.css'
+  styleUrls: ['./expenses.css']
 })
 export class ExpensesComponent implements OnInit {
   Math = Math;
@@ -28,8 +28,8 @@ export class ExpensesComponent implements OnInit {
   filteredData: Transacao[] = [];
 
   searchTerm = '';
-  filtroCategoria = '';
-  filtroPayment = '';
+  filtroDataInicio = '';
+  filtroDataFim = '';
 
   pageSize = 5;
   currentPage = 1;
@@ -39,7 +39,7 @@ export class ExpensesComponent implements OnInit {
   ];
 
   paymentMethods: string[] = [
-    'Credit Card', 'Debit Card', 'Cash', 'Pix'
+    'Cartão de Crédito', 'Cartão de Débito', 'Dinheiro', 'Pix'
   ];
 
   novaTransacao: NovaTransacao = this.emptyForm();
@@ -83,10 +83,25 @@ export class ExpensesComponent implements OnInit {
   applyFilters() {
     this.filteredData = this.dataSource.filter(t => {
       const matchSearch = t.descricao.toLowerCase().includes(this.searchTerm.toLowerCase());
-      const matchCat = this.filtroCategoria ? t.categoria === this.filtroCategoria : true;
-      return matchSearch && matchCat;
+
+      const dataTransacao = new Date(t.data);
+      const matchInicio = this.filtroDataInicio
+        ? dataTransacao >= new Date(this.filtroDataInicio)
+        : true;
+      const matchFim = this.filtroDataFim
+        ? dataTransacao <= new Date(this.filtroDataFim)
+        : true;
+
+      return matchSearch && matchInicio && matchFim;
     });
     this.currentPage = 1;
+  }
+
+  limparFiltros() {
+    this.searchTerm = '';
+    this.filtroDataInicio = '';
+    this.filtroDataFim = '';
+    this.applyFilters();
   }
 
   abrirFormulario() {
@@ -118,7 +133,7 @@ export class ExpensesComponent implements OnInit {
     });
   }
 
-    getCategoryIconClass(cat: string): string {
+  getCategoryIconClass(cat: string): string {
     const classes: { [key: string]: string } = {
       'Alimentação': 'icon-alimentacao',
       'Transporte': 'icon-transporte',
@@ -156,14 +171,14 @@ export class ExpensesComponent implements OnInit {
 
   getCategoryColor(cat: string): string {
     const colors: { [key: string]: string } = {
-      'Alimentação': '#22c55e',
-      'Transporte': '#3b82f6',
-      'Assinaturas': '#a855f7',
-      'Lazer': '#f97316',
-      'Moradia': '#f59e0b',
-      'Saúde': '#ef4444'
+      'Alimentação': '#ea580c',
+      'Transporte': '#2563eb',
+      'Assinaturas': '#9333ea',
+      'Lazer': '#db2777',
+      'Moradia': '#d97706',
+      'Saúde': '#dc2626'
     };
-    return colors[cat] || '#6b7280';
+    return colors[cat] || '#475569';
   }
 
   onFileSelected(event: Event) {
@@ -215,7 +230,7 @@ export class ExpensesComponent implements OnInit {
       categoria: '',
       data: new Date().toISOString().substring(0, 10),
       valor: 0,
-      paymentMethod: 'Credit Card',
+      paymentMethod: 'Cartão de Crédito',
       notes: ''
     };
   }
