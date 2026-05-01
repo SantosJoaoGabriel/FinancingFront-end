@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { TransactionsService } from '../core/transactions.service';
 import { HttpClient } from '@angular/common/http';
 
 export interface Ganho {
@@ -25,13 +24,13 @@ interface NovoGanho {
 }
 
 @Component({
-  selector: 'app-ganhos',
+  selector: 'app-gains',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './ganhos.html',
-  styleUrl: './ganhos.css'
+  templateUrl: './gains.html',
+  styleUrl: './gains.css'
 })
-export class GanhosComponent implements OnInit {
+export class GainsComponent implements OnInit {
   Math = Math;
   mostrarFormulario = false;
 
