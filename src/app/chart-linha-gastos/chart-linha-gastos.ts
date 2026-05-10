@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
-import { TransactionsService, Transacao } from '../core/transactions.service';
+import { TransactionsService, Transaction } from '../core/transactions.service';
 
 @Component({
   selector: 'app-chart-linha-gastos',
@@ -60,17 +60,17 @@ export class ChartLinhaGastosComponent implements OnInit {
     });
   }
 
-  private montarDados(transacoes: Transacao[]) {
+  private montarDados(transacoes: Transaction[]) {
     const porDia = new Map<string, number>();
 
     for (const t of transacoes) {
-      const dataObj = new Date(t.data);
+      const dataObj = new Date(t.date);
       const dia = dataObj.getDate().toString().padStart(2, '0');
       const mes = (dataObj.getMonth() + 1).toString().padStart(2, '0');
       const chave = `${dia}/${mes}`;
 
       const atual = porDia.get(chave) ?? 0;
-      porDia.set(chave, atual + t.valor);
+      porDia.set(chave, atual + t.amount);
     }
 
     // precisa criar um novo objeto para o Angular detectar a mudança

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { TransactionsService, Transacao } from '../core/transactions.service';
+import { TransactionsService, Transaction } from '../core/transactions.service';
 
 interface NovaTransacao {
   descricao: string;
@@ -24,8 +24,8 @@ export class ExpensesComponent implements OnInit {
   Math = Math;
   mostrarFormulario = false;
 
-  dataSource: Transacao[] = [];
-  filteredData: Transacao[] = [];
+  dataSource: Transaction[] = [];
+  filteredData: Transaction[] = [];
 
   searchTerm = '';
   filtroDataInicio = '';
@@ -65,7 +65,7 @@ export class ExpensesComponent implements OnInit {
     return Math.ceil(this.filteredData.length / this.pageSize);
   }
 
-  get paginatedData(): Transacao[] {
+  get paginatedData(): Transaction[] {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.filteredData.slice(start, start + this.pageSize);
   }
@@ -82,9 +82,9 @@ export class ExpensesComponent implements OnInit {
 
   applyFilters() {
     this.filteredData = this.dataSource.filter(t => {
-      const matchSearch = t.descricao.toLowerCase().includes(this.searchTerm.toLowerCase());
+      const matchSearch = t.description.toLowerCase().includes(this.searchTerm.toLowerCase());
 
-      const dataTransacao = new Date(t.data);
+      const dataTransacao = new Date(t.date);
       const matchInicio = this.filtroDataInicio
         ? dataTransacao >= new Date(this.filtroDataInicio)
         : true;
@@ -118,10 +118,10 @@ export class ExpensesComponent implements OnInit {
     if (!this.novaTransacao.descricao || !this.novaTransacao.categoria) return;
 
     this.transactionsService.addTransacao({
-      descricao: this.novaTransacao.descricao,
-      categoria: this.novaTransacao.categoria,
-      data: this.novaTransacao.data,
-      valor: this.novaTransacao.valor,
+      description: this.novaTransacao.descricao,
+      category: this.novaTransacao.categoria,
+      date: this.novaTransacao.data,
+      amount: this.novaTransacao.valor,
       paymentMethod: this.novaTransacao.paymentMethod,
       notes: this.novaTransacao.notes
     }).subscribe({

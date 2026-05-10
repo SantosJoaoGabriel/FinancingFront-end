@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
-import { TransactionsService, Transacao } from '../core/transactions.service';
+import { TransactionsService, Transaction } from '../core/transactions.service';
 
 @Component({
   selector: 'app-chart-gastos',
@@ -46,12 +46,12 @@ export class ChartGastosComponent implements OnInit {
     });
   }
 
-  private montarDados(transacoes: Transacao[]) {
+  private montarDados(transacoes: Transaction[]) {
     const porCategoria = new Map<string, number>();
 
     for (const t of transacoes) {
-      const atual = porCategoria.get(t.categoria) ?? 0;
-      porCategoria.set(t.categoria, atual + t.valor);
+      const atual = porCategoria.get(t.category) ?? 0;
+      porCategoria.set(t.category, atual + t.amount);
     }
 
     // precisa criar um novo objeto para o Angular detectar a mudança

@@ -66,20 +66,20 @@
         </thead>
         <tbody>
           <tr *ngFor="let t of paginatedData">
-            <td class="date-cell">{{ t.data | date:'MMM dd, yyyy' }}</td>
+            <td class="date-cell">{{ t.date | date:'MMM dd, yyyy' }}</td>
 
             <td>
               <div class="expense-details">
-                <div class="expense-icon" [ngClass]="getCategoryIconClass(t.categoria)">
-                  <span class="material-icons">{{ getCategoryIcon(t.categoria) }}</span>
+                <div class="expense-icon" [ngClass]="getCategoryIconClass(t.category)">
+                  <span class="material-icons">{{ getCategoryIcon(t.category) }}</span>
                 </div>
-                <span class="expense-name">{{ t.descricao }}</span>
+                <span class="expense-name">{{ t.description }}</span>
               </div>
             </td>
 
             <td>
-              <span class="category-badge" [ngClass]="getCategoryBadgeClass(t.categoria)">
-                {{ t.categoria }}
+              <span class="category-badge" [ngClass]="getCategoryBadgeClass(t.category)">
+                {{ t.category }}
               </span>
             </td>
 
@@ -91,7 +91,7 @@
             </td>
 
             <td class="amount-cell amount-negative">
-              -{{ t.valor | currency:'BRL' }}
+              -{{ t.amount | currency:'BRL' }}
             </td>
 
             <td class="action-cell">

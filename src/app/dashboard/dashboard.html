@@ -129,24 +129,24 @@
             <td>
               <div class="vendor-cell">
                 <div class="vendor-icon-box">
-                  <span class="material-icons-round" [style.color]="getCategoryColor(t.categoria)">
-                    {{ getCategoryIcon(t.categoria) }}
+                  <span class="material-icons-round" [style.color]="getCategoryColor(t.category)">
+                    {{ getCategoryIcon(t.category) }}
                   </span>
                 </div>
                 <div>
-                  <p class="vendor-name">{{ t.descricao }}</p>
-                  <p class="vendor-sub">{{ t.categoria }}</p>
+                  <p class="vendor-name">{{ t.description }}</p>
+                  <p class="vendor-sub">{{ t.category }}</p>
                 </div>
               </div>
             </td>
-            <td class="date-cell">{{ t.data | date:'MMM dd, yyyy' }}</td>
+            <td class="date-cell">{{ t.date | date:'MMM dd, yyyy' }}</td>
             <td>
-              <span class="category-badge" [ngClass]="getCategoryBadgeClass(t.categoria)">
-                {{ t.categoria }}
+              <span class="category-badge" [ngClass]="getCategoryBadgeClass(t.category)">
+                {{ t.category }}
               </span>
             </td>
             <td>
-              <span class="amount-negative">-{{ t.valor | currency:'BRL' }}</span>
+              <span class="amount-negative">-{{ t.amount | currency:'BRL' }}</span>
             </td>
             <td class="status-cell">
               <span class="status-badge status-completed">Completed</span>
