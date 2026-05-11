@@ -234,4 +234,38 @@ export class ExpensesComponent implements OnInit {
       notes: ''
     };
   }
+
+  openMenuId: number | null = null;
+
+  toggleActionMenu(id: number): void {
+    this.openMenuId = this.openMenuId === id ? null : id;
+  }
+
+  editTransaction(id: number): void {
+    console.log('Editar transação:', id);
+    this.openMenuId = null;
+  }
+
+  deleteTransaction(id: number): void {
+    const confirmed = window.confirm('Deseja realmente excluir este gasto?');
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.transactionsService.deleteTransacao(id).subscribe({
+      next: () => {
+        // Remove da lista original
+        this.dataSource = this.dataSource.filter(item => item.id !== id);
+
+        // Reaplica os filtros para atualizar filteredData e paginatedData
+        this.applyFilters();
+
+        this.openMenuId = null;
+      },
+      error: (error) => {
+        console.error('Erro ao excluir transação', error);
+      }
+    });
+  }
 }

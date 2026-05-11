@@ -95,9 +95,23 @@
             </td>
 
             <td class="action-cell">
-              <button class="action-btn">
-                <span class="material-icons">more_vert</span>
-              </button>
+              <div class="action-menu-wrapper">
+                <button class="action-btn" (click)="toggleActionMenu(t.id!)">
+                  <span class="material-icons">more_vert</span>
+                </button>
+
+                <div class="action-menu" *ngIf="openMenuId === t.id">
+                  <button type="button" class="menu-item" (click)="editTransaction(t.id!)">
+                    <span class="material-icons">edit</span>
+                    Editar
+                  </button>
+
+                  <button type="button" class="menu-item delete" (click)="deleteTransaction(t.id!)">
+                    <span class="material-icons">delete</span>
+                    Excluir
+                  </button>
+                </div>
+              </div>
             </td>
           </tr>
 
