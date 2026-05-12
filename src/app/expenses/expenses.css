@@ -747,7 +747,7 @@ tbody td {
 }
 
 /* ===== ÍCONES POR CATEGORIA ===== */
-.icon-alimentacao  { background: rgba(249, 115,  22, 0.1); color: #ea580c; }
+.icon-alimentacao  { background: rgba( 16, 185, 129, 0.1); color: #059669; }
 .icon-transporte   { background: rgba( 59, 130, 246, 0.1); color: #2563eb; }
 .icon-assinaturas  { background: rgba(168,  85, 247, 0.1); color: #9333ea; }
 .icon-lazer        { background: rgba(236,  72, 153, 0.1); color: #db2777; }
@@ -756,7 +756,7 @@ tbody td {
 .icon-default      { background: rgba(100, 116, 139, 0.1); color: #475569; }
 
 /* ===== BADGES POR CATEGORIA ===== */
-.badge-alimentacao  { background: rgba(249, 115,  22, 0.1); color: #ea580c; border-color: rgba(249, 115,  22, 0.2); }
+.badge-alimentacao  { background: rgba( 16, 185, 129, 0.1); color: #059669; border-color: rgba( 16, 185, 129, 0.2); }
 .badge-transporte   { background: rgba( 59, 130, 246, 0.1); color: #2563eb; border-color: rgba( 59, 130, 246, 0.2); }
 .badge-assinaturas  { background: rgba(168,  85, 247, 0.1); color: #9333ea; border-color: rgba(168,  85, 247, 0.2); }
 .badge-lazer        { background: rgba(236,  72, 153, 0.1); color: #db2777; border-color: rgba(236,  72, 153, 0.2); }
