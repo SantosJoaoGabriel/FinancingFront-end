@@ -246,25 +246,36 @@ export class ExpensesComponent implements OnInit {
     this.openMenuId = null;
   }
 
-  deleteTransaction(id: number): void {
-    const confirmed = window.confirm('Deseja realmente excluir este gasto?');
+  showDeleteModal = false;
+  transactionToDeleteId: number | null = null;
 
-    if (!confirmed) {
+  deleteTransaction(id: number): void {
+    this.transactionToDeleteId = id;
+    this.showDeleteModal = true;
+    this.openMenuId = null;
+  }
+
+  cancelDelete(): void {
+    this.showDeleteModal = false;
+    this.transactionToDeleteId = null;
+  }
+
+  confirmDelete(): void {
+    if (this.transactionToDeleteId === null) {
       return;
     }
 
-    this.transactionsService.deleteTransacao(id).subscribe({
+    this.transactionsService.deleteTransacao(this.transactionToDeleteId).subscribe({
       next: () => {
-        // Remove da lista original
-        this.dataSource = this.dataSource.filter(item => item.id !== id);
-
-        // Reaplica os filtros para atualizar filteredData e paginatedData
+        this.dataSource = this.dataSource.filter(item => item.id !== this.transactionToDeleteId);
         this.applyFilters();
-
-        this.openMenuId = null;
+        this.showDeleteModal = false;
+        this.transactionToDeleteId = null;
       },
       error: (error) => {
         console.error('Erro ao excluir transação', error);
+        this.showDeleteModal = false;
+        this.transactionToDeleteId = null;
       }
     });
   }

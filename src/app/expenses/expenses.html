@@ -99,7 +99,7 @@
                 <button class="action-btn" (click)="toggleActionMenu(t.id!)">
                   <span class="material-icons">more_vert</span>
                 </button>
-
+              </div>
                 <div class="action-menu" *ngIf="openMenuId === t.id">
                   <button type="button" class="menu-item" (click)="editTransaction(t.id!)">
                     <span class="material-icons">edit</span>
@@ -111,7 +111,6 @@
                     Excluir
                   </button>
                 </div>
-              </div>
             </td>
           </tr>
 
@@ -295,6 +294,27 @@
         <button class="btn-save" (click)="adicionarTransacao()">Salvar</button>
       </div>
 
+    </div>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="showDeleteModal">
+    <div class="confirm-modal">
+      <div class="confirm-modal-header">
+        <span class="material-icons">warning</span>
+        <h3>Excluir gasto</h3>
+      </div>
+
+      <p>Deseja realmente excluir este gasto?</p>
+
+      <div class="confirm-modal-actions">
+        <button type="button" class="btn-cancel" (click)="cancelDelete()">
+          Cancelar
+        </button>
+
+        <button type="button" class="btn-delete" (click)="confirmDelete()">
+          Excluir
+        </button>
+      </div>
     </div>
   </div>
 
