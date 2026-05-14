@@ -110,6 +110,8 @@ export class ExpensesComponent implements OnInit {
 
   fecharFormulario() {
     this.mostrarFormulario = false;
+    this.isEditMode = false;
+    this.editingTransactionId = null;
     this.novaTransacao = this.emptyForm();
     this.arquivosSelecionados = [];
   }
@@ -117,20 +119,32 @@ export class ExpensesComponent implements OnInit {
   adicionarTransacao() {
     if (!this.novaTransacao.descricao || !this.novaTransacao.categoria) return;
 
-    this.transactionsService.addTransacao({
+    const payload: Transaction = {
       description: this.novaTransacao.descricao,
       category: this.novaTransacao.categoria,
       date: this.novaTransacao.data,
       amount: this.novaTransacao.valor,
       paymentMethod: this.novaTransacao.paymentMethod,
       notes: this.novaTransacao.notes
-    }).subscribe({
-      next: () => {
-        this.carregarTransacoes();
-        this.fecharFormulario();
-      },
-      error: (err) => console.error('Erro ao adicionar transação:', err)
-    });
+    };
+
+    if (this.isEditMode && this.editingTransactionId !== null) {
+      this.transactionsService.updateTransacao(this.editingTransactionId, payload).subscribe({
+        next: () => {
+          this.carregarTransacoes();
+          this.fecharFormulario();
+        },
+        error: (err) => console.error('Erro ao atualizar transação:', err)
+      });
+    } else {
+      this.transactionsService.addTransacao(payload).subscribe({
+        next: () => {
+          this.carregarTransacoes();
+          this.fecharFormulario();
+        },
+        error: (err) => console.error('Erro ao adicionar transação:', err)
+      });
+    }
   }
 
   getCategoryIconClass(cat: string): string {
@@ -241,10 +255,31 @@ export class ExpensesComponent implements OnInit {
     this.openMenuId = this.openMenuId === id ? null : id;
   }
 
+  isEditMode = false;
+  editingTransactionId: number | null = null;
+
   editTransaction(id: number): void {
-    console.log('Editar transação:', id);
+    const transaction = this.dataSource.find(item => item.id === id);
+
+    if (!transaction) {
+      return;
+    }
+
+    this.isEditMode = true;
+    this.editingTransactionId = id;
     this.openMenuId = null;
+    this.mostrarFormulario = true;
+
+    this.novaTransacao = {
+      descricao: transaction.description,
+      categoria: transaction.category,
+      data: transaction.date,
+      valor: transaction.amount,
+      paymentMethod: transaction.paymentMethod || 'Cartão de Crédito',
+      notes: transaction.notes || ''
+    };
   }
+
 
   showDeleteModal = false;
   transactionToDeleteId: number | null = null;
