@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { TransactionsService, Transaction } from '../core/transactions.service';
 
 export interface Ganho {
   id?: number;
@@ -34,8 +34,8 @@ export class GainsComponent implements OnInit {
   Math = Math;
   mostrarFormulario = false;
 
-  dataSource: Ganho[] = [];
-  filteredData: Ganho[] = [];
+dataSource: Transaction[] = [];
+filteredData: Transaction[] = [];
 
   searchTerm = '';
   filtroDataInicio = '';
@@ -57,30 +57,30 @@ export class GainsComponent implements OnInit {
 
   private apiUrl = 'http://localhost:8080/api/ganhos';
 
-  constructor(private http: HttpClient) {}
+  constructor(private transactionsService: TransactionsService) {}
 
   ngOnInit() {
     this.carregarGanhos();
   }
 
   carregarGanhos() {
-    this.dataSource = [
-      { id: 1, descricao: 'Salário Mensal', categoria: 'Salário', data: '2026-04-05', valor: 5000, paymentMethod: 'Transferência' },
-      { id: 2, descricao: 'Projeto Freelance', categoria: 'Freelance', data: '2026-04-10', valor: 1500, paymentMethod: 'PIX' },
-      { id: 3, descricao: 'Dividendos', categoria: 'Investimentos', data: '2026-04-12', valor: 320, paymentMethod: 'Transferência' },
-    ];
-    this.applyFilters();
+    this.transactionsService.getTransacoes().subscribe({
+      next: (data) => {
+        this.dataSource = data.filter(t => t.type === 'INCOME');
+        this.applyFilters();
+      },
+      error: (err) => console.error('Erro ao carregar ganhos:', err)
+    });
   }
 
   get totalPages(): number {
     return Math.ceil(this.filteredData.length / this.pageSize);
   }
 
-  get paginatedData(): Ganho[] {
+  get paginatedData(): Transaction[] {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.filteredData.slice(start, start + this.pageSize);
   }
-
   get pageNumbers(): number[] {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
@@ -92,19 +92,27 @@ export class GainsComponent implements OnInit {
   }
 
   applyFilters() {
-    this.filteredData = this.dataSource.filter(t => {
-      const matchSearch = t.descricao.toLowerCase().includes(this.searchTerm.toLowerCase());
+    this.filteredData = this.dataSource
+      .filter(t => {
+        const matchType = t.type === 'INCOME';
 
-      const dataGanho = new Date(t.data);
-      const matchInicio = this.filtroDataInicio
-        ? dataGanho >= new Date(this.filtroDataInicio)
-        : true;
-      const matchFim = this.filtroDataFim
-        ? dataGanho <= new Date(this.filtroDataFim)
-        : true;
+        const matchSearch = t.description
+          .toLowerCase()
+          .includes(this.searchTerm.toLowerCase());
 
-      return matchSearch && matchInicio && matchFim;
-    });
+        const dataGanho = new Date(t.date);
+        const matchInicio = this.filtroDataInicio
+          ? dataGanho >= new Date(this.filtroDataInicio)
+          : true;
+
+        const matchFim = this.filtroDataFim
+          ? dataGanho <= new Date(this.filtroDataFim)
+          : true;
+
+        return matchType && matchSearch && matchInicio && matchFim;
+      })
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
     this.currentPage = 1;
   }
 
@@ -128,18 +136,23 @@ export class GainsComponent implements OnInit {
   adicionarGanho() {
     if (!this.novoGanho.descricao || !this.novoGanho.categoria) return;
 
-    const novo: Ganho = {
-      descricao: this.novoGanho.descricao,
-      categoria: this.novoGanho.categoria,
-      data: this.novoGanho.data,
-      valor: this.novoGanho.valor,
+    const payload: Transaction = {
+      description: this.novoGanho.descricao,
+      category: this.novoGanho.categoria,
+      date: this.novoGanho.data,
+      amount: this.novoGanho.valor,
+      type: 'INCOME',
       paymentMethod: this.novoGanho.paymentMethod,
       notes: this.novoGanho.notes
     };
 
-    this.dataSource = [...this.dataSource, novo];
-    this.applyFilters();
-    this.fecharFormulario();
+    this.transactionsService.addTransacao(payload).subscribe({
+      next: () => {
+        this.carregarGanhos();
+        this.fecharFormulario();
+      },
+      error: (err) => console.error('Erro ao adicionar ganho:', err)
+    });
   }
 
   getCategoryIcon(cat: string): string {
@@ -231,4 +244,5 @@ export class GainsComponent implements OnInit {
       notes: ''
     };
   }
+
 }
