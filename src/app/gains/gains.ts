@@ -4,16 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TransactionsService, Transaction } from '../core/transactions.service';
 
-export interface Ganho {
-  id?: number;
-  descricao: string;
-  categoria: string;
-  data: string;
-  valor: number;
-  paymentMethod?: string;
-  notes?: string;
-}
-
 interface NovoGanho {
   descricao: string;
   categoria: string;
@@ -129,12 +119,15 @@ filteredData: Transaction[] = [];
 
   fecharFormulario() {
     this.mostrarFormulario = false;
+    this.isEditMode = false;
     this.novoGanho = this.emptyForm();
     this.arquivosSelecionados = [];
   }
 
-  adicionarGanho() {
-    if (!this.novoGanho.descricao || !this.novoGanho.categoria) return;
+  salvarGanho(): void {
+    if (!this.novoGanho.descricao || !this.novoGanho.categoria) {
+      return;
+    }
 
     const payload: Transaction = {
       description: this.novoGanho.descricao,
@@ -146,12 +139,27 @@ filteredData: Transaction[] = [];
       notes: this.novoGanho.notes
     };
 
+    if (this.isEditMode && this.editingTransactionId !== null) {
+      this.transactionsService.updateTransacao(this.editingTransactionId, payload).subscribe({
+        next: () => {
+          this.carregarGanhos();
+          this.fecharFormulario();
+        },
+        error: (error) => {
+          console.error('Erro ao atualizar transação', error);
+        }
+      });
+      return;
+    }
+
     this.transactionsService.addTransacao(payload).subscribe({
       next: () => {
         this.carregarGanhos();
         this.fecharFormulario();
       },
-      error: (err) => console.error('Erro ao adicionar ganho:', err)
+      error: (error) => {
+        console.error('Erro ao adicionar transação', error);
+      }
     });
   }
 
@@ -245,4 +253,69 @@ filteredData: Transaction[] = [];
     };
   }
 
+    openMenuId: number | null = null;
+
+  toggleActionMenu(id: number): void {
+    this.openMenuId = this.openMenuId === id ? null : id;
+  }
+
+  isEditMode = false;
+  editingTransactionId: number | null = null;
+
+    editTransaction(id: number): void {
+    const transaction = this.dataSource.find(item => item.id === id);
+
+    if (!transaction) {
+      return;
+    }
+
+    this.isEditMode = true;
+    this.editingTransactionId = id;
+    this.openMenuId = null;
+    this.mostrarFormulario = true;
+
+    this.novoGanho = {
+      descricao: transaction.description,
+      categoria: transaction.category,
+      data: transaction.date,
+      valor: transaction.amount,
+      paymentMethod: transaction.paymentMethod || 'Pix',
+      notes: transaction.notes || ''
+    };
+  }
+
+
+  showDeleteModal = false;
+  transactionToDeleteId: number | null = null;
+
+  deleteTransaction(id: number): void {
+    this.transactionToDeleteId = id;
+    this.showDeleteModal = true;
+    this.openMenuId = null;
+  }
+
+  cancelDelete(): void {
+    this.showDeleteModal = false;
+    this.transactionToDeleteId = null;
+  }
+
+  confirmDelete(): void {
+    if (this.transactionToDeleteId === null) {
+      return;
+    }
+
+    this.transactionsService.deleteTransacao(this.transactionToDeleteId).subscribe({
+      next: () => {
+        this.dataSource = this.dataSource.filter(item => item.id !== this.transactionToDeleteId);
+        this.applyFilters();
+        this.showDeleteModal = false;
+        this.transactionToDeleteId = null;
+      },
+      error: (error) => {
+        console.error('Erro ao excluir transação', error);
+        this.showDeleteModal = false;
+        this.transactionToDeleteId = null;
+      }
+    });
+  }
 }
