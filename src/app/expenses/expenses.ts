@@ -81,19 +81,27 @@ export class ExpensesComponent implements OnInit {
   }
 
   applyFilters() {
-    this.filteredData = this.dataSource.filter(t => {
-      const matchSearch = t.description.toLowerCase().includes(this.searchTerm.toLowerCase());
+    this.filteredData = this.dataSource
+      .filter(t => {
+        const matchType = t.type === 'EXPENSE';
 
-      const dataTransacao = new Date(t.date);
-      const matchInicio = this.filtroDataInicio
-        ? dataTransacao >= new Date(this.filtroDataInicio)
-        : true;
-      const matchFim = this.filtroDataFim
-        ? dataTransacao <= new Date(this.filtroDataFim)
-        : true;
+        const matchSearch = t.description
+          .toLowerCase()
+          .includes(this.searchTerm.toLowerCase());
 
-      return matchSearch && matchInicio && matchFim;
-    });
+        const dataTransacao = new Date(t.date);
+        const matchInicio = this.filtroDataInicio
+          ? dataTransacao >= new Date(this.filtroDataInicio)
+          : true;
+
+        const matchFim = this.filtroDataFim
+          ? dataTransacao <= new Date(this.filtroDataFim)
+          : true;
+
+        return matchType && matchSearch && matchInicio && matchFim;
+      })
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
     this.currentPage = 1;
   }
 
@@ -124,6 +132,7 @@ export class ExpensesComponent implements OnInit {
       category: this.novaTransacao.categoria,
       date: this.novaTransacao.data,
       amount: this.novaTransacao.valor,
+      type: 'EXPENSE',
       paymentMethod: this.novaTransacao.paymentMethod,
       notes: this.novaTransacao.notes
     };

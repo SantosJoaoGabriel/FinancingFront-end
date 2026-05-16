@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export type TransactionType = 'EXPENSE' | 'INCOME';
+
 export interface Transaction {
   id?: number;
   description: string;
   category: string;
   date: string;
   amount: number;
+  type: TransactionType;
   paymentMethod?: string;
   notes?: string;
 }
