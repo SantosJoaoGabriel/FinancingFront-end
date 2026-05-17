@@ -8,7 +8,7 @@
       <div class="card-top">
         <div>
           <p class="card-label">Ganhos Mensal</p>
-          <p class="card-value">{{ saldoTotal | currency:'BRL' }}</p>
+          <p class="card-value">{{ ganhosMes | currency:'BRL' }}</p>
         </div>
         <div class="card-icon icon-green">
           <span class="material-icons-round">account_balance</span>
@@ -146,7 +146,10 @@
               </span>
             </td>
             <td>
-              <span class="amount-negative">-{{ t.amount | currency:'BRL' }}</span>
+              <span
+  [ngClass]="t.type === 'INCOME' ? 'amount-positive' : 'amount-negative'">
+  {{ t.type === 'INCOME' ? '+' : '-' }}{{ t.amount | currency:'BRL' }}
+</span>
             </td>
             <td class="status-cell">
               <span class="status-badge status-completed">Completed</span>
