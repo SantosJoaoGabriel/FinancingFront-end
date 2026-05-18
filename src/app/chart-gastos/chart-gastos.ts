@@ -49,12 +49,13 @@ export class ChartGastosComponent implements OnInit {
   private montarDados(transacoes: Transaction[]) {
     const porCategoria = new Map<string, number>();
 
-    for (const t of transacoes) {
+    const gastos = transacoes.filter(t => t.type === 'EXPENSE');
+
+    for (const t of gastos) {
       const atual = porCategoria.get(t.category) ?? 0;
       porCategoria.set(t.category, atual + t.amount);
     }
 
-    // precisa criar um novo objeto para o Angular detectar a mudança
     this.doughnutChartData = {
       ...this.doughnutChartData,
       labels: Array.from(porCategoria.keys()),

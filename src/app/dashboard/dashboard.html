@@ -147,9 +147,9 @@
             </td>
             <td>
               <span
-  [ngClass]="t.type === 'INCOME' ? 'amount-positive' : 'amount-negative'">
-  {{ t.type === 'INCOME' ? '+' : '-' }}{{ t.amount | currency:'BRL' }}
-</span>
+                [ngClass]="t.type === 'INCOME' ? 'amount-positive' : 'amount-negative'">
+                {{ t.type === 'INCOME' ? '+' : '-' }}{{ t.amount | currency:'BRL' }}
+              </span>
             </td>
             <td class="status-cell">
               <span class="status-badge status-completed">Completed</span>

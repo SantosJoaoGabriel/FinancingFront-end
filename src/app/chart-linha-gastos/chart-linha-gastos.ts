@@ -63,24 +63,31 @@ export class ChartLinhaGastosComponent implements OnInit {
   private montarDados(transacoes: Transaction[]) {
     const porDia = new Map<string, number>();
 
-    for (const t of transacoes) {
-      const dataObj = new Date(t.date);
-      const dia = dataObj.getDate().toString().padStart(2, '0');
-      const mes = (dataObj.getMonth() + 1).toString().padStart(2, '0');
-      const chave = `${dia}/${mes}`;
+    const gastos = transacoes.filter(t => t.type === 'EXPENSE');
 
-      const atual = porDia.get(chave) ?? 0;
-      porDia.set(chave, atual + t.amount);
+    for (const t of gastos) {
+      const [ano, mes, dia] = t.date.split('-').map(Number);
+      const chaveOrdenacao = `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+      const atual = porDia.get(chaveOrdenacao) ?? 0;
+      porDia.set(chaveOrdenacao, atual + t.amount);
     }
 
-    // precisa criar um novo objeto para o Angular detectar a mudança
+    const ordenado = Array.from(porDia.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+
+    const labels = ordenado.map(([data]) => {
+      const [ano, mes, dia] = data.split('-');
+      return `${dia}/${mes}`;
+    });
+
+    const valores = ordenado.map(([, valor]) => valor);
+
     this.lineChartData = {
       ...this.lineChartData,
-      labels: Array.from(porDia.keys()),
+      labels,
       datasets: [
         {
           ...this.lineChartData.datasets[0],
-          data: Array.from(porDia.values())
+          data: valores
         }
       ]
     };
