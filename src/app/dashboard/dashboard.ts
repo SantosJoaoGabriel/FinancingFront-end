@@ -6,6 +6,7 @@ import { ChartGastosComponent } from '../chart-gastos/chart-gastos';
 import { ChartLinhaGastosComponent } from '../chart-linha-gastos/chart-linha-gastos';
 import { TransactionsService, Transaction } from '../core/transactions.service';
 import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
 
 interface LegendaItem {
   categoria: string;
@@ -21,6 +22,7 @@ interface LegendaItem {
     MatCardModule,
     RouterModule,
     MatIconModule,
+    FormsModule,
     ChartGastosComponent,
     ChartLinhaGastosComponent
   ],
@@ -35,6 +37,7 @@ export class DashboardComponent implements OnInit {
   metasMes = 3000;
   metaPorcentagem = 0;
   metaRestante = 0;
+  periodoSelecionado = 6;
 
   transacoesRecentes: Transaction[] = [];
   legendaGastos: LegendaItem[] = [];

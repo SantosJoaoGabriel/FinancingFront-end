@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
@@ -11,14 +11,18 @@ import { TransactionsService, Transaction } from '../core/transactions.service';
   templateUrl: './chart-linha-gastos.html',
   styleUrl: './chart-linha-gastos.css'
 })
-export class ChartLinhaGastosComponent implements OnInit {
+export class ChartLinhaGastosComponent implements OnInit, OnChanges {
+  @Input() periodo = 6;
+
+  private transacoes: Transaction[] = [];
+
   public lineChartType = 'line' as const;
 
   public lineChartData: ChartConfiguration<'line'>['data'] = {
     labels: [],
     datasets: [
       {
-        label: 'Gastos por dia',
+        label: 'Gastos por mês',
         data: [],
         fill: true,
         tension: 0.4,
@@ -55,31 +59,54 @@ export class ChartLinhaGastosComponent implements OnInit {
 
   ngOnInit() {
     this.transactionsService.getTransacoes().subscribe({
-      next: (data) => this.montarDados(data),
+      next: (data) => {
+        this.transacoes = data;
+        this.montarDados();
+      },
       error: (err) => console.error('Erro ao carregar gráfico de linha:', err)
     });
   }
 
-  private montarDados(transacoes: Transaction[]) {
-    const porDia = new Map<string, number>();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['periodo'] && this.transacoes.length) {
+      this.montarDados();
+    }
+  }
 
-    const gastos = transacoes.filter(t => t.type === 'EXPENSE');
+  private montarDados() {
+    const hoje = new Date();
+    const inicio = new Date(hoje.getFullYear(), hoje.getMonth() - (this.periodo - 1), 1);
 
-    for (const t of gastos) {
-      const [ano, mes, dia] = t.date.split('-').map(Number);
-      const chaveOrdenacao = `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
-      const atual = porDia.get(chaveOrdenacao) ?? 0;
-      porDia.set(chaveOrdenacao, atual + t.amount);
+    const porMes = new Map<string, number>();
+
+    for (let i = 0; i < this.periodo; i++) {
+      const data = new Date(inicio.getFullYear(), inicio.getMonth() + i, 1);
+      const chave = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}`;
+      porMes.set(chave, 0);
     }
 
-    const ordenado = Array.from(porDia.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+    const gastosFiltrados = this.transacoes.filter(t => {
+      if (t.type !== 'EXPENSE') return false;
 
-    const labels = ordenado.map(([data]) => {
-      const [ano, mes, dia] = data.split('-');
-      return `${dia}/${mes}`;
+      const [ano, mes, dia] = t.date.split('-').map(Number);
+      const data = new Date(ano, mes - 1, dia);
+
+      return data >= inicio && data <= hoje;
     });
 
-    const valores = ordenado.map(([, valor]) => valor);
+    for (const t of gastosFiltrados) {
+      const [ano, mes] = t.date.split('-');
+      const chave = `${ano}-${mes}`;
+      const atual = porMes.get(chave) ?? 0;
+      porMes.set(chave, atual + t.amount);
+    }
+
+    const labels = Array.from(porMes.keys()).map(chave => {
+      const [ano, mes] = chave.split('-');
+      return `${mes}/${ano.slice(2)}`;
+    });
+
+    const valores = Array.from(porMes.values());
 
     this.lineChartData = {
       ...this.lineChartData,

@@ -389,9 +389,14 @@ tbody td {
   letter-spacing: 0.05em;
 }
 
-.status-completed {
-  background: rgba(16, 185, 129, 0.1);
-  color: #059669;
+.status-income {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-expense {
+  background: #fee2e2;
+  color: #b91c1c;
 }
 
 .status-pending {

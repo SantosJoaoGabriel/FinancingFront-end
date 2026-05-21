@@ -76,12 +76,12 @@
           <p class="chart-title">Escala de Gastos</p>
           <p class="chart-subtitle">Crescimentos dos gastos em escala grafica</p>
         </div>
-        <select class="period-select">
-          <option>Ultimos 6 Meses</option>
-          <option>Ultimos 12 Meses</option>
+        <select class="period-select" [(ngModel)]="periodoSelecionado">
+          <option [ngValue]="6">Ultimos 6 Meses</option>
+          <option [ngValue]="12">Ultimos 12 Meses</option>
         </select>
       </div>
-      <app-chart-linha-gastos></app-chart-linha-gastos>
+      <app-chart-linha-gastos [periodo]="periodoSelecionado"></app-chart-linha-gastos>
     </div>
 
     <!-- Gráfico de Rosca -->
@@ -139,7 +139,7 @@
                 </div>
               </div>
             </td>
-            <td class="date-cell">{{ t.date | date:'MMM dd, yyyy' }}</td>
+            <td class="date-cell">{{ t.date | date:'dd-MM-yyyy' }}</td>
             <td>
               <span class="category-badge" [ngClass]="getCategoryBadgeClass(t.category)">
                 {{ t.category }}
@@ -152,7 +152,11 @@
               </span>
             </td>
             <td class="status-cell">
-              <span class="status-badge status-completed">Completed</span>
+                <span
+                  class="status-badge"
+                  [ngClass]="t.type === 'INCOME' ? 'status-income' : 'status-expense'">
+                  {{ t.type === 'INCOME' ? 'Lucro' : 'Gasto' }}
+                </span>
             </td>
           </tr>
         </tbody>
