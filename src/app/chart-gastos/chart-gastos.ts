@@ -19,12 +19,20 @@ export class ChartGastosComponent implements OnInit {
     datasets: [
       {
         data: [],
-        backgroundColor: ['#3b82f6', '#22c55e', '#f97316', '#6b7280'],
         borderColor: '#0d1626',
         borderWidth: 3,
         hoverOffset: 4
       }
     ]
+  };
+
+  private cores: { [key: string]: string } = {
+    'Alimentação': '#10b981',
+    'Transporte': '#2563eb',
+    'Assinaturas': '#9333ea',
+    'Lazer': '#db2777',
+    'Moradia': '#d97706',
+    'Saúde': '#dc2626'
   };
 
   public doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
@@ -56,13 +64,18 @@ export class ChartGastosComponent implements OnInit {
       porCategoria.set(t.category, atual + t.amount);
     }
 
+    const labels = Array.from(porCategoria.keys());
+    const valores = Array.from(porCategoria.values());
+    const cores = labels.map(label => this.cores[label] || '#6b7280');
+
     this.doughnutChartData = {
       ...this.doughnutChartData,
-      labels: Array.from(porCategoria.keys()),
+      labels,
       datasets: [
         {
           ...this.doughnutChartData.datasets[0],
-          data: Array.from(porCategoria.values())
+          data: valores,
+          backgroundColor: cores
         }
       ]
     };

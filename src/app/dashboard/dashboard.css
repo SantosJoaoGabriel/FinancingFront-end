@@ -351,16 +351,6 @@ tbody td {
   letter-spacing: 0.05em;
 }
 
-.badge-food {
-  background: rgba(16, 185, 129, 0.1);
-  color: #059669;
-}
-
-.badge-transport {
-  background: rgba(249, 115, 22, 0.1);
-  color: #ea580c;
-}
-
 .badge-default {
   background: #f1f5f9;
   color: #475569;

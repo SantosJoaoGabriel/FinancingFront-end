@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
   gastosMes = 0;
   saldoTotal = 0;
 
-  metasMes = 3000;
+  metasMes = 0;
   metaPorcentagem = 0;
   metaRestante = 0;
   periodoSelecionado = 6;
@@ -71,6 +71,8 @@ export class DashboardComponent implements OnInit {
           .reduce((total, t) => total + (t.amount ?? 0), 0);
 
         this.saldoTotal = this.ganhosMes - this.gastosMes;
+
+        this.metasMes = this.ganhosMes;
 
         this.metaPorcentagem = this.metasMes > 0
           ? Math.min(Math.round((this.gastosMes / this.metasMes) * 100), 100)
