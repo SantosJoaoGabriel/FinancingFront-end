@@ -1,13 +1,20 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard';
-import { ExpensesComponent } from './expenses/expenses';
-import { GainsComponent } from './gains/gains';
-import { ReportsComponent } from './reports/reports';
+import { MainLayoutComponent } from './layout/main-layout/main-layout';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'expenses', component: ExpensesComponent },
-  { path: 'gains', component: GainsComponent },
-  { path: 'reports', component: ReportsComponent }
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+  {
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      { path: 'dashboard', loadComponent: () => import('./dashboard/dashboard').then(m => m.DashboardComponent) },
+      { path: 'expenses', loadComponent: () => import('./expenses/expenses').then(m => m.ExpensesComponent) },
+      { path: 'gains', loadComponent: () => import('./gains/gains').then(m => m.GainsComponent) },
+      { path: 'reports', loadComponent: () => import('./reports/reports').then(m => m.ReportsComponent) }
+    ]
+  },
+
+  { path: 'login', loadComponent: () => import('./login/login').then(m => m.LoginComponent) },
+  { path: '**', redirectTo: 'login' }
 ];
