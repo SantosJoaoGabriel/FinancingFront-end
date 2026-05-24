@@ -61,10 +61,15 @@
             <label for="remember">Lembrar deste dispositivo</label>
           </div>
 
+          <p class="error-message" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </p>
+
           <button class="submit-btn" type="submit" [disabled]="loading">
             <span *ngIf="!loading">Entrar</span>
             <span *ngIf="loading" class="loading-content">
               <span class="material-symbols-outlined spin">sync</span>
+              Entrando...
             </span>
           </button>
         </form>

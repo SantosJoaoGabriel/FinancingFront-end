@@ -279,6 +279,13 @@
   color: #697080;
 }
 
+.error-message {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #dc2626;
+  font-weight: 500;
+}
+
 .bg-shape {
   position: absolute;
   border-radius: 999px;
