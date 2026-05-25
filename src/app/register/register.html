@@ -85,10 +85,19 @@
             </label>
           </div>
 
+          <p class="error-message" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </p>
+
+          <p class="success-message" *ngIf="successMessage">
+            {{ successMessage }}
+          </p>
+
           <button class="submit-btn" type="submit" [disabled]="loading">
             <span *ngIf="!loading">Criar Conta</span>
             <span *ngIf="loading" class="loading-content">
               <span class="material-symbols-outlined spin">sync</span>
+              Criando...
             </span>
           </button>
         </form>

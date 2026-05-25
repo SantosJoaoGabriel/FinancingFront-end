@@ -281,6 +281,20 @@
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
+.error-message {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.success-message {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #15803d;
+  font-weight: 500;
+}
+
 .loading-content {
   display: inline-flex;
   align-items: center;
