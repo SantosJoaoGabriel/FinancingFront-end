@@ -19,6 +19,11 @@ export interface UserResponse {
   email: string;
 }
 
+export interface LoginResponse {
+  token: string;
+  user: UserResponse;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -26,14 +31,20 @@ export class AuthService {
   private apiUrl = 'http://localhost:8080/api/auth';
 
   private currentUser: UserResponse | null = null;
+  private token: string | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.loadSession();
+  }
 
-  login(data: LoginRequest): Observable<UserResponse> {
-    return this.http.post<UserResponse>(`${this.apiUrl}/login`, data).pipe(
-      tap(user => {
-        this.currentUser = user;
-        // aqui depois podemos salvar token quando existir
+  login(data: LoginRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, data).pipe(
+      tap(response => {
+        this.token = response.token;
+        this.currentUser = response.user;
+
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
       })
     );
   }
@@ -46,8 +57,32 @@ export class AuthService {
     return this.currentUser;
   }
 
+  getToken(): string | null {
+    return this.token;
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.token;
+  }
+
   logout(): void {
+    this.token = null;
     this.currentUser = null;
-    // quando tiver token, limpamos aqui também
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  }
+
+  private loadSession(): void {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+
+    if (token) {
+      this.token = token;
+    }
+
+    if (user) {
+      this.currentUser = JSON.parse(user);
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -22,8 +22,7 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
-    private authService: AuthService,
-    private cdr: ChangeDetectorRef
+    private authService: AuthService
   ) {}
 
   togglePassword(): void {
@@ -39,7 +38,6 @@ export class LoginComponent {
     }
 
     this.loading = true;
-    this.cdr.detectChanges();
 
     this.authService.login({
       email: this.email,
@@ -47,16 +45,19 @@ export class LoginComponent {
     }).subscribe({
       next: () => {
         this.loading = false;
-        this.cdr.detectChanges();
         this.router.navigate(['/dashboard']);
       },
       error: (error: HttpErrorResponse) => {
         this.loading = false;
+
+        if (error.status === 0) {
+          this.errorMessage = 'Não foi possível conectar ao servidor.';
+          return;
+        }
+
         this.errorMessage =
           error?.error?.message ||
-          error?.error ||
           'E-mail ou senha incorretos.';
-        this.cdr.detectChanges();
       }
     });
   }
