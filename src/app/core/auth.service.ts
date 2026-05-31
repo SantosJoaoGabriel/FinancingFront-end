@@ -58,11 +58,20 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return this.token;
+    if (this.token) {
+      return this.token;
+    }
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.token = token;
+    }
+
+    return token;
   }
 
   isAuthenticated(): boolean {
-    return !!this.token;
+    return !!this.getToken();
   }
 
   logout(): void {
