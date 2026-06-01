@@ -57,7 +57,19 @@ export class ChartGastosComponent implements OnInit {
   private montarDados(transacoes: Transaction[]) {
     const porCategoria = new Map<string, number>();
 
-    const gastos = transacoes.filter(t => t.type === 'EXPENSE');
+    const hoje = new Date();
+
+    const gastos = transacoes.filter(t => {
+      if (t.type !== 'EXPENSE') return false;
+
+      const [ano, mes, dia] = t.date.split('-').map(Number);
+      const data = new Date(ano, mes - 1, dia);
+
+      return (
+        data.getMonth() === hoje.getMonth() &&
+        data.getFullYear() === hoje.getFullYear()
+      );
+    });
 
     for (const t of gastos) {
       const atual = porCategoria.get(t.category) ?? 0;

@@ -54,7 +54,7 @@ export class ExpensesComponent implements OnInit {
   carregarTransacoes() {
     this.transactionsService.getTransacoes().subscribe({
       next: (data) => {
-        this.dataSource = data;
+        this.dataSource = [...data];
         this.applyFilters();
       },
       error: (err) => console.error('Erro ao carregar transações:', err)
@@ -139,16 +139,20 @@ export class ExpensesComponent implements OnInit {
 
     if (this.isEditMode && this.editingTransactionId !== null) {
       this.transactionsService.updateTransacao(this.editingTransactionId, payload).subscribe({
-        next: () => {
-          this.carregarTransacoes();
+        next: (transacaoAtualizada) => {
+          this.dataSource = this.dataSource.map(item =>
+            item.id === this.editingTransactionId ? transacaoAtualizada : item
+          );
+          this.applyFilters();
           this.fecharFormulario();
         },
         error: (err) => console.error('Erro ao atualizar transação:', err)
       });
     } else {
       this.transactionsService.addTransacao(payload).subscribe({
-        next: () => {
-          this.carregarTransacoes();
+        next: (nova) => {
+          this.dataSource = [nova, ...this.dataSource];
+          this.applyFilters();
           this.fecharFormulario();
         },
         error: (err) => console.error('Erro ao adicionar transação:', err)
@@ -232,6 +236,7 @@ export class ExpensesComponent implements OnInit {
   removerArquivo(index: number, event: MouseEvent) {
     event.stopPropagation();
     this.arquivosSelecionados.splice(index, 1);
+    this.arquivosSelecionados = [...this.arquivosSelecionados];
   }
 
   getFileIcon(filename: string): string {
@@ -288,7 +293,6 @@ export class ExpensesComponent implements OnInit {
       notes: transaction.notes || ''
     };
   }
-
 
   showDeleteModal = false;
   transactionToDeleteId: number | null = null;

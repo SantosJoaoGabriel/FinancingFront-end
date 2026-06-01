@@ -14,10 +14,6 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideAnimationsAsync(),
     provideCharts(withDefaultRegisterables()),
-    provideHttpClient(withInterceptors([authInterceptor])),
-    {
-      provide: RouteReuseStrategy,
-      useClass: NoReuseStrategy
-    }
+    provideHttpClient(withInterceptors([authInterceptor]))
   ]
 }).catch(err => console.error(err));

@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
     this.carregarDados();
   }
 
-  carregarDados(): void {
+    carregarDados(): void {
     this.transactionsService.getTransacoes().subscribe({
       next: (data) => {
         const transacoesMesAtual = data.filter(t => this.isMesAtual(t.date));
@@ -86,7 +86,7 @@ export class DashboardComponent implements OnInit {
 
         const porCategoria = new Map<string, number>();
 
-        for (const t of data.filter(t => t.type === 'EXPENSE')) {
+        for (const t of transacoesMesAtual.filter(t => t.type === 'EXPENSE')) {
           const atual = porCategoria.get(t.category) ?? 0;
           porCategoria.set(t.category, atual + (t.amount ?? 0));
         }

@@ -41,6 +41,7 @@
       </div>
 
       <button
+        type="button"
         class="btn-clear-filter"
         *ngIf="filtroDataInicio || filtroDataFim"
         (click)="limparFiltros()"
@@ -96,7 +97,7 @@
 
             <td class="action-cell">
               <div class="action-menu-wrapper">
-                <button class="action-btn" (click)="toggleActionMenu(t.id!)">
+                <button type="button" class="action-btn" (click)="toggleActionMenu(t.id!)">
                   <span class="material-icons">more_vert</span>
                 </button>
               </div>
@@ -129,6 +130,7 @@
     <div class="pagination-wrapper">
       <div class="pagination-buttons">
         <button
+          type="button"
           class="page-nav-btn"
           (click)="goToPage(currentPage - 1)"
           [disabled]="currentPage === 1">
@@ -145,6 +147,7 @@
         </ng-container>
 
         <button
+          type="button"
           class="page-nav-btn"
           (click)="goToPage(currentPage + 1)"
           [disabled]="currentPage === totalPages">
@@ -165,7 +168,7 @@
   </div>
 
   <!-- Botão flutuante -->
-  <button class="fab" (click)="abrirFormulario()">
+  <button type="button" class="fab" (click)="abrirFormulario()">
     <span class="material-icons">add</span>
   </button>
 
@@ -290,8 +293,14 @@
       </div>
 
       <div class="actions">
-        <button class="btn-cancel" (click)="fecharFormulario()">Cancelar</button>
-        <button class="btn-save" (click)="adicionarTransacao()">{{ isEditMode ? '+ Editar' : 'Salvar' }}</button>
+        <button type="button" class="btn-cancel" (click)="fecharFormulario()">Cancelar</button>
+        <button
+          type="button"
+          class="btn-save"
+          [disabled]="!novaTransacao.descricao || !novaTransacao.categoria"
+          (click)="adicionarTransacao()">
+          {{ isEditMode ? '+ Editar' : 'Salvar' }}
+        </button>
       </div>
 
     </div>

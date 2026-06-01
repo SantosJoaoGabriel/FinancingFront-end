@@ -11,19 +11,23 @@
 
     <!-- Navegação -->
     <nav class="nav-list">
-      <a class="nav-item" routerLink="/dashboard" routerLinkActive="active">
+      <a class="nav-item" routerLink="/dashboard"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <span class="material-icons-round">dashboard</span>
         <span>Inicio</span>
       </a>
-      <a class="nav-item" routerLink="/expenses" routerLinkActive="active">
+      <a class="nav-item" routerLink="/expenses"
+        routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">
         <span class="material-icons-round">receipt_long</span>
         <span>Gastos</span>
       </a>
-      <a class="nav-item" routerLink="/gains" routerLinkActive="active">
+      <a class="nav-item" routerLink="/gains"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <span class="material-icons-round">payments</span>
         <span>Ganhos</span>
       </a>
-      <a class="nav-item" routerLink="/reports" routerLinkActive="active">
+      <a class="nav-item" routerLink="/reports"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <mat-icon>description</mat-icon>
         <span>Relatórios</span>
       </a>
@@ -49,9 +53,9 @@
     </div>
 
     <!-- Conteúdo das páginas -->
-    <div class="page-content">
-      <ng-content></ng-content>
-    </div>
+  <div class="page-content">
+    <router-outlet></router-outlet>
+  </div>
 
   </mat-sidenav-content>
 </mat-sidenav-container>
