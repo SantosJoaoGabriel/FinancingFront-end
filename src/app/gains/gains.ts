@@ -45,6 +45,73 @@ filteredData: Transaction[] = [];
   novoGanho: NovoGanho = this.emptyForm();
   arquivosSelecionados: File[] = [];
 
+  submitted = false;
+
+isCampoInvalido(campo: 'valor' | 'descricao' | 'categoria' | 'paymentMethod'): boolean {
+  if (!this.submitted) return false;
+
+  switch (campo) {
+    case 'valor':
+      return this.novoGanho.valor === null ||
+             this.novoGanho.valor === undefined ||
+             this.novoGanho.valor <= 0;
+
+    case 'descricao':
+      return !this.novoGanho.descricao?.trim() ||
+             this.novoGanho.descricao.trim().length > 20;
+
+    case 'categoria':
+      return !this.novoGanho.categoria?.trim();
+
+    case 'paymentMethod':
+      return !this.novoGanho.paymentMethod?.trim();
+
+    default:
+      return false;
+  }
+}
+
+getMensagemErroValor(): string {
+  if (!this.submitted) return '';
+
+  if (this.novoGanho.valor === null || this.novoGanho.valor === undefined || this.novoGanho.valor === 0) {
+    return 'Campo obrigatório';
+  }
+
+  if (this.novoGanho.valor < 0) {
+    return 'Não pode ser negativo';
+  }
+
+  return '';
+}
+
+getMensagemErroDescricao(): string {
+  if (!this.submitted) return '';
+
+  const descricao = this.novoGanho.descricao?.trim() || '';
+
+  if (!descricao) {
+    return 'Campo obrigatório';
+  }
+
+  if (descricao.length > 20) {
+    return 'Máximo de 20 caracteres';
+  }
+
+  return '';
+}
+
+formularioValido(): boolean {
+  return (
+    !!this.novoGanho.descricao?.trim() &&
+    this.novoGanho.descricao.trim().length <= 20 &&
+    !!this.novoGanho.categoria?.trim() &&
+    !!this.novoGanho.paymentMethod?.trim() &&
+    !!this.novoGanho.valor &&
+    this.novoGanho.valor > 0
+  );
+}
+
   private apiUrl = 'http://localhost:8080/api/ganhos';
 
   constructor(private transactionsService: TransactionsService) {}
@@ -114,18 +181,23 @@ filteredData: Transaction[] = [];
   }
 
   abrirFormulario() {
+    this.submitted = false;
     this.mostrarFormulario = true;
   }
 
   fecharFormulario() {
     this.mostrarFormulario = false;
     this.isEditMode = false;
+    this.editingTransactionId = null;
     this.novoGanho = this.emptyForm();
     this.arquivosSelecionados = [];
+    this.submitted = false;
   }
 
   salvarGanho(): void {
-    if (!this.novoGanho.descricao || !this.novoGanho.categoria) {
+    this.submitted = true;
+
+    if (!this.formularioValido()) {
       return;
     }
 
@@ -248,7 +320,7 @@ filteredData: Transaction[] = [];
       categoria: '',
       data: new Date().toISOString().substring(0, 10),
       valor: 0,
-      paymentMethod: 'PIX',
+      paymentMethod: '',
       notes: ''
     };
   }
@@ -265,6 +337,7 @@ filteredData: Transaction[] = [];
     editTransaction(id: number): void {
     const transaction = this.dataSource.find(item => item.id === id);
 
+
     if (!transaction) {
       return;
     }
@@ -272,6 +345,7 @@ filteredData: Transaction[] = [];
     this.isEditMode = true;
     this.editingTransactionId = id;
     this.openMenuId = null;
+    this.submitted = false;
     this.mostrarFormulario = true;
 
     this.novoGanho = {

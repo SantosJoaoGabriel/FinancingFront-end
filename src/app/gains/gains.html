@@ -168,12 +168,12 @@
 
   <div class="overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()"></div>
 
-  <div class="form-modal" *ngIf="mostrarFormulario">
+ <div class="form-modal" *ngIf="mostrarFormulario">
     <div class="form-card">
 
       <div class="amount-section">
         <div class="amount-label">Adicionar Ganho</div>
-        <div class="amount-input-row">
+        <div class="amount-input-row" [class.field-error]="isCampoInvalido('valor')">
           <span class="currency-symbol">R$</span>
           <input
             type="number"
@@ -184,6 +184,9 @@
             step="0.01"
             min="0">
         </div>
+        <small class="error-message" *ngIf="isCampoInvalido('valor')">
+          {{ getMensagemErroValor() }}
+        </small>
       </div>
 
       <div class="divider"></div>
@@ -193,15 +196,20 @@
         <input
           type="text"
           class="field-input"
+          [class.field-error]="isCampoInvalido('descricao')"
           [(ngModel)]="novoGanho.descricao"
           name="descricao"
+          maxlength="20"
           placeholder="Clique para escrever">
+        <small class="error-message" *ngIf="isCampoInvalido('descricao')">
+          {{ getMensagemErroDescricao() }}
+        </small>
       </div>
 
       <div class="field-row">
         <div class="field-group">
           <label class="field-label">Categoria</label>
-          <div class="select-wrapper">
+          <div class="select-wrapper" [class.field-error]="isCampoInvalido('categoria')">
             <span class="material-icons select-icon">category</span>
             <select class="field-select" [(ngModel)]="novoGanho.categoria" name="categoria">
               <option value="" disabled selected>Selecione</option>
@@ -209,6 +217,7 @@
             </select>
             <span class="material-icons chevron-icon">expand_more</span>
           </div>
+          <small class="error-message" *ngIf="isCampoInvalido('categoria')">Campo obrigatório</small>
         </div>
 
         <div class="field-group">
@@ -226,13 +235,15 @@
 
       <div class="field-group">
         <label class="field-label">Forma de Recebimento</label>
-        <div class="select-wrapper">
+        <div class="select-wrapper" [class.field-error]="isCampoInvalido('paymentMethod')">
           <span class="material-icons select-icon">payments</span>
           <select class="field-select" [(ngModel)]="novoGanho.paymentMethod" name="paymentMethod">
+            <option value="" disabled selected>Selecione</option>
             <option *ngFor="let method of paymentMethods" [value]="method">{{ method }}</option>
           </select>
           <span class="material-icons chevron-icon">expand_more</span>
         </div>
+        <small class="error-message" *ngIf="isCampoInvalido('paymentMethod')">Campo obrigatório</small>
       </div>
 
       <div class="field-group">
@@ -245,7 +256,8 @@
         </textarea>
       </div>
 
-      <div class="field-group">
+
+   <!--  <div class="field-group">
         <label class="field-label">Adicionar Comprovante</label>
         <div class="upload-area"
           (click)="fileInput.click()"
@@ -282,7 +294,7 @@
             </div>
           </ng-container>
         </div>
-      </div>
+      </div> -->
 
       <div class="actions">
         <button class="btn-cancel" (click)="fecharFormulario()">Cancelar</button>

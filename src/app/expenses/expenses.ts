@@ -45,6 +45,73 @@ export class ExpensesComponent implements OnInit {
   novaTransacao: NovaTransacao = this.emptyForm();
   arquivosSelecionados: File[] = [];
 
+  submitted = false;
+
+isCampoInvalido(campo: 'valor' | 'descricao' | 'categoria' | 'paymentMethod'): boolean {
+  if (!this.submitted) return false;
+
+  switch (campo) {
+    case 'valor':
+      return this.novaTransacao.valor === null ||
+             this.novaTransacao.valor === undefined ||
+             this.novaTransacao.valor <= 0;
+
+    case 'descricao':
+      return !this.novaTransacao.descricao?.trim() ||
+             this.novaTransacao.descricao.trim().length > 20;
+
+    case 'categoria':
+      return !this.novaTransacao.categoria?.trim();
+
+    case 'paymentMethod':
+      return !this.novaTransacao.paymentMethod?.trim();
+
+    default:
+      return false;
+  }
+}
+
+  getMensagemErroValor(): string {
+    if (!this.submitted) return '';
+
+    if (this.novaTransacao.valor === null || this.novaTransacao.valor === undefined || this.novaTransacao.valor === 0) {
+      return 'Campo obrigatório';
+    }
+
+    if (this.novaTransacao.valor < 0) {
+      return 'Não pode ser negativo';
+    }
+
+    return '';
+  }
+
+  getMensagemErroDescricao(): string {
+    if (!this.submitted) return '';
+
+    const descricao = this.novaTransacao.descricao?.trim() || '';
+
+    if (!descricao) {
+      return 'Campo obrigatório';
+    }
+
+    if (descricao.length > 20) {
+      return 'Máximo de 20 caracteres';
+    }
+
+    return '';
+  }
+
+formularioValido(): boolean {
+  return (
+    !!this.novaTransacao.descricao?.trim() &&
+    this.novaTransacao.descricao.trim().length <= 20 &&
+    !!this.novaTransacao.categoria?.trim() &&
+    !!this.novaTransacao.paymentMethod?.trim() &&
+    !!this.novaTransacao.valor &&
+    this.novaTransacao.valor > 0
+  );
+}
+
   constructor(private transactionsService: TransactionsService) {}
 
   ngOnInit() {
@@ -113,6 +180,7 @@ export class ExpensesComponent implements OnInit {
   }
 
   abrirFormulario() {
+    this.submitted = false;
     this.mostrarFormulario = true;
   }
 
@@ -122,10 +190,13 @@ export class ExpensesComponent implements OnInit {
     this.editingTransactionId = null;
     this.novaTransacao = this.emptyForm();
     this.arquivosSelecionados = [];
+    this.submitted = false;
   }
 
   adicionarTransacao() {
-    if (!this.novaTransacao.descricao || !this.novaTransacao.categoria) return;
+    this.submitted = true;
+
+    if (!this.formularioValido()) return;
 
     const payload: Transaction = {
       description: this.novaTransacao.descricao,
@@ -258,7 +329,7 @@ export class ExpensesComponent implements OnInit {
       categoria: '',
       data: new Date().toISOString().substring(0, 10),
       valor: 0,
-      paymentMethod: 'Cartão de Crédito',
+      paymentMethod: '',
       notes: ''
     };
   }
