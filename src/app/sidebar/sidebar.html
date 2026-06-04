@@ -43,12 +43,37 @@
       <button class="menu-btn" (click)="opened = !opened">
         <span class="material-icons-round">menu</span>
       </button>
-      <div class="topbar-right">
+    <div class="topbar-right" (click)="$event.stopPropagation()">
+      <button class="user-trigger" type="button" (click)="toggleUserMenu($event)">
         <div class="user-info">
-          <p class="user-name">Joao</p>
+          <p class="user-name">{{ usuarioNome }}</p>
           <p class="user-plan">Logado</p>
         </div>
-        <div class="user-avatar">J</div>
+        <div class="user-avatar">{{ usuarioInicial }}</div>
+      </button>
+
+      <div class="user-menu" *ngIf="userMenuOpen">
+        <div class="user-menu-header">
+          <div class="user-menu-avatar">{{ usuarioInicial }}</div>
+          <div class="user-menu-data">
+            <p class="user-menu-name">{{ usuarioNome }}</p>
+            <p class="user-menu-email">{{ usuarioEmail || 'E-mail não informado' }}</p>
+          </div>
+        </div>
+
+        <div class="user-menu-status">
+          <span class="auth-line">
+            <strong>Autenticado:</strong> {{ tokenParcial || 'Token indisponível' }}
+          </span>
+        </div>
+
+        <div class="user-menu-divider"></div>
+
+          <button type="button" class="logout-btn" (click)="abrirConfirmacaoLogout($event)">
+            <span class="material-icons-round">logout</span>
+            <span>Sair</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -59,3 +84,19 @@
 
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<div class="modal-backdrop" *ngIf="showLogoutModal" (click)="cancelarLogout()">
+  <div class="confirm-modal" (click)="$event.stopPropagation()">
+    <div class="confirm-modal-header">
+      <span class="material-icons-round">logout</span>
+      <h3>Confirmar saída</h3>
+    </div>
+
+    <p>Deseja realmente sair da sua conta?</p>
+
+    <div class="confirm-modal-actions">
+      <button type="button" class="btn-cancel" (click)="cancelarLogout()">Cancelar</button>
+      <button type="button" class="btn-confirm-logout" (click)="confirmarLogout()">Sair</button>
+    </div>
+  </div>
+</div>
