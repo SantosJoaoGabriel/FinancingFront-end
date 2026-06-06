@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 export interface ReportCard {
   id: number;
+  code: 'MONTHLY' | 'CATEGORY' | 'ANNUAL';
   title: string;
   subtitle: string;
   type: string;
@@ -9,6 +12,7 @@ export interface ReportCard {
 }
 
 export interface ReportHistoryItem {
+  id: number;
   date: string;
   title: string;
   description: string;
@@ -16,16 +20,26 @@ export interface ReportHistoryItem {
   format: 'PDF';
   status: 'Concluído' | 'Processando';
   fileName: string;
+  category: 'Financeiro' | 'Analítico' | 'Anual';
+}
+
+export interface GenerateReportRequest {
+  type: 'MONTHLY' | 'CATEGORY' | 'ANNUAL';
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportsService {
+  private apiUrl = 'http://localhost:8080/api/reports';
+
+  constructor(private http: HttpClient) {}
+
   getReportCards(): ReportCard[] {
     return [
       {
         id: 1,
+        code: 'MONTHLY',
         title: 'Relatório mensal',
         subtitle: 'Conciliação completa de entradas e saídas do mês vigente.',
         type: 'Mensal',
@@ -33,6 +47,7 @@ export class ReportsService {
       },
       {
         id: 2,
+        code: 'CATEGORY',
         title: 'Gastos por categoria',
         subtitle: 'Distribuição percentual de despesas operacionais e fixas.',
         type: 'Analítico',
@@ -40,6 +55,7 @@ export class ReportsService {
       },
       {
         id: 3,
+        code: 'ANNUAL',
         title: 'Resumo anual',
         subtitle: 'Visão consolidada das movimentações financeiras do ano.',
         type: 'Anual',
@@ -48,35 +64,17 @@ export class ReportsService {
     ];
   }
 
-  getReportHistory(): ReportHistoryItem[] {
-    return [
-      {
-        date: '2026-04-20',
-        title: 'Fechamento mensal - Setembro',
-        description: 'Relatório do fluxo de caixa operacional.',
-        period: '01/09/2025 - 30/09/2025',
-        format: 'PDF',
-        status: 'Concluído',
-        fileName: 'fechamento-mensal-setembro.pdf'
-      },
-      {
-        date: '2026-04-18',
-        title: 'Analítico por categoria',
-        description: 'Despesas agrupadas por categoria.',
-        period: '01/04/2026 - 18/04/2026',
-        format: 'PDF',
-        status: 'Concluído',
-        fileName: 'analitico-categorias.pdf'
-      },
-      {
-        date: '2026-04-15',
-        title: 'Resumo anual consolidado',
-        description: 'Extrato consolidado do exercício atual.',
-        period: '01/01/2026 - 15/04/2026',
-        format: 'PDF',
-        status: 'Processando',
-        fileName: 'resumo-anual.pdf'
-      }
-    ];
+  getReportHistory(): Observable<ReportHistoryItem[]> {
+    return this.http.get<ReportHistoryItem[]>(`${this.apiUrl}/history`);
+  }
+
+  generateReport(data: GenerateReportRequest): Observable<ReportHistoryItem> {
+    return this.http.post<ReportHistoryItem>(`${this.apiUrl}/generate`, data);
+  }
+
+  downloadReport(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${id}/download`, {
+      responseType: 'blob'
+    });
   }
 }

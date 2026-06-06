@@ -1,7 +1,6 @@
 <div class="reports-page">
   <div class="reports-header">
     <div>
-      <div class="breadcrumb">CENTRO FINANCEIRO <span>›</span> RELATÓRIOS</div>
       <h2>Relatórios Financeiros</h2>
       <p>Visualize, gere e exporte seus demonstrativos consolidados.</p>
     </div>
@@ -40,7 +39,7 @@
       <div class="history-filters">
         <mat-form-field appearance="outline">
           <mat-label>Categoria</mat-label>
-          <mat-select [(ngModel)]="selectedCategory">
+          <mat-select [(ngModel)]="selectedCategory" (selectionChange)="applyFilters()">
             <mat-option value="Todos">Todos</mat-option>
             <mat-option value="Financeiro">Financeiro</mat-option>
             <mat-option value="Analítico">Analítico</mat-option>
@@ -50,7 +49,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Período</mat-label>
-          <mat-select [(ngModel)]="selectedPeriod">
+          <mat-select [(ngModel)]="selectedPeriod" (selectionChange)="applyFilters()">
             <mat-option value="Últimos 30 dias">Últimos 30 dias</mat-option>
             <mat-option value="Últimos 90 dias">Últimos 90 dias</mat-option>
             <mat-option value="Este ano">Este ano</mat-option>
@@ -60,7 +59,7 @@
     </div>
 
     <div class="table-shell">
-      <table mat-table [dataSource]="reportHistory" class="reports-table">
+      <table mat-table [dataSource]="filteredHistory" class="reports-table">
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef>DATA DO RELATÓRIO</th>
           <td mat-cell *matCellDef="let item">{{ item.date | date:'dd/MM/yyyy' }}</td>

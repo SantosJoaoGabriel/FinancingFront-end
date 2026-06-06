@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -30,9 +30,10 @@ import {
   templateUrl: './reports.html',
   styleUrl: './reports.css'
 })
-export class ReportsComponent {
+export class ReportsComponent implements OnInit {
   reportCards: ReportCard[] = [];
   reportHistory: ReportHistoryItem[] = [];
+  filteredHistory: ReportHistoryItem[] = [];
 
   displayedColumns: string[] = [
     'date',
@@ -45,17 +46,66 @@ export class ReportsComponent {
 
   selectedCategory = 'Todos';
   selectedPeriod = 'Últimos 30 dias';
+  loading = false;
 
-  constructor(private reportsService: ReportsService) {
+  constructor(private reportsService: ReportsService) {}
+
+  ngOnInit(): void {
     this.reportCards = this.reportsService.getReportCards();
-    this.reportHistory = this.reportsService.getReportHistory();
+    this.loadHistory();
   }
 
-  generatePdf(report: ReportCard) {
-    alert(`Gerando PDF: ${report.title}`);
+  loadHistory(): void {
+    this.reportsService.getReportHistory().subscribe({
+      next: (data) => {
+        this.reportHistory = data;
+        this.applyFilters();
+      },
+      error: () => {
+        alert('Erro ao carregar histórico de relatórios.');
+      }
+    });
   }
 
-  downloadPdf(item: ReportHistoryItem) {
-    alert(`Baixar arquivo: ${item.fileName}`);
+  generatePdf(report: ReportCard): void {
+    this.loading = true;
+
+    this.reportsService.generateReport({ type: report.code }).subscribe({
+      next: () => {
+        this.loading = false;
+        this.loadHistory();
+        alert(`Relatório "${report.title}" gerado com sucesso.`);
+      },
+      error: () => {
+        this.loading = false;
+        alert(`Erro ao gerar relatório "${report.title}".`);
+      }
+    });
+  }
+
+  downloadPdf(item: ReportHistoryItem): void {
+    this.reportsService.downloadReport(item.id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = item.fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        alert('Erro ao baixar arquivo.');
+      }
+    });
+  }
+
+  applyFilters(): void {
+    this.filteredHistory = this.reportHistory.filter(item => {
+      const matchesCategory =
+        this.selectedCategory === 'Todos' ||
+        item.category === this.selectedCategory;
+
+      return matchesCategory;
+    });
   }
 }
