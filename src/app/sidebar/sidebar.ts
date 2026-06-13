@@ -1,10 +1,12 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { LayoutStateService } from '../core/layout-state.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -20,18 +22,35 @@ import { Router, RouterModule } from '@angular/router';
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css'
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit, OnDestroy {
   opened = true;
   userMenuOpen = false;
   showLogoutModal = false;
+  hideSidebar = false;
 
   usuarioNome = 'Usuário';
   usuarioEmail = '';
   usuarioInicial = 'U';
   tokenParcial = '';
 
-  constructor(private router: Router) {
+  private sidebarStateSubscription?: Subscription;
+
+  constructor(
+    private router: Router,
+    private layoutStateService: LayoutStateService
+  ) {
     this.carregarUsuarioLogado();
+  }
+
+  ngOnInit(): void {
+    this.sidebarStateSubscription = this.layoutStateService.sidebarHidden$
+      .subscribe(hidden => {
+        this.hideSidebar = hidden;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.sidebarStateSubscription?.unsubscribe();
   }
 
   toggle() {

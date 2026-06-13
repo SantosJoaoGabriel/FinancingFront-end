@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TransactionsService, Transaction } from '../core/transactions.service';
+import { LayoutStateService } from '../core/layout-state.service';
 
 interface NovaTransacao {
   descricao: string;
@@ -47,29 +48,45 @@ export class ExpensesComponent implements OnInit {
 
   submitted = false;
 
-isCampoInvalido(campo: 'valor' | 'descricao' | 'categoria' | 'paymentMethod'): boolean {
-  if (!this.submitted) return false;
+  openMenuId: number | null = null;
+  isEditMode = false;
+  editingTransactionId: number | null = null;
 
-  switch (campo) {
-    case 'valor':
-      return this.novaTransacao.valor === null ||
-             this.novaTransacao.valor === undefined ||
-             this.novaTransacao.valor <= 0;
+  showDeleteModal = false;
+  transactionToDeleteId: number | null = null;
 
-    case 'descricao':
-      return !this.novaTransacao.descricao?.trim() ||
-             this.novaTransacao.descricao.trim().length > 20;
+  constructor(
+    private transactionsService: TransactionsService,
+    private layoutStateService: LayoutStateService
+  ) {}
 
-    case 'categoria':
-      return !this.novaTransacao.categoria?.trim();
-
-    case 'paymentMethod':
-      return !this.novaTransacao.paymentMethod?.trim();
-
-    default:
-      return false;
+  ngOnInit() {
+    this.carregarTransacoes();
   }
-}
+
+  isCampoInvalido(campo: 'valor' | 'descricao' | 'categoria' | 'paymentMethod'): boolean {
+    if (!this.submitted) return false;
+
+    switch (campo) {
+      case 'valor':
+        return this.novaTransacao.valor === null ||
+               this.novaTransacao.valor === undefined ||
+               this.novaTransacao.valor <= 0;
+
+      case 'descricao':
+        return !this.novaTransacao.descricao?.trim() ||
+               this.novaTransacao.descricao.trim().length > 20;
+
+      case 'categoria':
+        return !this.novaTransacao.categoria?.trim();
+
+      case 'paymentMethod':
+        return !this.novaTransacao.paymentMethod?.trim();
+
+      default:
+        return false;
+    }
+  }
 
   getMensagemErroValor(): string {
     if (!this.submitted) return '';
@@ -101,21 +118,15 @@ isCampoInvalido(campo: 'valor' | 'descricao' | 'categoria' | 'paymentMethod'): b
     return '';
   }
 
-formularioValido(): boolean {
-  return (
-    !!this.novaTransacao.descricao?.trim() &&
-    this.novaTransacao.descricao.trim().length <= 20 &&
-    !!this.novaTransacao.categoria?.trim() &&
-    !!this.novaTransacao.paymentMethod?.trim() &&
-    !!this.novaTransacao.valor &&
-    this.novaTransacao.valor > 0
-  );
-}
-
-  constructor(private transactionsService: TransactionsService) {}
-
-  ngOnInit() {
-    this.carregarTransacoes();
+  formularioValido(): boolean {
+    return (
+      !!this.novaTransacao.descricao?.trim() &&
+      this.novaTransacao.descricao.trim().length <= 20 &&
+      !!this.novaTransacao.categoria?.trim() &&
+      !!this.novaTransacao.paymentMethod?.trim() &&
+      !!this.novaTransacao.valor &&
+      this.novaTransacao.valor > 0
+    );
   }
 
   carregarTransacoes() {
@@ -182,6 +193,7 @@ formularioValido(): boolean {
   abrirFormulario() {
     this.submitted = false;
     this.mostrarFormulario = true;
+    document.body.classList.add('expense-modal-open');
   }
 
   fecharFormulario() {
@@ -191,6 +203,7 @@ formularioValido(): boolean {
     this.novaTransacao = this.emptyForm();
     this.arquivosSelecionados = [];
     this.submitted = false;
+    document.body.classList.remove('expense-modal-open');
   }
 
   adicionarTransacao() {
@@ -334,14 +347,9 @@ formularioValido(): boolean {
     };
   }
 
-  openMenuId: number | null = null;
-
   toggleActionMenu(id: number): void {
     this.openMenuId = this.openMenuId === id ? null : id;
   }
-
-  isEditMode = false;
-  editingTransactionId: number | null = null;
 
   editTransaction(id: number): void {
     const transaction = this.dataSource.find(item => item.id === id);
@@ -354,6 +362,7 @@ formularioValido(): boolean {
     this.editingTransactionId = id;
     this.openMenuId = null;
     this.mostrarFormulario = true;
+    document.body.classList.add('expense-modal-open');
 
     this.novaTransacao = {
       descricao: transaction.description,
@@ -364,9 +373,6 @@ formularioValido(): boolean {
       notes: transaction.notes || ''
     };
   }
-
-  showDeleteModal = false;
-  transactionToDeleteId: number | null = null;
 
   deleteTransaction(id: number): void {
     this.transactionToDeleteId = id;
