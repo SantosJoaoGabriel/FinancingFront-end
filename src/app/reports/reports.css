@@ -288,3 +288,186 @@
     min-width: 860px;
   }
 }
+
+.custom-delete-dialog {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 28px 30px 24px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
+}
+
+.dialog-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.dialog-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 14px;
+  background: #fff4e5;
+  color: #f59e0b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog-icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.dialog-text h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.dialog-text p {
+  margin: 0;
+  font-size: 16px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.cancel-button,
+.delete-button {
+  border: none;
+  border-radius: 16px;
+  height: 50px;
+  min-width: 120px;
+  padding: 0 22px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.cancel-button {
+  background: #eef2f7;
+  color: #475569;
+}
+
+.cancel-button:hover {
+  background: #e2e8f0;
+}
+
+.delete-button {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.delete-button:hover {
+  background: #dc2626;
+}
+
+.custom-delete-dialog {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 28px 30px 24px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
+}
+
+.custom-feedback-dialog {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 28px 30px 24px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
+}
+
+.success-icon {
+  background: #ecfdf3;
+  color: #16a34a;
+}
+
+.error-icon {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.single-action {
+  justify-content: flex-end;
+}
+
+.custom-feedback-dialog {
+  background: #ffffff;
+  border-radius: 32px;
+  padding: 22px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
+  max-width: 100%;
+}
+
+.custom-feedback-dialog .dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.custom-feedback-dialog .dialog-icon {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-feedback-dialog .dialog-icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.custom-feedback-dialog .dialog-text {
+  flex: 1;
+}
+
+.custom-feedback-dialog .dialog-text h2 {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.custom-feedback-dialog .dialog-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.custom-feedback-dialog .dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.custom-feedback-dialog .confirm-button {
+  min-width: 96px;
+  height: 42px;
+  border: none;
+  border-radius: 16px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 700;
+  background: #2284e6;
+  color: #ffffff;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.custom-feedback-dialog .confirm-button:hover {
+  background: #166fd1;
+}

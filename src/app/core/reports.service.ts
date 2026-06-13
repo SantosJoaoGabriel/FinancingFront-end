@@ -77,4 +77,8 @@ export class ReportsService {
       responseType: 'blob'
     });
   }
+
+  deleteReport(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }
