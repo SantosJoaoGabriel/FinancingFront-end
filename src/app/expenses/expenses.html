@@ -167,15 +167,10 @@
     </div>
   </div>
 
-  <!-- Botão flutuante -->
   <button type="button" class="fab" (click)="abrirFormulario()">
     <span class="material-icons">add</span>
   </button>
 
-  <!-- Overlay -->
-  <div class="overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()"></div>
-
-  <!-- Modal formulário -->
 <div class="form-modal" *ngIf="mostrarFormulario" (click)="fecharFormulario()">
   <div class="form-card" (click)="$event.stopPropagation()">
 

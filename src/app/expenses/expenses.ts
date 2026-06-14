@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TransactionsService, Transaction } from '../core/transactions.service';
-import { LayoutStateService } from '../core/layout-state.service';
 
 interface NovaTransacao {
   descricao: string;
@@ -21,7 +20,7 @@ interface NovaTransacao {
   templateUrl: './expenses.html',
   styleUrls: ['./expenses.css']
 })
-export class ExpensesComponent implements OnInit {
+export class ExpensesComponent implements OnInit, OnDestroy {
   Math = Math;
   mostrarFormulario = false;
 
@@ -57,11 +56,15 @@ export class ExpensesComponent implements OnInit {
 
   constructor(
     private transactionsService: TransactionsService,
-    private layoutStateService: LayoutStateService
   ) {}
 
   ngOnInit() {
     this.carregarTransacoes();
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('expense-modal-open');
+    document.body.classList.remove('delete-modal-open');
   }
 
   isCampoInvalido(campo: 'valor' | 'descricao' | 'categoria' | 'paymentMethod'): boolean {
@@ -362,6 +365,7 @@ export class ExpensesComponent implements OnInit {
     this.editingTransactionId = id;
     this.openMenuId = null;
     this.mostrarFormulario = true;
+    this.submitted = false;
     document.body.classList.add('expense-modal-open');
 
     this.novaTransacao = {
@@ -378,11 +382,13 @@ export class ExpensesComponent implements OnInit {
     this.transactionToDeleteId = id;
     this.showDeleteModal = true;
     this.openMenuId = null;
+    document.body.classList.add('delete-modal-open');
   }
 
   cancelDelete(): void {
     this.showDeleteModal = false;
     this.transactionToDeleteId = null;
+    document.body.classList.remove('delete-modal-open');
   }
 
   confirmDelete(): void {
@@ -396,11 +402,13 @@ export class ExpensesComponent implements OnInit {
         this.applyFilters();
         this.showDeleteModal = false;
         this.transactionToDeleteId = null;
+        document.body.classList.remove('delete-modal-open');
       },
       error: (error) => {
         console.error('Erro ao excluir transação', error);
         this.showDeleteModal = false;
         this.transactionToDeleteId = null;
+        document.body.classList.remove('delete-modal-open');
       }
     });
   }

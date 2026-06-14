@@ -59,7 +59,6 @@
   letter-spacing: -0.3px;
 }
 
-/* Navegação */
 .nav-list {
   flex: 1;
   min-height: 0;
@@ -68,6 +67,23 @@
   flex-direction: column;
   gap: 4px;
   background: transparent;
+}
+
+mat-nav-list a {
+  color: #64748b;
+  border-radius: 12px;
+  margin: 6px 12px;
+  width: calc(100% - 24px);
+}
+
+mat-nav-list a:hover {
+  background: rgba(255, 255, 255, 0.35);
+  color: #2563eb;
+}
+
+mat-nav-list a mat-icon {
+  color: inherit;
+  margin-right: 8px;
 }
 
 .nav-item {
@@ -102,15 +118,18 @@
   color: #2563eb;
 }
 
-/* Ativo normal, fora do modal */
-a.nav-item.nav-active {
+/* Estado ativo normal (fora do modal) – usar nav-active */
+a.nav-item.nav-active,
+mat-nav-list a.nav-active {
   background-color: rgba(219, 234, 254, 0.85);
-  color: #2563eb;
+  color: #2563eb !important;
+  font-weight: 600;
 }
 
 a.nav-item.nav-active .material-icons-round,
-a.nav-item.nav-active mat-icon {
-  color: #137fec;
+a.nav-item.nav-active mat-icon,
+mat-nav-list a.nav-active mat-icon {
+  color: #137fec !important;
 }
 
 /* Content */
@@ -133,6 +152,16 @@ a.nav-item.nav-active mat-icon {
   padding: 0 24px;
   top: 0;
   z-index: 2;
+}
+
+.menu-button {
+  margin-right: 8px;
+  color: #0f172a;
+}
+
+.app-title {
+  font-weight: 600;
+  color: #0f172a;
 }
 
 .menu-btn {
@@ -158,6 +187,7 @@ a.nav-item.nav-active mat-icon {
   font-size: 22px;
 }
 
+/* Lado direito da topbar */
 .topbar-right {
   display: flex;
   align-items: center;
@@ -394,66 +424,11 @@ a.nav-item.nav-active mat-icon {
   background: #b91c1c;
 }
 
-/* Page content */
 .page-content {
   padding: 32px;
   flex: 1;
   overflow-y: auto;
   background: #f4f8ff;
-}
-
-/* Estado com modal de gastos aberto */
-body.expense-modal-open .sidenav,
-body.expense-modal-open .sidenav ::ng-deep .mat-drawer-inner-container,
-body.expense-modal-open .logo-area,
-body.expense-modal-open .nav-list {
-  background: rgba(255, 255, 255, 0.16) !important;
-  background-color: rgba(255, 255, 255, 0.16) !important;
-  backdrop-filter: blur(18px) !important;
-  -webkit-backdrop-filter: blur(18px) !important;
-}
-
-body.expense-modal-open .sidenav {
-  border-right-color: rgba(255, 255, 255, 0.22) !important;
-  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06) !important;
-}
-
-body.expense-modal-open .content,
-body.expense-modal-open .page-content,
-body.expense-modal-open .mat-sidenav-content,
-body.expense-modal-open .mat-drawer-content {
-  background: rgba(244, 248, 255, 0.18) !important;
-  background-color: rgba(244, 248, 255, 0.18) !important;
-}
-
-body.expense-modal-open .topbar {
-  background: rgba(255, 255, 255, 0.28) !important;
-  background-color: rgba(255, 255, 255, 0.28) !important;
-  border-bottom-color: rgba(219, 231, 245, 0.10) !important;
-}
-
-/* Item ativo fica bem apagado enquanto o modal está aberto */
-body.expense-modal-open a.nav-item.nav-active,
-body.expense-modal-open a.nav-item.nav-active:hover,
-body.expense-modal-open a.nav-item.nav-active:focus,
-body.expense-modal-open a.nav-item.nav-active:active {
-  background: rgba(219, 234, 254, 0.22) !important;
-  background-color: rgba(219, 234, 254, 0.22) !important;
-  border: 1px solid rgba(255, 255, 255, 0.10) !important;
-  box-shadow: none !important;
-  color: rgba(37, 99, 235, 0.78) !important;
-  filter: saturate(0.55) brightness(0.96) !important;
-}
-
-body.expense-modal-open a.nav-item.nav-active .material-icons-round,
-body.expense-modal-open a.nav-item.nav-active mat-icon,
-body.expense-modal-open a.nav-item.nav-active:hover .material-icons-round,
-body.expense-modal-open a.nav-item.nav-active:hover mat-icon,
-body.expense-modal-open a.nav-item.nav-active:focus .material-icons-round,
-body.expense-modal-open a.nav-item.nav-active:focus mat-icon,
-body.expense-modal-open a.nav-item.nav-active:active .material-icons-round,
-body.expense-modal-open a.nav-item.nav-active:active mat-icon {
-  color: rgba(37, 99, 235, 0.72) !important;
 }
 
 @media (max-width: 1024px) {

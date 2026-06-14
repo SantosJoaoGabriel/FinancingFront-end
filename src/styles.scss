@@ -49,3 +49,52 @@ body {
 .sidenav .mat-drawer-inner-container {
   background: transparent;
 }
+
+/* Sidebar embassada quando o modal de gasto estiver aberto */
+body.expense-modal-open .sidenav,
+body.expense-modal-open .sidenav .mat-drawer-inner-container,
+body.expense-modal-open .logo-area,
+body.expense-modal-open .nav-list {
+  filter: blur(2px) saturate(0.85) brightness(0.96) !important;
+  opacity: 0.78 !important;
+}
+
+/* Item ativo também perde destaque junto com a sidebar */
+body.expense-modal-open a.nav-item,
+body.expense-modal-open a.nav-item.nav-active,
+body.expense-modal-open mat-nav-list a,
+body.expense-modal-open mat-nav-list a.nav-active {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Ícones e textos da sidebar ficam mais apagados */
+body.expense-modal-open .nav-item,
+body.expense-modal-open .nav-item .material-icons-round,
+body.expense-modal-open .nav-item mat-icon,
+body.expense-modal-open .logo-text {
+  color: rgba(15, 23, 42, 0.45) !important;
+}
+
+
+/* Modal de exclusão: remove só o destaque da tela ativa na sidebar */
+body.delete-modal-open .sidenav,
+body.delete-modal-open .sidenav .mat-drawer-inner-container,
+body.delete-modal-open .logo-area,
+body.delete-modal-open .nav-list {
+  opacity: 0.92 !important;
+}
+
+body.delete-modal-open a.nav-item.nav-active,
+body.delete-modal-open mat-nav-list a.nav-active {
+  background: rgba(255, 255, 255, 0.01) !important;
+  color: rgba(15, 23, 42, 0.52) !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+body.delete-modal-open a.nav-item.nav-active .material-icons-round,
+body.delete-modal-open a.nav-item.nav-active mat-icon,
+body.delete-modal-open mat-nav-list a.nav-active mat-icon {
+  color: rgba(15, 23, 42, 0.42) !important;
+}

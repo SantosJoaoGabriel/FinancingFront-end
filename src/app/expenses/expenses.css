@@ -354,24 +354,18 @@ tbody td {
   font-size: 28px;
 }
 
-/* ===== OVERLAY E MODAL ===== */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 200;
-  backdrop-filter: blur(3px);
-}
 
 .form-modal {
   position: fixed;
   inset: 0;
-  z-index: 300;
+  z-index: 3000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
-  pointer-events: none;
+  background: rgba(15, 23, 42, 0.32);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .form-card {
@@ -387,10 +381,8 @@ tbody td {
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  pointer-events: all;
 }
 
-/* ===== FORMULÁRIO ===== */
 .amount-section {
   text-align: center;
   padding: 12px 0;
@@ -1017,3 +1009,4 @@ tbody td {
   -moz-appearance: textfield;
   appearance: textfield;
 }
+

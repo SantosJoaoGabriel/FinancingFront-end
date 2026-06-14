@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -20,12 +20,12 @@ interface NovoGanho {
   templateUrl: './gains.html',
   styleUrls: ['./gains.css']
 })
-export class GainsComponent implements OnInit {
+export class GainsComponent implements OnInit, OnDestroy {
   Math = Math;
   mostrarFormulario = false;
 
-dataSource: Transaction[] = [];
-filteredData: Transaction[] = [];
+  dataSource: Transaction[] = [];
+  filteredData: Transaction[] = [];
 
   searchTerm = '';
   filtroDataInicio = '';
@@ -47,70 +47,13 @@ filteredData: Transaction[] = [];
 
   submitted = false;
 
-isCampoInvalido(campo: 'valor' | 'descricao' | 'categoria' | 'paymentMethod'): boolean {
-  if (!this.submitted) return false;
+  openMenuId: number | null = null;
 
-  switch (campo) {
-    case 'valor':
-      return this.novoGanho.valor === null ||
-             this.novoGanho.valor === undefined ||
-             this.novoGanho.valor <= 0;
+  isEditMode = false;
+  editingTransactionId: number | null = null;
 
-    case 'descricao':
-      return !this.novoGanho.descricao?.trim() ||
-             this.novoGanho.descricao.trim().length > 20;
-
-    case 'categoria':
-      return !this.novoGanho.categoria?.trim();
-
-    case 'paymentMethod':
-      return !this.novoGanho.paymentMethod?.trim();
-
-    default:
-      return false;
-  }
-}
-
-getMensagemErroValor(): string {
-  if (!this.submitted) return '';
-
-  if (this.novoGanho.valor === null || this.novoGanho.valor === undefined || this.novoGanho.valor === 0) {
-    return 'Campo obrigatório';
-  }
-
-  if (this.novoGanho.valor < 0) {
-    return 'Não pode ser negativo';
-  }
-
-  return '';
-}
-
-getMensagemErroDescricao(): string {
-  if (!this.submitted) return '';
-
-  const descricao = this.novoGanho.descricao?.trim() || '';
-
-  if (!descricao) {
-    return 'Campo obrigatório';
-  }
-
-  if (descricao.length > 20) {
-    return 'Máximo de 20 caracteres';
-  }
-
-  return '';
-}
-
-formularioValido(): boolean {
-  return (
-    !!this.novoGanho.descricao?.trim() &&
-    this.novoGanho.descricao.trim().length <= 20 &&
-    !!this.novoGanho.categoria?.trim() &&
-    !!this.novoGanho.paymentMethod?.trim() &&
-    !!this.novoGanho.valor &&
-    this.novoGanho.valor > 0
-  );
-}
+  showDeleteModal = false;
+  transactionToDeleteId: number | null = null;
 
   private apiUrl = 'http://localhost:8080/api/ganhos';
 
@@ -118,6 +61,76 @@ formularioValido(): boolean {
 
   ngOnInit() {
     this.carregarGanhos();
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('expense-modal-open');
+    document.body.classList.remove('delete-modal-open');
+  }
+
+  isCampoInvalido(campo: 'valor' | 'descricao' | 'categoria' | 'paymentMethod'): boolean {
+    if (!this.submitted) return false;
+
+    switch (campo) {
+      case 'valor':
+        return this.novoGanho.valor === null ||
+               this.novoGanho.valor === undefined ||
+               this.novoGanho.valor <= 0;
+
+      case 'descricao':
+        return !this.novoGanho.descricao?.trim() ||
+               this.novoGanho.descricao.trim().length > 20;
+
+      case 'categoria':
+        return !this.novoGanho.categoria?.trim();
+
+      case 'paymentMethod':
+        return !this.novoGanho.paymentMethod?.trim();
+
+      default:
+        return false;
+    }
+  }
+
+  getMensagemErroValor(): string {
+    if (!this.submitted) return '';
+
+    if (this.novoGanho.valor === null || this.novoGanho.valor === undefined || this.novoGanho.valor === 0) {
+      return 'Campo obrigatório';
+    }
+
+    if (this.novoGanho.valor < 0) {
+      return 'Não pode ser negativo';
+    }
+
+    return '';
+  }
+
+  getMensagemErroDescricao(): string {
+    if (!this.submitted) return '';
+
+    const descricao = this.novoGanho.descricao?.trim() || '';
+
+    if (!descricao) {
+      return 'Campo obrigatório';
+    }
+
+    if (descricao.length > 20) {
+      return 'Máximo de 20 caracteres';
+    }
+
+    return '';
+  }
+
+  formularioValido(): boolean {
+    return (
+      !!this.novoGanho.descricao?.trim() &&
+      this.novoGanho.descricao.trim().length <= 20 &&
+      !!this.novoGanho.categoria?.trim() &&
+      !!this.novoGanho.paymentMethod?.trim() &&
+      !!this.novoGanho.valor &&
+      this.novoGanho.valor > 0
+    );
   }
 
   carregarGanhos() {
@@ -138,6 +151,7 @@ formularioValido(): boolean {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.filteredData.slice(start, start + this.pageSize);
   }
+
   get pageNumbers(): number[] {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
@@ -183,6 +197,7 @@ formularioValido(): boolean {
   abrirFormulario() {
     this.submitted = false;
     this.mostrarFormulario = true;
+    document.body.classList.add('expense-modal-open');
   }
 
   fecharFormulario() {
@@ -192,6 +207,7 @@ formularioValido(): boolean {
     this.novoGanho = this.emptyForm();
     this.arquivosSelecionados = [];
     this.submitted = false;
+    document.body.classList.remove('expense-modal-open');
   }
 
   salvarGanho(): void {
@@ -325,18 +341,12 @@ formularioValido(): boolean {
     };
   }
 
-    openMenuId: number | null = null;
-
   toggleActionMenu(id: number): void {
     this.openMenuId = this.openMenuId === id ? null : id;
   }
 
-  isEditMode = false;
-  editingTransactionId: number | null = null;
-
-    editTransaction(id: number): void {
+  editTransaction(id: number): void {
     const transaction = this.dataSource.find(item => item.id === id);
-
 
     if (!transaction) {
       return;
@@ -347,6 +357,7 @@ formularioValido(): boolean {
     this.openMenuId = null;
     this.submitted = false;
     this.mostrarFormulario = true;
+    document.body.classList.add('expense-modal-open');
 
     this.novoGanho = {
       descricao: transaction.description,
@@ -358,19 +369,17 @@ formularioValido(): boolean {
     };
   }
 
-
-  showDeleteModal = false;
-  transactionToDeleteId: number | null = null;
-
   deleteTransaction(id: number): void {
     this.transactionToDeleteId = id;
     this.showDeleteModal = true;
     this.openMenuId = null;
+    document.body.classList.add('delete-modal-open');
   }
 
   cancelDelete(): void {
     this.showDeleteModal = false;
     this.transactionToDeleteId = null;
+    document.body.classList.remove('delete-modal-open');
   }
 
   confirmDelete(): void {
@@ -384,11 +393,13 @@ formularioValido(): boolean {
         this.applyFilters();
         this.showDeleteModal = false;
         this.transactionToDeleteId = null;
+        document.body.classList.remove('delete-modal-open');
       },
       error: (error) => {
         console.error('Erro ao excluir transação', error);
         this.showDeleteModal = false;
         this.transactionToDeleteId = null;
+        document.body.classList.remove('delete-modal-open');
       }
     });
   }
