@@ -1,0 +1,101 @@
+<div class="login-page">
+  <header class="topbar">
+    <div class="brand">SaveUp</div>
+  </header>
+
+  <main class="login-main">
+    <div class="bg-shape bg-shape-left"></div>
+    <div class="bg-shape bg-shape-right"></div>
+
+    <section class="login-wrapper">
+      <div class="login-card">
+        <div class="login-header">
+          <h1>Bem-vindo de volta</h1>
+          <p>Acesse sua conta SaveUp para gerenciar suas finanças.</p>
+        </div>
+
+        <form #loginForm="ngForm" (ngSubmit)="onSubmit()" class="login-form">
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <div class="input-wrapper">
+              <span class="material-symbols-outlined input-icon">mail</span>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                [(ngModel)]="email"
+                placeholder="nome@exemplo.com"
+                required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="label-row">
+              <label for="password">Senha</label>
+              <a href="#" class="helper-link">Esqueceu a senha?</a>
+            </div>
+
+            <div class="input-wrapper">
+              <span class="material-symbols-outlined input-icon">lock</span>
+              <input
+                id="password"
+                name="password"
+                [type]="showPassword ? 'text' : 'password'"
+                [(ngModel)]="password"
+                placeholder="••••••••"
+                required />
+              <button type="button" class="toggle-password" (click)="togglePassword()">
+                <span class="material-symbols-outlined">
+                  {{ showPassword ? 'visibility_off' : 'visibility' }}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="remember-row">
+            <input
+              id="remember"
+              name="remember"
+              type="checkbox"
+              [(ngModel)]="rememberMe" />
+            <label for="remember">Lembrar deste dispositivo</label>
+          </div>
+
+          <p class="error-message" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </p>
+
+          <button class="submit-btn" type="submit" [disabled]="loading">
+            <span *ngIf="!loading">Entrar</span>
+            <span *ngIf="loading" class="loading-content">
+              <span class="material-symbols-outlined spin">sync</span>
+              Entrando...
+            </span>
+          </button>
+        </form>
+
+        <p class="signup-text">
+          Não tem uma conta?
+          <a routerLink="/register">Criar uma conta</a>
+        </p>
+      </div>
+
+      <div class="trust-row">
+        <div class="trust-item">
+          <span class="material-symbols-outlined">verified_user</span>
+          <span>Certificado de Segurança</span>
+        </div>
+        <div class="trust-dot"></div>
+        <div class="trust-item">
+          <span class="material-symbols-outlined">lock</span>
+          <span>Dados Criptografados</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="login-footer">
+    <div class="footer-brand">SaveUp</div>
+    <p>© 2026 SaveUp. Todos os direitos reservados.</p>
+  </footer>
+</div>

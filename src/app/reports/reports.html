@@ -1,0 +1,154 @@
+<div class="reports-page">
+  <div class="reports-header">
+    <div>
+      <h2>Relatórios Financeiros</h2>
+      <p>Visualize, gere e exporte seus demonstrativos consolidados.</p>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <mat-card class="report-card" *ngFor="let report of reportCards; let i = index">
+      <div class="card-top">
+        <div class="card-icon" [ngClass]="'icon-' + i">
+          <mat-icon>
+            {{ i === 0 ? 'calendar_month' : i === 1 ? 'donut_large' : 'insights' }}
+          </mat-icon>
+        </div>
+
+        <div class="card-tag">
+          {{ report.type }}
+        </div>
+      </div>
+
+      <div class="card-content">
+        <h3>{{ report.title }}</h3>
+        <p>{{ report.subtitle }}</p>
+      </div>
+
+      <button mat-flat-button class="generate-button" (click)="generatePdf(report)">
+        <mat-icon>bolt</mat-icon>
+        {{ report.buttonText }}
+      </button>
+    </mat-card>
+  </div>
+
+  <div class="history-section">
+    <div class="history-header">
+      <h3>Histórico de relatórios</h3>
+
+    </div>
+
+    <div class="table-shell">
+      <table mat-table [dataSource]="filteredHistory" class="reports-table">
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>DATA DO RELATÓRIO</th>
+          <td mat-cell *matCellDef="let item">{{ item.date | date:'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>TÍTULO / DESCRIÇÃO</th>
+          <td mat-cell *matCellDef="let item">
+            <div class="title-cell">
+              <strong>{{ item.title }}</strong>
+              <span>{{ item.description }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="period">
+          <th mat-header-cell *matHeaderCellDef>PERÍODO</th>
+          <td mat-cell *matCellDef="let item">{{ item.period }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="format">
+          <th mat-header-cell *matHeaderCellDef>FORMATO</th>
+          <td mat-cell *matCellDef="let item">
+            <span class="format-chip pdf-chip">{{ item.format }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>STATUS</th>
+          <td mat-cell *matCellDef="let item">
+            <span class="status-chip" [ngClass]="item.status === 'Concluído' ? 'success' : 'warning'">
+              {{ item.status }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>AÇÕES</th>
+          <td mat-cell *matCellDef="let item">
+            <div class="actions-group">
+              <button
+                mat-icon-button
+                class="table-action download-action"
+                (click)="downloadPdf(item)"
+                aria-label="Baixar PDF">
+                <mat-icon>download</mat-icon>
+              </button>
+
+              <button
+                mat-icon-button
+                class="table-action delete-action"
+                (click)="deleteReport(item)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #deleteDialog>
+  <div class="custom-delete-dialog">
+    <div class="dialog-header">
+      <div class="dialog-icon">
+        <mat-icon>warning_amber</mat-icon>
+      </div>
+
+      <div class="dialog-text">
+        <h2>Excluir relatório</h2>
+        <p>Deseja excluir o relatório {{ selectedReportToDelete?.title }}?</p>
+      </div>
+    </div>
+
+    <div class="dialog-actions">
+      <button type="button" class="cancel-button" (click)="cancelDelete()">
+        Cancelar
+      </button>
+
+      <button type="button" class="delete-button" (click)="confirmDelete()">
+        Excluir
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #feedbackDialog>
+  <div class="custom-feedback-dialog">
+    <div class="dialog-header">
+      <div class="dialog-icon" [ngClass]="feedbackType === 'success' ? 'success-icon' : 'error-icon'">
+        <mat-icon>
+          {{ feedbackType === 'success' ? 'check_circle' : 'error' }}
+        </mat-icon>
+      </div>
+
+      <div class="dialog-text">
+        <h2>{{ feedbackTitle }}</h2>
+        <p>{{ feedbackMessage }}</p>
+      </div>
+    </div>
+
+    <div class="dialog-actions single-action">
+      <button type="button" class="confirm-button" (click)="closeFeedbackDialog()">
+        OK
+      </button>
+    </div>
+  </div>
+</ng-template>

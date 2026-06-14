@@ -2,10 +2,16 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  color: #f1f5f9;
+  color: #1e293b;
+  min-width: 0;
 }
 
-/* ===== CARDS ===== */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
 .cards-row {
   display: flex;
   gap: 20px;
@@ -13,21 +19,21 @@
 }
 
 .card {
-  flex: 1;
+  flex: 1 1 220px;
   min-width: 220px;
-  background-color: #1a2530;
+  background: #ffffff;
   border-radius: 20px;
-  border: 1px solid #2d3a4b;
-  color: #f1f5f9;
+  border: 1px solid #e2e8f0;
   padding: 20px 22px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  min-width: 0;
 }
 
-/* card-top é o que o HTML usa */
 .card-top {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  gap: 12px;
   margin-bottom: 8px;
 }
 
@@ -41,9 +47,11 @@
 .card-value {
   font-size: 1.8rem;
   font-weight: 800;
-  color: #f1f5f9;
+  color: #1e293b;
   letter-spacing: -0.5px;
   margin: 0;
+  line-height: 1.1;
+  word-break: break-word;
 }
 
 .card-icon {
@@ -56,33 +64,31 @@
   flex-shrink: 0;
 }
 
-/* corrigido para material-icons-round */
-.card-icon .material-icons-round {
+.card-icon .material-icons-round,
+.card-icon mat-icon {
   font-size: 20px;
 }
 
 .card-icon mat-icon {
-  font-size: 20px;
   width: 20px;
   height: 20px;
 }
 
 .icon-green {
-  background-color: rgba(16, 185, 129, 0.15);
+  background: rgba(16, 185, 129, 0.15);
   color: #10b981;
 }
 
 .icon-blue {
-  background-color: rgba(19, 127, 236, 0.15);
+  background: rgba(19, 127, 236, 0.15);
   color: #137fec;
 }
 
 .icon-orange {
-  background-color: rgba(249, 115, 22, 0.15);
+  background: rgba(249, 115, 22, 0.15);
   color: #f97316;
 }
 
-/* Mini barras - alinhado com HTML (.mini-bars e .mini-bar) */
 .mini-bars {
   display: flex;
   gap: 5px;
@@ -96,7 +102,6 @@
   border-radius: 4px 4px 0 0;
 }
 
-/* Barra de progresso */
 .progress-section {
   margin-top: 16px;
 }
@@ -105,14 +110,14 @@
   width: 100%;
   height: 10px;
   border-radius: 999px;
-  background-color: #0f1922;
+  background: #e2e8f0;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
   border-radius: 999px;
-  background-color: #f97316;
+  background: #f97316;
 }
 
 .progress-label {
@@ -122,28 +127,27 @@
   font-weight: 500;
 }
 
-/* ===== GRÁFICOS ===== */
 .charts-row {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
 }
 
-/* chart-card é o que o HTML usa para ambos os gráficos */
 .chart-card {
-  background-color: #1a2530;
+  background: #ffffff;
   border-radius: 20px;
-  border: 1px solid #2d3a4b;
+  border: 1px solid #e2e8f0;
   padding: 22px;
+  min-width: 0;
 }
 
 .chart-card:first-child {
-  flex: 2;
+  flex: 2 1 420px;
   min-width: 300px;
 }
 
 .chart-card:last-child {
-  flex: 1;
+  flex: 1 1 280px;
   min-width: 260px;
 }
 
@@ -151,13 +155,14 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 14px;
   margin-bottom: 20px;
 }
 
 .chart-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: #1e293b;
   margin: 0 0 4px 0;
 }
 
@@ -168,18 +173,18 @@
 }
 
 .period-select {
-  background-color: #0f1922;
-  border: 1px solid #2d3a4b;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
-  color: #94a3b8;
+  color: #475569;
   padding: 6px 12px;
   font-size: 0.78rem;
   font-family: 'Manrope', sans-serif;
   cursor: pointer;
   outline: none;
+  min-height: 40px;
 }
 
-/* Legenda do donut - alinhado com HTML (.legend-item, .legend-left, .legend-dot, .legend-value) */
 .donut-legend {
   display: flex;
   flex-direction: column;
@@ -191,6 +196,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   font-size: 0.85rem;
 }
 
@@ -198,8 +204,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #cbd5e1;
+  color: #475569;
   font-weight: 500;
+  min-width: 0;
 }
 
 .legend-dot {
@@ -211,14 +218,14 @@
 
 .legend-value {
   font-weight: 700;
-  color: #f1f5f9;
+  color: #1e293b;
+  white-space: nowrap;
 }
 
-/* ===== TRANSAÇÕES RECENTES ===== */
 .transactions-card {
-  background-color: #1a2530;
+  background: #ffffff;
   border-radius: 20px;
-  border: 1px solid #2d3a4b;
+  border: 1px solid #e2e8f0;
   overflow: hidden;
 }
 
@@ -226,14 +233,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   padding: 20px 24px;
-  border-bottom: 1px solid #2d3a4b;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .transactions-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: #1e293b;
   margin: 0;
 }
 
@@ -246,6 +254,7 @@
   border: none;
   cursor: pointer;
   font-family: 'Manrope', sans-serif;
+  white-space: nowrap;
 }
 
 .view-all-btn:hover {
@@ -254,15 +263,17 @@
 
 .table-wrapper {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
   width: 100%;
+  min-width: 720px;
   border-collapse: collapse;
 }
 
 thead tr {
-  background-color: rgba(15, 25, 34, 0.5);
+  background: #f8fafc;
 }
 
 thead th {
@@ -273,6 +284,7 @@ thead th {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   text-align: left;
+  white-space: nowrap;
 }
 
 thead th:last-child {
@@ -280,8 +292,8 @@ thead th:last-child {
 }
 
 tbody tr {
-  border-bottom: 1px solid #2d3a4b;
-  transition: background-color 0.15s;
+  border-bottom: 1px solid #e2e8f0;
+  transition: background 0.15s;
 }
 
 tbody tr:last-child {
@@ -289,34 +301,34 @@ tbody tr:last-child {
 }
 
 tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.03);
+  background: #f8fafc;
 }
 
 tbody td {
   padding: 14px 24px;
   font-size: 0.85rem;
-  color: #f1f5f9;
+  color: #1e293b;
+  white-space: nowrap;
 }
 
-/* vendor-cell e vendor-icon-box são o que o HTML usa */
 .vendor-cell {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
 .vendor-icon-box {
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background-color: #0f1922;
+  background: #f1f5f9;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-/* corrigido para material-icons-round */
 .vendor-icon-box .material-icons-round {
   font-size: 20px;
 }
@@ -324,7 +336,7 @@ tbody td {
 .vendor-name {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: #1e293b;
   margin: 0;
 }
 
@@ -341,38 +353,28 @@ tbody td {
 .category-badge {
   padding: 4px 10px;
   border-radius: 999px;
-  background-color: #0f1922;
-  color: #94a3b8;
+  background: #f1f5f9;
+  color: #475569;
   font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-}
-
-/* classes de badge por categoria */
-.badge-food {
-  background-color: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-}
-
-.badge-transport {
-  background-color: rgba(249, 115, 22, 0.15);
-  color: #f97316;
+  white-space: nowrap;
 }
 
 .badge-default {
-  background-color: #0f1922;
-  color: #94a3b8;
+  background: #f1f5f9;
+  color: #475569;
 }
 
 .amount-negative {
   font-weight: 700;
-  color: #ef4444;
+  color: #dc2626;
 }
 
 .amount-positive {
   font-weight: 700;
-  color: #10b981;
+  color: #16a34a;
 }
 
 .status-cell {
@@ -386,33 +388,210 @@ tbody td {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
-.status-completed {
-  background-color: rgba(16, 185, 129, 0.15);
-  color: #10b981;
+.status-income {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-expense {
+  background: #fee2e2;
+  color: #b91c1c;
 }
 
 .status-pending {
-  background-color: #0f1922;
-  color: #94a3b8;
+  background: #f1f5f9;
+  color: #64748b;
 }
 
-/* ===== RESPONSIVO ===== */
 @media (max-width: 1024px) {
+  .dashboard-container {
+    gap: 20px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cards-row {
+    gap: 16px;
+  }
+
+  .card {
+    padding: 18px 18px;
+  }
+
   .charts-row {
     flex-direction: column;
   }
 
   .chart-card:first-child,
   .chart-card:last-child {
-    flex: 1;
+    flex: 1 1 auto;
     min-width: unset;
+  }
+
+  .transactions-header {
+    padding: 18px 20px;
+  }
+
+  thead th,
+  tbody td {
+    padding-left: 18px;
+    padding-right: 18px;
   }
 }
 
 @media (max-width: 768px) {
+  .dashboard-container {
+    gap: 16px;
+  }
+
   .cards-row {
     flex-direction: column;
+    gap: 14px;
+  }
+
+  .card {
+    min-width: 0;
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .card-value {
+    font-size: 1.5rem;
+  }
+
+  .card-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .charts-row {
+    gap: 14px;
+  }
+
+  .chart-card {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .chart-card-header {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 16px;
+  }
+
+  .period-select {
+    width: 100%;
+  }
+
+  .legend-item {
+    font-size: 0.82rem;
+  }
+
+  .transactions-card {
+    border-radius: 18px;
+  }
+
+  .transactions-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 640px;
+  }
+
+  thead th,
+  tbody td {
+    padding: 12px 16px;
+  }
+
+  .vendor-icon-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+
+  .vendor-name {
+    font-size: 0.82rem;
+  }
+
+  .vendor-sub {
+    font-size: 0.72rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 14px;
+  }
+
+  .card-top {
+    margin-bottom: 10px;
+  }
+
+  .card-label {
+    font-size: 0.74rem;
+  }
+
+  .card-value {
+    font-size: 1.3rem;
+  }
+
+  .mini-bars {
+    height: 30px;
+    margin-top: 12px;
+  }
+
+  .progress-label {
+    font-size: 0.72rem;
+  }
+
+  .chart-card {
+    padding: 14px;
+  }
+
+  .chart-title {
+    font-size: 0.94rem;
+  }
+
+  .chart-subtitle {
+    font-size: 0.74rem;
+  }
+
+  .transactions-header {
+    padding: 14px;
+  }
+
+  .transactions-title {
+    font-size: 0.94rem;
+  }
+
+  .view-all-btn {
+    font-size: 0.8rem;
+  }
+
+  table {
+    min-width: 560px;
+  }
+
+  thead th,
+  tbody td {
+    padding: 12px;
+  }
+
+  .category-badge,
+  .status-badge {
+    font-size: 0.62rem;
+    padding: 4px 8px;
   }
 }

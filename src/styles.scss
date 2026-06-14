@@ -1,6 +1,178 @@
+html, body {
+  height: 100%;
+}
+
+:root {
+  --app-bg: #f4f8ff;
+  --surface: #ffffff;
+  --surface-soft: #f8fbff;
+  --surface-hover: #eef5ff;
+  --border-color: #dbe7f5;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-soft: #dbeafe;
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --shadow-soft: 0 10px 30px rgba(37, 99, 235, 0.08);
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --container-padding: 24px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
-  background-color: #101922;
-  color: #f1f5f9;
-  font-family: 'Manrope', sans-serif;
+  background: var(--app-bg);
+  color: var(--text-primary);
+  font-family: 'Roboto', Arial, sans-serif;
+  line-height: 1.5;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.delete-dialog-panel .mat-mdc-dialog-container .mdc-dialog__surface {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 28px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.delete-dialog-panel .mat-mdc-dialog-container {
+  padding: 0 !important;
+}
+
+.custom-delete-dialog {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 28px 30px 24px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
+  width: min(92vw, 460px);
+}
+
+.sidenav .mat-drawer-inner-container {
+  background: transparent;
+}
+
+body.expense-modal-open .sidenav,
+body.expense-modal-open .sidenav .mat-drawer-inner-container,
+body.expense-modal-open .logo-area,
+body.expense-modal-open .nav-list {
+  filter: blur(2px) saturate(0.85) brightness(0.96) !important;
+  opacity: 0.78 !important;
+}
+
+body.expense-modal-open a.nav-item,
+body.expense-modal-open a.nav-item.nav-active,
+body.expense-modal-open mat-nav-list a,
+body.expense-modal-open mat-nav-list a.nav-active {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+body.expense-modal-open .nav-item,
+body.expense-modal-open .nav-item .material-icons-round,
+body.expense-modal-open .nav-item mat-icon,
+body.expense-modal-open .logo-text {
+  color: rgba(15, 23, 42, 0.45) !important;
+}
+
+body.delete-modal-open .sidenav,
+body.delete-modal-open .sidenav .mat-drawer-inner-container,
+body.delete-modal-open .logo-area,
+body.delete-modal-open .nav-list {
+  opacity: 0.92 !important;
+}
+
+body.delete-modal-open a.nav-item.nav-active,
+body.delete-modal-open mat-nav-list a.nav-active {
+  background: rgba(255, 255, 255, 0.01) !important;
+  color: rgba(15, 23, 42, 0.52) !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+body.delete-modal-open a.nav-item.nav-active .material-icons-round,
+body.delete-modal-open a.nav-item.nav-active mat-icon,
+body.delete-modal-open mat-nav-list a.nav-active mat-icon {
+  color: rgba(15, 23, 42, 0.42) !important;
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --container-padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --container-padding: 16px;
+  }
+
+  body {
+    font-size: 15px;
+  }
+
+  .custom-delete-dialog {
+    width: calc(100vw - 24px);
+    padding: 24px 20px 20px;
+    border-radius: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --container-padding: 14px;
+  }
+
+  body {
+    font-size: 14px;
+  }
+
+  .custom-delete-dialog {
+    width: calc(100vw - 16px);
+    padding: 20px 16px 16px;
+    border-radius: 18px;
+  }
 }

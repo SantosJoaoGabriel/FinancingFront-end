@@ -1,0 +1,302 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <h2 class="page-title">Todos os Gastos</h2>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters-row">
+    <div class="search-box">
+      <span class="material-icons search-icon">search</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Pesquisar..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applyFilters()">
+    </div>
+
+    <!-- Filtro por período -->
+    <div class="date-range-filter">
+      <div class="date-field">
+        <span class="material-icons date-icon">calendar_today</span>
+        <input
+          type="date"
+          class="date-input"
+          [(ngModel)]="filtroDataInicio"
+          (ngModelChange)="applyFilters()"
+          title="Data inicial">
+      </div>
+
+      <span class="date-separator">até</span>
+
+      <div class="date-field">
+        <span class="material-icons date-icon">calendar_today</span>
+        <input
+          type="date"
+          class="date-input"
+          [(ngModel)]="filtroDataFim"
+          (ngModelChange)="applyFilters()"
+          title="Data final">
+      </div>
+
+      <button
+        type="button"
+        class="btn-clear-filter"
+        *ngIf="filtroDataInicio || filtroDataFim"
+        (click)="limparFiltros()"
+        title="Limpar filtros">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabela -->
+  <div class="table-card">
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Descrição</th>
+            <th>Categoria</th>
+            <th>Forma de Pagamento</th>
+            <th style="text-align:right">Valor</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of paginatedData">
+            <td class="date-cell">{{ t.date | date:'dd-MM-yyyy' }}</td>
+
+            <td>
+              <div class="expense-details">
+                <div class="expense-icon" [ngClass]="getCategoryIconClass(t.category)">
+                  <span class="material-icons">{{ getCategoryIcon(t.category) }}</span>
+                </div>
+                <span class="expense-name">{{ t.description }}</span>
+              </div>
+            </td>
+
+            <td>
+              <span class="category-badge" [ngClass]="getCategoryBadgeClass(t.category)">
+                {{ t.category }}
+              </span>
+            </td>
+
+            <td>
+              <div class="payment-cell">
+                <span class="material-icons">credit_card</span>
+                {{ t.paymentMethod || 'Cartão de Crédito' }}
+              </div>
+            </td>
+
+            <td class="amount-cell amount-negative">
+              -{{ t.amount | currency:'BRL' }}
+            </td>
+
+            <td class="action-cell">
+              <div class="action-menu-wrapper">
+                <button type="button" class="action-btn" (click)="toggleActionMenu(t.id!)">
+                  <span class="material-icons">more_vert</span>
+                </button>
+              </div>
+                <div class="action-menu" *ngIf="openMenuId === t.id">
+                  <button type="button" class="menu-item" (click)="editTransaction(t.id!)">
+                    <span class="material-icons">edit</span>
+                    Editar
+                  </button>
+
+                  <button type="button" class="menu-item delete" (click)="deleteTransaction(t.id!)">
+                    <span class="material-icons">delete</span>
+                    Excluir
+                  </button>
+                </div>
+            </td>
+          </tr>
+
+          <!-- Estado vazio -->
+          <tr *ngIf="paginatedData.length === 0">
+            <td colspan="6" class="empty-state">
+              <span class="material-icons">search_off</span>
+              <p>Nenhum gasto encontrado para o período selecionado.</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginação -->
+    <div class="pagination-wrapper">
+      <div class="pagination-buttons">
+        <button
+          type="button"
+          class="page-nav-btn"
+          (click)="goToPage(currentPage - 1)"
+          [disabled]="currentPage === 1">
+          Anterior
+        </button>
+
+        <ng-container *ngFor="let p of pageNumbers">
+          <button
+            class="page-number-btn"
+            [class.active]="p === currentPage"
+            (click)="goToPage(p)">
+            {{ p }}
+          </button>
+        </ng-container>
+
+        <button
+          type="button"
+          class="page-nav-btn"
+          (click)="goToPage(currentPage + 1)"
+          [disabled]="currentPage === totalPages">
+          Próximo
+        </button>
+      </div>
+
+      <p class="page-info">
+        Mostrando
+        <span>{{ (currentPage - 1) * pageSize + 1 }}</span>
+        a
+        <span>{{ Math.min(currentPage * pageSize, filteredData.length) }}</span>
+        de
+        <span>{{ filteredData.length }}</span>
+        registros
+      </p>
+    </div>
+  </div>
+
+  <button type="button" class="fab" (click)="abrirFormulario()">
+    <span class="material-icons">add</span>
+  </button>
+
+<div class="form-modal" *ngIf="mostrarFormulario" (click)="fecharFormulario()">
+  <div class="form-card" (click)="$event.stopPropagation()">
+
+    <div class="amount-section">
+      <div class="amount-label">Adicionar Gasto</div>
+      <div class="amount-input-row" [class.field-error]="isCampoInvalido('valor')">
+        <span class="currency-symbol">R$</span>
+        <input
+          type="number"
+          class="amount-input"
+          [(ngModel)]="novaTransacao.valor"
+          name="valor"
+          placeholder="0.00"
+          step="0.01"
+          min="0">
+      </div>
+      <small class="error-message" *ngIf="isCampoInvalido('valor')">
+        {{ getMensagemErroValor() }}
+      </small>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label class="field-label">Descrição</label>
+      <input
+        type="text"
+        class="field-input"
+        [class.field-error]="isCampoInvalido('descricao')"
+        [(ngModel)]="novaTransacao.descricao"
+        name="descricao"
+        maxlength="20"
+        placeholder="Clique para escrever">
+      <small class="error-message" *ngIf="isCampoInvalido('descricao')">
+        {{ getMensagemErroDescricao() }}
+      </small>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label class="field-label">Categoria</label>
+        <div class="select-wrapper" [class.field-error]="isCampoInvalido('categoria')">
+          <span class="material-icons select-icon">category</span>
+          <select
+            class="field-select"
+            [(ngModel)]="novaTransacao.categoria"
+            name="categoria">
+            <option value="" disabled selected>Selecione</option>
+            <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+          </select>
+          <span class="material-icons chevron-icon">expand_more</span>
+        </div>
+        <small class="error-message" *ngIf="isCampoInvalido('categoria')">Campo obrigatório</small>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Data</label>
+        <div class="select-wrapper">
+          <span class="material-icons select-icon">calendar_today</span>
+          <input
+            type="date"
+            class="field-date"
+            [(ngModel)]="novaTransacao.data"
+            name="data">
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Forma de Pagamento</label>
+      <div class="select-wrapper" [class.field-error]="isCampoInvalido('paymentMethod')">
+        <span class="material-icons select-icon">credit_card</span>
+        <select
+          class="field-select"
+          [(ngModel)]="novaTransacao.paymentMethod"
+          name="paymentMethod">
+          <option value="" disabled selected>Selecione</option>
+          <option *ngFor="let method of paymentMethods" [value]="method">{{ method }}</option>
+        </select>
+        <span class="material-icons chevron-icon">expand_more</span>
+      </div>
+      <small class="error-message" *ngIf="isCampoInvalido('paymentMethod')">Campo obrigatório</small>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Observação</label>
+      <textarea
+        class="field-textarea"
+        [(ngModel)]="novaTransacao.notes"
+        name="notes"
+        placeholder="Clique para escrever">
+      </textarea>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn-cancel" (click)="fecharFormulario()">Cancelar</button>
+      <button
+        type="button"
+        class="btn-save"
+        (click)="adicionarTransacao()">
+        {{ isEditMode ? '+ Editar' : 'Salvar' }}
+      </button>
+    </div>
+
+  </div>
+</div>
+
+  <div class="modal-backdrop" *ngIf="showDeleteModal">
+    <div class="confirm-modal">
+      <div class="confirm-modal-header">
+        <span class="material-icons">warning</span>
+        <h3>Excluir gasto</h3>
+      </div>
+
+      <p>Deseja realmente excluir este gasto?</p>
+
+      <div class="confirm-modal-actions">
+        <button type="button" class="btn-cancel" (click)="cancelDelete()">
+          Cancelar
+        </button>
+
+        <button type="button" class="btn-delete" (click)="confirmDelete()">
+          Excluir
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -8,7 +8,7 @@
       <div class="card-top">
         <div>
           <p class="card-label">Ganhos Mensal</p>
-          <p class="card-value">{{ saldoTotal | currency:'BRL' }}</p>
+          <p class="card-value">{{ ganhosMes | currency:'BRL' }}</p>
         </div>
         <div class="card-icon icon-green">
           <span class="material-icons-round">account_balance</span>
@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="mini-bars">
-        <div class="mini-bar" style="height:30%; background:rgba(19,127,236,0.2)"></div>
+        <div class="mini-bar" style="height:30%; background:rgba(19, 81, 236, 0.2)"></div>
         <div class="mini-bar" style="height:85%; background:#137fec"></div>
         <div class="mini-bar" style="height:60%; background:rgba(19,127,236,0.2)"></div>
         <div class="mini-bar" style="height:40%; background:rgba(19,127,236,0.2)"></div>
@@ -76,12 +76,12 @@
           <p class="chart-title">Escala de Gastos</p>
           <p class="chart-subtitle">Crescimentos dos gastos em escala grafica</p>
         </div>
-        <select class="period-select">
-          <option>Ultimos 6 Meses</option>
-          <option>Ultimos 12 Meses</option>
+        <select class="period-select" [(ngModel)]="periodoSelecionado">
+          <option [ngValue]="6">Ultimos 6 Meses</option>
+          <option [ngValue]="12">Ultimos 12 Meses</option>
         </select>
       </div>
-      <app-chart-linha-gastos></app-chart-linha-gastos>
+      <app-chart-linha-gastos [periodo]="periodoSelecionado"></app-chart-linha-gastos>
     </div>
 
     <!-- Gráfico de Rosca -->
@@ -110,14 +110,14 @@
   <div class="transactions-card">
     <div class="transactions-header">
       <h4 class="transactions-title">Ultimas Transações</h4>
-      <a class="view-all-btn" routerLink="/transacoes">View All</a>
+ <!--     <a class="view-all-btn" routerLink="/transacoes">View All</a> -->
     </div>
 
     <div class="table-wrapper">
       <table>
         <thead>
           <tr>
-            <th>Vendor</th>
+            <th>Descrição</th>
             <th>Data</th>
             <th>Categoria</th>
             <th>Valor</th>
@@ -129,27 +129,34 @@
             <td>
               <div class="vendor-cell">
                 <div class="vendor-icon-box">
-                  <span class="material-icons-round" [style.color]="getCategoryColor(t.categoria)">
-                    {{ getCategoryIcon(t.categoria) }}
+                  <span class="material-icons-round" [style.color]="getCategoryColor(t.category)">
+                    {{ getCategoryIcon(t.category) }}
                   </span>
                 </div>
                 <div>
-                  <p class="vendor-name">{{ t.descricao }}</p>
-                  <p class="vendor-sub">{{ t.categoria }}</p>
+                  <p class="vendor-name">{{ t.description }}</p>
+                  <p class="vendor-sub">{{ t.category }}</p>
                 </div>
               </div>
             </td>
-            <td class="date-cell">{{ t.data | date:'MMM dd, yyyy' }}</td>
+            <td class="date-cell">{{ t.date | date:'dd-MM-yyyy' }}</td>
             <td>
-              <span class="category-badge" [ngClass]="getCategoryBadgeClass(t.categoria)">
-                {{ t.categoria }}
+              <span class="category-badge" [ngClass]="getCategoryBadgeClass(t.category)">
+                {{ t.category }}
               </span>
             </td>
             <td>
-              <span class="amount-negative">-{{ t.valor | currency:'BRL' }}</span>
+              <span
+                [ngClass]="t.type === 'INCOME' ? 'amount-positive' : 'amount-negative'">
+                {{ t.type === 'INCOME' ? '+' : '-' }}{{ t.amount | currency:'BRL' }}
+              </span>
             </td>
             <td class="status-cell">
-              <span class="status-badge status-completed">Completed</span>
+                <span
+                  class="status-badge"
+                  [ngClass]="t.type === 'INCOME' ? 'status-income' : 'status-expense'">
+                  {{ t.type === 'INCOME' ? 'Lucro' : 'Gasto' }}
+                </span>
             </td>
           </tr>
         </tbody>

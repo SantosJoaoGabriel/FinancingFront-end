@@ -2,12 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface Transacao {
+
+export type TransactionType = 'EXPENSE' | 'INCOME';
+
+export interface Transaction {
   id?: number;
-  descricao: string;
-  categoria: string;
-  data: string;
-  valor: number;
+  description: string;
+  category: string;
+  date: string;
+  amount: number;
+  type: TransactionType;
   paymentMethod?: string;
   notes?: string;
 }
@@ -20,20 +24,20 @@ export class TransactionsService {
 
   constructor(private http: HttpClient) {}
 
-  getTransacoes(): Observable<Transacao[]> {
-    return this.http.get<Transacao[]>(this.apiUrl);
+  getTransacoes(): Observable<Transaction[]> {
+    return this.http.get<Transaction[]>(this.apiUrl);
   }
 
-  getRecentes(limite: number = 5): Observable<Transacao[]> {
-    return this.http.get<Transacao[]>(`${this.apiUrl}/recentes?limite=${limite}`);
+  getRecentes(limite: number = 5): Observable<Transaction[]> {
+    return this.http.get<Transaction[]>(`${this.apiUrl}/recentes?limite=${limite}`);
   }
 
-  addTransacao(transacao: Transacao): Observable<Transacao> {
-    return this.http.post<Transacao>(this.apiUrl, transacao);
+  addTransacao(transacao: Transaction): Observable<Transaction> {
+    return this.http.post<Transaction>(this.apiUrl, transacao);
   }
 
-  updateTransacao(id: number, transacao: Transacao): Observable<Transacao> {
-    return this.http.put<Transacao>(`${this.apiUrl}/${id}`, transacao);
+  updateTransacao(id: number, transacao: Transaction): Observable<Transaction> {
+    return this.http.put<Transaction>(`${this.apiUrl}/${id}`, transacao);
   }
 
   deleteTransacao(id: number): Observable<void> {

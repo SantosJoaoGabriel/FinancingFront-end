@@ -4,8 +4,9 @@ import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { ChartGastosComponent } from '../chart-gastos/chart-gastos';
 import { ChartLinhaGastosComponent } from '../chart-linha-gastos/chart-linha-gastos';
-import { TransactionsService, Transacao } from '../core/transactions.service';
+import { TransactionsService, Transaction } from '../core/transactions.service';
 import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
 
 interface LegendaItem {
   categoria: string;
@@ -21,6 +22,7 @@ interface LegendaItem {
     MatCardModule,
     RouterModule,
     MatIconModule,
+    FormsModule,
     ChartGastosComponent,
     ChartLinhaGastosComponent
   ],
@@ -28,12 +30,16 @@ interface LegendaItem {
   styleUrl: './dashboard.css'
 })
 export class DashboardComponent implements OnInit {
-  saldoTotal = 0;
+  ganhosMes = 0;
   gastosMes = 0;
-  metasMes = 3000;
+  saldoTotal = 0;
+
+  metasMes = 0;
   metaPorcentagem = 0;
   metaRestante = 0;
-  transacoesRecentes: Transacao[] = [];
+  periodoSelecionado = 6;
+
+  transacoesRecentes: Transaction[] = [];
   legendaGastos: LegendaItem[] = [];
 
   private cores: { [key: string]: string } = {
@@ -47,30 +53,44 @@ export class DashboardComponent implements OnInit {
 
   constructor(private transactionsService: TransactionsService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.carregarDados();
   }
 
-  carregarDados() {
+    carregarDados(): void {
     this.transactionsService.getTransacoes().subscribe({
       next: (data) => {
-        this.gastosMes = data.reduce((total, t) => total + t.valor, 0);
-        this.saldoTotal = this.metasMes - this.gastosMes;
-        this.metaPorcentagem = Math.min(
-          Math.round((this.gastosMes / this.metasMes) * 100), 100
-        );
+        const transacoesMesAtual = data.filter(t => this.isMesAtual(t.date));
+
+        this.ganhosMes = transacoesMesAtual
+          .filter(t => t.type === 'INCOME')
+          .reduce((total, t) => total + (t.amount ?? 0), 0);
+
+        this.gastosMes = transacoesMesAtual
+          .filter(t => t.type === 'EXPENSE')
+          .reduce((total, t) => total + (t.amount ?? 0), 0);
+
+        this.saldoTotal = this.ganhosMes - this.gastosMes;
+
+        this.metasMes = this.ganhosMes;
+
+        this.metaPorcentagem = this.metasMes > 0
+          ? Math.min(Math.round((this.gastosMes / this.metasMes) * 100), 100)
+          : 0;
+
         this.metaRestante = Math.max(this.metasMes - this.gastosMes, 0);
 
         this.transacoesRecentes = [...data]
-          .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
           .slice(0, 5);
 
-        // montar legenda do donut
         const porCategoria = new Map<string, number>();
-        for (const t of data) {
-          const atual = porCategoria.get(t.categoria) ?? 0;
-          porCategoria.set(t.categoria, atual + t.valor);
+
+        for (const t of transacoesMesAtual.filter(t => t.type === 'EXPENSE')) {
+          const atual = porCategoria.get(t.category) ?? 0;
+          porCategoria.set(t.category, atual + (t.amount ?? 0));
         }
+
         this.legendaGastos = Array.from(porCategoria.entries()).map(([cat, val]) => ({
           categoria: cat,
           valor: val,
@@ -79,6 +99,18 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => console.error('Erro ao carregar dashboard:', err)
     });
+  }
+
+  private isMesAtual(dataString: string): boolean {
+    const hoje = new Date();
+
+    const [ano, mes, dia] = dataString.split('-').map(Number);
+    const data = new Date(ano, mes - 1, dia);
+
+    return (
+      data.getMonth() === hoje.getMonth() &&
+      data.getFullYear() === hoje.getFullYear()
+    );
   }
 
   getCategoryIcon(cat: string): string {

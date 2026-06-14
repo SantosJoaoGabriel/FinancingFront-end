@@ -1,11 +1,23 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard';
-import { TransacoesComponent } from './transacoes/transacoes';
-import { GanhosComponent } from './ganhos/ganhos';
+import { MainLayoutComponent } from './layout/main-layout/main-layout';
+import { authGuard } from './core/auth.guard';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'transacoes', component: TransacoesComponent },
-  { path: 'ganhos', component: GanhosComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+  {
+    path: '',
+    component: MainLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: 'dashboard', loadComponent: () => import('./dashboard/dashboard').then(m => m.DashboardComponent) },
+      { path: 'expenses', loadComponent: () => import('./expenses/expenses').then(m => m.ExpensesComponent) },
+      { path: 'gains', loadComponent: () => import('./gains/gains').then(m => m.GainsComponent) },
+      { path: 'reports', loadComponent: () => import('./reports/reports').then(m => m.ReportsComponent) }
+    ]
+  },
+
+  { path: 'login', loadComponent: () => import('./login/login').then(m => m.LoginComponent) },
+  { path: 'register', loadComponent: () => import('./register/register').then(m => m.RegisterComponent) },
+  { path: '**', redirectTo: 'login' }
 ];
