@@ -75,9 +75,6 @@ ng build
 
 Os arquivos gerados ficarão na pasta de saída configurada pelo Angular.
 
-## Responsividade e interface
-
-O projeto contempla estilo para melhorar a experiência em desktop, tablet e celular. Também foram trabalhados estados visuais de modal, blur de fundo, tabela com rolagem horizontal em telas pequenas e adaptação de cards, filtros e formulários para uso mobile.
 
 ## Integração com back-end
 
