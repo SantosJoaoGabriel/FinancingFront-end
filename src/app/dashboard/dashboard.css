@@ -1,9 +1,9 @@
-/* ===== DASHBOARD CONTAINER ===== */
 .dashboard-container {
   display: flex;
   flex-direction: column;
   gap: 24px;
   color: #1e293b;
+  min-width: 0;
 }
 
 .dashboard-grid {
@@ -12,7 +12,6 @@
   gap: 20px;
 }
 
-/* ===== CARDS ===== */
 .cards-row {
   display: flex;
   gap: 20px;
@@ -20,19 +19,21 @@
 }
 
 .card {
-  flex: 1;
+  flex: 1 1 220px;
   min-width: 220px;
   background: #ffffff;
   border-radius: 20px;
   border: 1px solid #e2e8f0;
   padding: 20px 22px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  min-width: 0;
 }
 
 .card-top {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  gap: 12px;
   margin-bottom: 8px;
 }
 
@@ -49,6 +50,8 @@
   color: #1e293b;
   letter-spacing: -0.5px;
   margin: 0;
+  line-height: 1.1;
+  word-break: break-word;
 }
 
 .card-icon {
@@ -86,7 +89,6 @@
   color: #f97316;
 }
 
-/* Mini barras */
 .mini-bars {
   display: flex;
   gap: 5px;
@@ -100,7 +102,6 @@
   border-radius: 4px 4px 0 0;
 }
 
-/* Barra de progresso */
 .progress-section {
   margin-top: 16px;
 }
@@ -126,7 +127,6 @@
   font-weight: 500;
 }
 
-/* ===== GRÁFICOS ===== */
 .charts-row {
   display: flex;
   flex-wrap: wrap;
@@ -138,15 +138,16 @@
   border-radius: 20px;
   border: 1px solid #e2e8f0;
   padding: 22px;
+  min-width: 0;
 }
 
 .chart-card:first-child {
-  flex: 2;
+  flex: 2 1 420px;
   min-width: 300px;
 }
 
 .chart-card:last-child {
-  flex: 1;
+  flex: 1 1 280px;
   min-width: 260px;
 }
 
@@ -154,6 +155,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 14px;
   margin-bottom: 20px;
 }
 
@@ -180,9 +182,9 @@
   font-family: 'Manrope', sans-serif;
   cursor: pointer;
   outline: none;
+  min-height: 40px;
 }
 
-/* Legenda do donut */
 .donut-legend {
   display: flex;
   flex-direction: column;
@@ -194,6 +196,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   font-size: 0.85rem;
 }
 
@@ -203,6 +206,7 @@
   gap: 8px;
   color: #475569;
   font-weight: 500;
+  min-width: 0;
 }
 
 .legend-dot {
@@ -215,9 +219,9 @@
 .legend-value {
   font-weight: 700;
   color: #1e293b;
+  white-space: nowrap;
 }
 
-/* ===== TRANSAÇÕES RECENTES ===== */
 .transactions-card {
   background: #ffffff;
   border-radius: 20px;
@@ -229,6 +233,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   padding: 20px 24px;
   border-bottom: 1px solid #e2e8f0;
 }
@@ -249,6 +254,7 @@
   border: none;
   cursor: pointer;
   font-family: 'Manrope', sans-serif;
+  white-space: nowrap;
 }
 
 .view-all-btn:hover {
@@ -257,10 +263,12 @@
 
 .table-wrapper {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
   width: 100%;
+  min-width: 720px;
   border-collapse: collapse;
 }
 
@@ -276,6 +284,7 @@ thead th {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   text-align: left;
+  white-space: nowrap;
 }
 
 thead th:last-child {
@@ -299,13 +308,14 @@ tbody td {
   padding: 14px 24px;
   font-size: 0.85rem;
   color: #1e293b;
+  white-space: nowrap;
 }
 
-/* Célula de vendor */
 .vendor-cell {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
 .vendor-icon-box {
@@ -349,6 +359,7 @@ tbody td {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 .badge-default {
@@ -377,6 +388,7 @@ tbody td {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 .status-income {
@@ -394,10 +406,21 @@ tbody td {
   color: #64748b;
 }
 
-/* ===== RESPONSIVO ===== */
 @media (max-width: 1024px) {
+  .dashboard-container {
+    gap: 20px;
+  }
+
   .dashboard-grid {
     grid-template-columns: 1fr;
+  }
+
+  .cards-row {
+    gap: 16px;
+  }
+
+  .card {
+    padding: 18px 18px;
   }
 
   .charts-row {
@@ -406,13 +429,169 @@ tbody td {
 
   .chart-card:first-child,
   .chart-card:last-child {
-    flex: 1;
+    flex: 1 1 auto;
     min-width: unset;
+  }
+
+  .transactions-header {
+    padding: 18px 20px;
+  }
+
+  thead th,
+  tbody td {
+    padding-left: 18px;
+    padding-right: 18px;
   }
 }
 
 @media (max-width: 768px) {
+  .dashboard-container {
+    gap: 16px;
+  }
+
   .cards-row {
     flex-direction: column;
+    gap: 14px;
+  }
+
+  .card {
+    min-width: 0;
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .card-value {
+    font-size: 1.5rem;
+  }
+
+  .card-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .charts-row {
+    gap: 14px;
+  }
+
+  .chart-card {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .chart-card-header {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 16px;
+  }
+
+  .period-select {
+    width: 100%;
+  }
+
+  .legend-item {
+    font-size: 0.82rem;
+  }
+
+  .transactions-card {
+    border-radius: 18px;
+  }
+
+  .transactions-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 640px;
+  }
+
+  thead th,
+  tbody td {
+    padding: 12px 16px;
+  }
+
+  .vendor-icon-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+
+  .vendor-name {
+    font-size: 0.82rem;
+  }
+
+  .vendor-sub {
+    font-size: 0.72rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 14px;
+  }
+
+  .card-top {
+    margin-bottom: 10px;
+  }
+
+  .card-label {
+    font-size: 0.74rem;
+  }
+
+  .card-value {
+    font-size: 1.3rem;
+  }
+
+  .mini-bars {
+    height: 30px;
+    margin-top: 12px;
+  }
+
+  .progress-label {
+    font-size: 0.72rem;
+  }
+
+  .chart-card {
+    padding: 14px;
+  }
+
+  .chart-title {
+    font-size: 0.94rem;
+  }
+
+  .chart-subtitle {
+    font-size: 0.74rem;
+  }
+
+  .transactions-header {
+    padding: 14px;
+  }
+
+  .transactions-title {
+    font-size: 0.94rem;
+  }
+
+  .view-all-btn {
+    font-size: 0.8rem;
+  }
+
+  table {
+    min-width: 560px;
+  }
+
+  thead th,
+  tbody td {
+    padding: 12px;
+  }
+
+  .category-badge,
+  .status-badge {
+    font-size: 0.62rem;
+    padding: 4px 8px;
   }
 }

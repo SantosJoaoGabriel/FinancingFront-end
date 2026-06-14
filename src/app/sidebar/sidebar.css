@@ -3,7 +3,6 @@
   background: #f4f8ff;
 }
 
-/* Sidebar */
 .sidenav {
   width: 250px;
   background: rgba(255, 255, 255, 0.18);
@@ -17,7 +16,6 @@
   box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
 }
 
-/* Container interno do Angular Material */
 .sidenav ::ng-deep .mat-drawer-inner-container {
   display: flex;
   flex-direction: column;
@@ -25,7 +23,6 @@
   background: transparent;
 }
 
-/* Logo */
 .logo-area {
   display: flex;
   align-items: center;
@@ -46,6 +43,7 @@
   justify-content: center;
   color: white;
   box-shadow: 0 10px 20px rgba(19, 127, 236, 0.18);
+  flex-shrink: 0;
 }
 
 .logo-icon .material-icons-round {
@@ -57,6 +55,7 @@
   font-weight: 800;
   color: #0f172a;
   letter-spacing: -0.3px;
+  white-space: nowrap;
 }
 
 .nav-list {
@@ -91,6 +90,7 @@ mat-nav-list a mat-icon {
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
+  min-height: 48px;
   border-radius: 12px;
   color: #475569;
   text-decoration: none;
@@ -106,6 +106,7 @@ mat-nav-list a mat-icon {
   color: #64748b;
   transition: color 0.2s ease;
   margin-right: 0;
+  flex-shrink: 0;
 }
 
 .nav-item:hover {
@@ -118,7 +119,6 @@ mat-nav-list a mat-icon {
   color: #2563eb;
 }
 
-/* Estado ativo normal (fora do modal) – usar nav-active */
 a.nav-item.nav-active,
 mat-nav-list a.nav-active {
   background-color: rgba(219, 234, 254, 0.85);
@@ -132,18 +132,18 @@ mat-nav-list a.nav-active mat-icon {
   color: #137fec !important;
 }
 
-/* Content */
 .content {
   background-color: #f4f8ff;
   color: #0f172a;
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-width: 0;
 }
 
-/* Topbar */
 .topbar {
   height: 64px;
+  min-height: 64px;
   background: rgba(255, 255, 255, 0.96);
   border-bottom: 1px solid #dbe7f5;
   display: flex;
@@ -152,6 +152,7 @@ mat-nav-list a.nav-active mat-icon {
   padding: 0 24px;
   top: 0;
   z-index: 2;
+  gap: 12px;
 }
 
 .menu-button {
@@ -176,6 +177,7 @@ mat-nav-list a.nav-active mat-icon {
   height: 40px;
   border-radius: 10px;
   transition: background-color 0.2s, color 0.2s;
+  flex-shrink: 0;
 }
 
 .menu-btn:hover {
@@ -187,12 +189,12 @@ mat-nav-list a.nav-active mat-icon {
   font-size: 22px;
 }
 
-/* Lado direito da topbar */
 .topbar-right {
   display: flex;
   align-items: center;
   gap: 12px;
   position: relative;
+  min-width: 0;
 }
 
 .user-trigger {
@@ -203,10 +205,12 @@ mat-nav-list a.nav-active mat-icon {
   border: none;
   cursor: pointer;
   padding: 0;
+  min-width: 0;
 }
 
 .user-info {
   text-align: right;
+  min-width: 0;
 }
 
 .user-name {
@@ -235,6 +239,7 @@ mat-nav-list a.nav-active mat-icon {
   font-weight: 700;
   font-family: 'Manrope', sans-serif;
   box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+  flex-shrink: 0;
 }
 
 .user-menu {
@@ -242,6 +247,7 @@ mat-nav-list a.nav-active mat-icon {
   top: calc(100% + 12px);
   right: 0;
   width: 250px;
+  max-width: calc(100vw - 24px);
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 18px;
@@ -302,6 +308,7 @@ mat-nav-list a.nav-active mat-icon {
   justify-content: center;
   font-size: 1rem;
   font-weight: 700;
+  flex-shrink: 0;
 }
 
 .user-menu-data {
@@ -357,6 +364,7 @@ mat-nav-list a.nav-active mat-icon {
   justify-content: center;
   z-index: 2000;
   backdrop-filter: blur(3px);
+  padding: 16px;
 }
 
 .confirm-modal {
@@ -394,6 +402,7 @@ mat-nav-list a.nav-active mat-icon {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .btn-cancel {
@@ -429,10 +438,118 @@ mat-nav-list a.nav-active mat-icon {
   flex: 1;
   overflow-y: auto;
   background: #f4f8ff;
+  min-width: 0;
 }
 
 @media (max-width: 1024px) {
   .sidenav {
     width: 220px;
+  }
+
+  .topbar {
+    padding: 0 18px;
+  }
+
+  .page-content {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    height: 100dvh;
+  }
+
+  .sidenav {
+    width: min(82vw, 280px);
+  }
+
+  .logo-area {
+    padding: 12px 16px;
+  }
+
+  .nav-list {
+    padding: 12px 10px;
+  }
+
+  .nav-item {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
+
+  .topbar {
+    height: 60px;
+    min-height: 60px;
+    padding: 0 14px;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  .user-menu {
+    right: 0;
+    width: min(280px, calc(100vw - 20px));
+  }
+
+  .page-content {
+    padding: 18px 14px;
+  }
+
+  .confirm-modal {
+    max-width: 100%;
+    border-radius: 18px;
+    padding: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidenav {
+    width: min(88vw, 300px);
+  }
+
+  .logo-text {
+    font-size: 1.05rem;
+  }
+
+  .nav-item {
+    font-size: 0.92rem;
+    padding: 11px 12px;
+    min-height: 46px;
+  }
+
+  .topbar {
+    padding: 0 12px;
+  }
+
+  .menu-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .user-avatar {
+    width: 38px;
+    height: 38px;
+    font-size: 0.92rem;
+  }
+
+  .page-content {
+    padding: 16px 12px;
+  }
+
+  .confirm-modal-actions {
+    flex-direction: column;
+  }
+
+  .btn-cancel,
+  .btn-confirm-logout {
+    width: 100%;
+    justify-content: center;
   }
 }
