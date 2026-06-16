@@ -5,7 +5,6 @@
   </div>
 
   <div class="filters-row">
-    <!-- Campo de pesquisa -->
     <div class="search-box">
       <span class="material-icons search-icon">search</span>
       <input
@@ -16,7 +15,6 @@
         (ngModelChange)="applyFilters()">
     </div>
 
-    <!-- Filtro por período -->
     <div class="date-range-filter">
       <div class="date-field">
         <span class="material-icons date-icon">calendar_today</span>
@@ -113,7 +111,6 @@
             </td>
           </tr>
 
-          <!-- Estado vazio -->
           <tr *ngIf="paginatedData.length === 0">
             <td colspan="6" class="empty-state">
               <span class="material-icons">search_off</span>
@@ -255,46 +252,6 @@
           placeholder="Clique para escrever">
         </textarea>
       </div>
-
-
-   <!--  <div class="field-group">
-        <label class="field-label">Adicionar Comprovante</label>
-        <div class="upload-area"
-          (click)="fileInput.click()"
-          (dragover)="onDragOver($event)"
-          (drop)="onDrop($event)">
-          <input
-            #fileInput
-            type="file"
-            accept=".pdf,.png,.jpg,.jpeg"
-            style="display:none"
-            (change)="onFileSelected($event)"
-            multiple>
-
-          <ng-container *ngIf="arquivosSelecionados.length === 0">
-            <span class="material-icons upload-icon">cloud_upload</span>
-            <div class="upload-text">Clique para adicionar</div>
-            <div class="upload-subtext">PDF, PNG, JPG (max. 10MB)</div>
-          </ng-container>
-
-          <ng-container *ngIf="arquivosSelecionados.length > 0">
-            <div class="files-list">
-              <div class="file-item" *ngFor="let file of arquivosSelecionados; let i = index">
-                <span class="material-icons file-icon">{{ getFileIcon(file.name) }}</span>
-                <div class="file-info">
-                  <span class="file-name">{{ file.name }}</span>
-                  <span class="file-size">{{ formatFileSize(file.size) }}</span>
-                </div>
-                <span class="material-icons remove-icon" (click)="removerArquivo(i, $event)">close</span>
-              </div>
-            </div>
-            <div class="upload-more">
-              <span class="material-icons">add</span>
-              Adicionar mais arquivos
-            </div>
-          </ng-container>
-        </div>
-      </div> -->
 
       <div class="actions">
         <button class="btn-cancel" (click)="fecharFormulario()">Cancelar</button>

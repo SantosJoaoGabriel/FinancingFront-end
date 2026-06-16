@@ -1,7 +1,6 @@
 <mat-sidenav-container class="container">
   <mat-sidenav #sidenav [(opened)]="opened" mode="side" class="sidenav">
 
-    <!-- Logo -->
     <div class="logo-area">
       <div class="logo-icon">
         <span class="material-icons-round">account_balance_wallet</span>
@@ -9,7 +8,6 @@
       <span class="logo-text">SaveUp</span>
     </div>
 
-    <!-- Navegação -->
     <nav class="nav-list">
       <a class="nav-item" routerLink="/dashboard"
         routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: true }">
@@ -41,7 +39,6 @@
 
   <mat-sidenav-content class="content">
 
-    <!-- Topbar -->
     <div class="topbar">
       <button class="menu-btn" (click)="opened = !opened">
         <span class="material-icons-round">menu</span>
@@ -80,7 +77,6 @@
       </div>
     </div>
 
-    <!-- Conteúdo das páginas -->
   <div class="page-content">
     <router-outlet></router-outlet>
   </div>
